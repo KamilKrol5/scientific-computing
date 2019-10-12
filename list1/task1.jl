@@ -19,5 +19,35 @@ end
 
 println("Machine Epsilon for every type:")
 for type in types
-    println("Computed macheps = $(determineMachEps(type)); eps($type) = $(eps(type))")
+    println("$type:      Computed macheps = $(determineMachEps(type)); eps($type) = $(eps(type))")
+end
+
+function determineEta(type)
+    zero = type(0.0)
+    eta = type(1.0)
+    while eta / 2 != zero
+        eta = eta / 2
+    end
+    return eta
+end
+
+println()
+println("Eta for every type:")
+for type in types
+    println("$type:      Computed eta = $(determineEta(type)); nextfloat($type(0.0)) = $(nextfloat(type(0.0)))")
+end
+
+function determineMax(type)
+    max = type(2.0 - eps(type)) # or 1.0 eps/2 or 0.5 - eps/4 ...
+        #czemu nie 1 - eps?
+    while !isinf(max * 2)
+        max *= 2
+    end
+    return max
+end
+
+println()
+println("MAX every type:")
+for type in types
+    println("$type:      Computed MAX = $(determineMax(type)); floatmax($type) = $(floatmax(type))")
 end
