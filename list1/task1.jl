@@ -11,7 +11,7 @@ types = [Float64, Float32, Float16]
 # type - type for which macheps should be computed
 function determineMachEps(type)
     one = type(1.0)
-    macheps = type(1.0)
+    macheps = type(1.0) #macheps value initializated with 1.0
     while one + macheps / 2 != one
         macheps = macheps / 2
     end
@@ -26,7 +26,7 @@ end
 # type - type for which eta should be computed
 function determineEta(type)
     zero = type(0.0)
-    eta = type(1.0)
+    eta = type(1.0) #eta value initializated with 1.0
     while eta / 2 != zero
         eta = eta / 2
     end
@@ -43,6 +43,7 @@ end
 function determineMax(type)
     max = type(2.0 - eps(type)) # or 1.0 eps/2 or 0.5 - eps/4 ...
         #czemu nie 1 - eps?
+        #max value initializated with 1.0 but mantissa is filled with ones
     while !isinf(max * 2)
         max *= 2
     end
