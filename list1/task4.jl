@@ -1,6 +1,7 @@
 #author: Kamil Król
 
 types = [Float64]
+
 function main()
     start = nextfloat(Float64(1.0)) #first number in range (1,2)
     end_ = Float64(2.0) #end of the range (1,2) (exclusive)
