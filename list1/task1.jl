@@ -43,7 +43,7 @@ end
 function determineMax(type)
     max = type(2.0 - eps(type)) # or 1.0 eps/2 or 0.5 - eps/4 ...
         #czemu nie 1 - eps?
-        #max value initializated with 1.0 but mantissa is filled with ones
+        #max value initializated with 2.0 = 1.(9) so mantissa is filled with ones
     while !isinf(max * 2)
         max *= 2
     end
