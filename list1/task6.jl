@@ -18,7 +18,7 @@ function g(type, x)
     return result
 end
 
-for n = 1:9
+for n = 1:30
     x = Float64(8)^(-n)
     f_ = f(Float64, x)
     g_ = g(Float64, x)
