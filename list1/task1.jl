@@ -8,6 +8,7 @@ FLT_EPSILON = 1.19209290e-07 # float
 DBL_EPSILON = 2.2204460492503131e-16 # double
 types = [Float64, Float32, Float16]
 
+# type - type for which macheps should be computed
 function determineMachEps(type)
     one = type(1.0)
     macheps = type(1.0)
@@ -22,6 +23,7 @@ for type in types
     println("$type:      Computed macheps = $(determineMachEps(type)); eps($type) = $(eps(type))")
 end
 
+# type - type for which eta should be computed
 function determineEta(type)
     zero = type(0.0)
     eta = type(1.0)
@@ -37,6 +39,7 @@ for type in types
     println("$type:      Computed eta = $(determineEta(type)); nextfloat($type(0.0)) = $(nextfloat(type(0.0)))")
 end
 
+# type - type for which MAX should be computed
 function determineMax(type)
     max = type(2.0 - eps(type)) # or 1.0 eps/2 or 0.5 - eps/4 ...
         #czemu nie 1 - eps?
