@@ -1,6 +1,9 @@
 \documentclass[]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{polski}
+\usepackage{listings}
+\usepackage[usenames,dvipsnames]{xcolor}
+%%\hyphenchar\font=-1
 
 \title{
 	Sprawozdanie \\
@@ -9,6 +12,30 @@
 \author{Kamil Król}
 \date{}
 
+%% julia definition and coloring
+\lstdefinelanguage{Julia}%
+{morekeywords={abstract,break,case,catch,const,continue,do,else,elseif,%
+		end,export,false,for,function,immutable,import,importall,if,in,%
+		macro,module,otherwise,quote,return,switch,true,try,type,typealias,%
+		using,while},%
+	sensitive=true,%
+	alsoother={$},%
+	morecomment=[l]\#,%
+	morecomment=[n]{\#=}{=\#},%
+	morestring=[s]{"}{"},%
+	morestring=[m]{'}{'},%
+}[keywords,comments,strings]%
+
+\lstset{%
+	language         = Julia,
+	basicstyle       = \ttfamily,
+	keywordstyle     = \bfseries\color{blue},
+	stringstyle      = \color{magenta},
+	commentstyle     = \color{ForestGreen},
+	showstringspaces = false,
+}
+%% end of julia definition and coloring
+
 \begin{document}
 	
 	\maketitle
@@ -16,10 +43,83 @@
 	\section{Zadanie 1}
 	
 	\subsection{MachEps}
+	Epsilonem maszynowym macheps (ang. machine epsilon) nazywamy najmniejszą liczbę macheps większą od 0 taką, że fl(1.0 + macheps)\textgreater 1.0.
 	
-	Epsilonem maszynowym macheps (ang. machine epsilon) nazywamy najmniejszą liczbę macheps większą od 0 taką, że fl(1.0 + macheps)\textgreater 1.0
+	W celu wyznaczenia metodą iteracyjną \textit{macheps} zgodnego z powyższą definicją napisałem program, a jego wyniki zamieściłem w poniższej tabeli. Zgodnie z treścią zadania program uruchomiłem dla typów Float16, Float32 oraz Float64 i porównałem z wartościami zwracanymi przez funkcję \textit{eps} dla każdego z typów.
+	
+	\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\multicolumn{4}{c}{Iteracyjne wyznaczanie macheps}\\
+			\hline
+			& obliczony \textit{macheps} & eps(type) & wartość z pliku float.h \\
+			\hline
+			Float16 & 0.000977 & 0.000977 & xd \\
+			\hline
+			Float32 & 1.1920929e-7 & 1.1920929e-7 & xd \\
+			\hline
+			Float64 & 2.220446049250313e-16 & 2.220446049250313e-16 & xd \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	Okazało się, że wartości \textit{macheps} wyznaczone przeze mnie są równe wartościom zwracanym przez wbudowaną w język Julia funkcją \textit{eps}.
+	
+	W treści zadania pojawia się pytanie: jaki związek ma liczba \textit{macheps} z precyzją arytmetyki (oznaczaną na wykładzie przez $\epsilon$)? W celu odpowiedzi na to pytanie przytoczę najpierw definicję precyzji arytmetyki - $\epsilon$. Jest to największy błąd względny reprezentacji liczby jaki możemy popełnić i dla liczb reprezentowanych zgodnie ze standardem IEEE-754 wyraża się on wzorem: \(2^{-t}\). Podstawiając do wzoru dla arytmetyki Float32 mamy: \[\epsilon = 2^{-24} = 0.5 \cdot 2 ^{-23} = \frac{1}{2} \cdot \textit{macheps}\]
+	Wartość \textit{macheps} dla Float32 w tabeli tj. 1.1920929e-7 jest zaokrąglona. Jej dokładna wartość wynosi: 1.1920928955078125e-7 co jest równe \(2 ^{-23}\) (stąd równość). \textit{Macheps} jest w komputerze przechowywany dokładnie.
+	Wykonując to rozumowanie dla wszystkich typów widzimy zgodność i otrzymujemy zależność: \mbox{\(\textit{macheps} = 2\epsilon\)}.
 	
 	
+	\subsection{Eta}
+	Kolejnym zadaniem jest wyznaczenie liczby \textit{eta} takiej, że \textit{eta} \textgreater\space0.0 dla wszystkich typów zmiennopozycyjnych Float16, Float32, Float64.
+	Wyniki napisanego przeze mnie programu, który iteracyjnie wyznacza te liczby, umieściłem w poniższej tabeli. Ponadto wartości otrzymanych liczb \textit{eta} porównałem z wartościami zwracanymi przez funkcje: \mbox{\textit{nextfloat}(Float16(0.0))}, \mbox{\textit{nextfloat}(Float32(0.0))}, \mbox{\textit{nextfloat}(Float64(0.0)}
+	
+	\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|}
+			\multicolumn{3}{c}{Iteracyjne wyznaczanie eta}\\
+			\hline
+			& obliczona \textit{eta} & nextfloat(type)  \\
+			\hline
+			Float16 & 6.0e-8 & 6.0e-8 \\
+			\hline
+			Float32 & 1.0e-45 & 1.0e-45 \\
+			\hline
+			Float64 & 5.0e-324 & 5.0e-324 \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	Wartości obliczone przeze mnie okazały się takie same jak zwrócone przez funkcje wbudowane w język Julia.
+	Kolejnym pytaniem jest: Jaki związek ma liczba \textit{eta} z liczbą $MIN_{sub}$?
+	\colorbox{BurntOrange}{TO DO}\newline
+	Innym pytaniem z treści zadania jest: co zwracają funkcje \textit{floatmin}(Float32) i \textit{floatmin}(Float64) i jaki jest związek zwracanych wartości z liczbą $MIN_nor$?
+		\colorbox{BurntOrange}{TO DO}
+	
+	\subsection{Liczba MAX}
+	Kolejnym zadaniem do zrobienia było wyznaczenie (iteracyjnie) liczby \textit{MAX} dla wszystkich typów zmiennopozycyjnych Float16, Float32, Float64 i porównanie wyników z wartościami zwracanymi przez funkcje:
+	\mbox{\textit{floatmax}(Float16)}, \mbox{\textit{floatmax}(Float32)}, \mbox{\textit{floatmax}(Float64)} oraz z danymi zawartymi w pliku nagłówkowym float.h dowolnej instalacji języka C. Liczbę \textit{MAX} interpretuję jako największą wartość jaką można przechować w danym typie zmiennoprzecinkowym. Przy wyznaczaniu tej wartości musiałem pamiętać aby mantysa była wypełniona jedynkami. By to uzyskać postanowiłem wziąć liczbę \textit{zaraz przed} liczbą 2.0 czyli 2.0 - \textit{macheps}. Ten rezultat mogłem uzyskać też biorąc liczbę \textit{zaraz przed} 1.0, wtedy byłoby to \(1.0 - \frac{\textit{macheps}}{2}\).
+	
+	\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\multicolumn{4}{c}{Iteracyjne wyznaczanie liczby \textit{MAX}}\\
+			\hline
+			& Obliczony \textit{MAX} & maxfloat(type) & wartość z pliku float.h \\
+			\hline
+			Float16 & 6.55e4 & 6.55e4 & xd \\
+			\hline
+			Float32 & 3.4028235e38 & 3.4028235e38 & xd \\
+			\hline
+			Float64 & 1.7976931348623157e308 & 1.7976931348623157e308 & xd \\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	Ponownie wartości wyznaczone przeze mnie okazały się takie same jak te wyznaczone przez funkcje z języka Julia.
 	
 	\section{Second Section}
 	
