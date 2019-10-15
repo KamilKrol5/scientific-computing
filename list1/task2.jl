@@ -11,5 +11,9 @@ end
 
 println("Machine Epsilon for every type:")
 for type in types
-    println("$type:      Computed macheps [3(4/3−1)−1] = $(computeExpression(type)); eps($type) = $(eps(type))")
+    computedExpression = computeExpression(type)
+    computedEps = eps(type)
+    println("$type:   Computed macheps [3(4/3−1)−1] = $computedExpression; eps($type) = $computedEps; absolute value equal = $(abs(computedExpression) == computedEps)")
+    # println(bitstring(computedExpression))
+    # println(bitstring(computedEps))
 end
