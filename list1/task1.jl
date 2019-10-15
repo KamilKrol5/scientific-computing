@@ -39,6 +39,12 @@ for type in types
     println("$type:      Computed eta = $(determineEta(type)); nextfloat($type(0.0)) = $(nextfloat(type(0.0)))")
 end
 
+println()
+println("Results of floatmin function for every type:")
+for type in types
+    println("floatmin($type) = $(floatmin(type))")
+end
+
 # type - type for which MAX should be computed
 function determineMax(type)
     max = type(2.0 - eps(type)) # or 1.0 eps/2 or 0.5 - eps/4 ...
