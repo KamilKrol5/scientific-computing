@@ -40,9 +40,9 @@
 	
 	\maketitle
 	
-	\section{Zadanie 1}
+	\section*{Zadanie 1}
 	
-	\subsection{MachEps}
+	\subsection*{MachEps}
 	Epsilonem maszynowym macheps (ang. machine epsilon) nazywamy najmniejszą liczbę macheps większą od 0 taką, że fl(1.0 + macheps)\textgreater 1.0.
 	
 	W celu wyznaczenia metodą iteracyjną \textit{macheps} zgodnego z powyższą definicją napisałem program, a jego wyniki zamieściłem w poniższej tabeli. Zgodnie z treścią zadania program uruchomiłem dla typów Float16, Float32 oraz Float64 i porównałem z wartościami zwracanymi przez funkcję \textit{eps} dla każdego z typów.
@@ -71,7 +71,7 @@
 	Wykonując to rozumowanie dla wszystkich typów widzimy zgodność i otrzymujemy zależność: \mbox{\(\textit{macheps} = 2\epsilon\)}.
 	
 	
-	\subsection{Eta}
+	\subsection*{Eta}
 	Kolejnym zadaniem jest wyznaczenie liczby \textit{eta} takiej, że \textit{eta} \textgreater\space0.0 dla wszystkich typów zmiennopozycyjnych Float16, Float32, Float64.
 	Wyniki napisanego przeze mnie programu, który iteracyjnie wyznacza te liczby, umieściłem w poniższej tabeli. Ponadto wartości otrzymanych liczb \textit{eta} porównałem z wartościami zwracanymi przez funkcje: \mbox{\textit{nextfloat}(Float16(0.0))}, \mbox{\textit{nextfloat}(Float32(0.0))}, \mbox{\textit{nextfloat}(Float64(0.0)}
 	
@@ -99,7 +99,7 @@
 	Innym pytaniem z treści zadania jest: co zwracają funkcje \textit{floatmin}(Float32) i \textit{floatmin}(Float64) i jaki jest związek zwracanych wartości z liczbą $MIN_{nor}$?\newline
 		\colorbox{BurntOrange}{TO DO}
 	Funkcje te zwracają najmniejsze liczby znormalizowane dla danego typu, a jest to dokładnie $MIN_{nor}$. Liczby znromalizowane to takie gdzie w mantysie zakładamy niepisaną jedynkę, tzn. wartość mantysy '0011...' oznacza '1.0011...' (inaczej niż w subnormalnych) i cecha nie jest zerem. Inaczej są to liczby, które można pomniejszyć zmniejszając wartość cechy.
-	\subsection{Liczba MAX}
+	\subsection*{Liczba MAX}
 	Kolejnym zadaniem do zrobienia było wyznaczenie (iteracyjnie) liczby \textit{MAX} dla wszystkich typów zmiennopozycyjnych Float16, Float32, Float64 i porównanie wyników z wartościami zwracanymi przez funkcje:
 	\mbox{\textit{floatmax}(Float16)}, \mbox{\textit{floatmax}(Float32)}, \mbox{\textit{floatmax}(Float64)} oraz z danymi zawartymi w pliku nagłówkowym float.h dowolnej instalacji języka C. Liczbę \textit{MAX} interpretuję jako największą wartość jaką można przechować w danym typie zmiennoprzecinkowym. Przy wyznaczaniu tej wartości musiałem pamiętać aby mantysa była wypełniona jedynkami. By to uzyskać postanowiłem wziąć liczbę \textit{zaraz przed} liczbą 2.0 czyli 2.0 - \textit{macheps}. Ten rezultat mogłem uzyskać też biorąc liczbę \textit{zaraz przed} 1.0, wtedy byłoby to \(1.0 - \frac{\textit{macheps}}{2}\).
 	
@@ -122,7 +122,7 @@
 	
 	Ponownie wartości wyznaczone przeze mnie okazały się takie same jak te wyznaczone przez funkcje z języka Julia.
 	
-	\section{Zadanie 2}
+	\section*{Zadanie 2}
 	
 	Zadanie to dotyczyło sprawdzenia eksperymentalnie w języku Julia
 	słuszności tezy Kahana dla wszystkich typów zmiennopozycyjnych \mbox{Float16}, \mbox{Float32}, \mbox{Float64}. Wyniki programu zamieściłem w poniższej tabeli:
@@ -145,7 +145,7 @@
 	
 	Ponadto mój program sprawdzał, czy wartości bezwzględne otrzymanych eps są równe i okazało się że tak jest. Wnioskiem z doświadczenia jest to, że teza Kahana jest słuszna - macheps można obliczyć stosując zaproponowany przez niego wzór. W celu otrzymania macheps należy na wynik otrzymany ze wzoru \(3(4/3-1)-1\) nałożyć wartość bezwzględną. 
 	
-	\section{Zadanie 3} 
+	\section*{Zadanie 3} 
 	
 	Celem tego zadania było eksperymentalne sprawdzenie, że w arytmetyce \mbox{Float64} liczby zmiennopozycyjne są równomiernie rozmieszczone w [1, 2] z
 	krokiem \(\delta = 2^{-52}\).
@@ -230,15 +230,59 @@
 
 	Widać, że wartości $\delta_1$ i $\delta_4$ są poprawne z tego samego powodu co poprzednio - wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy.
 	
-	\section{Zadanie 4}
+	\section*{Zadanie 4}
 
 	Celem tego zadania było eksperymentalne znalezienie w arytmetyce Float64 (double) najmniejszej liczby zmiennopozycyjnej x w przedziale (1,2) takiej, że \(x \cdot \frac{1}{x} \neq 1\). 
 	Wynik mojego programu to: 1.000000057228997. Reprezentacja tej liczby w arytmetyce Float64 to: \newline 
 	\mbox{0 01111111111 0000000000000000000000001111010111001011111100101010}.\newline
+	Mantysa zinterpretowana jako samodzielna liczba to 257736490. Oznacza to, że program musiał wykonać aż 257736490 - 1 = 257736480 iteracji.
 	\colorbox{BurntOrange}{TO DO} Wnioski?\newline
 	
+	\section*{Zadanie 5}
+	Zadanie to polegało na eksperymentalnym obliczeniu iloczynu skalarnego dwóch wektorów x i y. \newline
+	\mbox{x = [2.718281828, -3.141592654, 1.414213562, 0.5772156649, 0.3010299957]}\newline
+	\mbox{y = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049].}\newline
+	W treści zadania są podane 4 algorytmy: \newline a (forward),b (backward),c (descending),d (ascending), które zaimplementowałem. Algorytmy są opisane w treści zadania, więc nie będę ich tu opisywać. Kolejnym krokiem w zadaniu było porównanie otrzymanych wartości z wartościa prawdziwą, zrealizowałem to licząc błąd bezwzględny i względny. Przypomnijmy - wartość dokładna (z dokładnością do 15 cyfr, według treści zadania) wynosi \(-1.00657107\cdot10^{-11}\). Wyniki mojego programu znajdują się w tabeli poniżej:
 	
-	\section{Second Section}
+	\begin{table}[h!]
+	\centering
+	\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\multicolumn{4}{c}{Dla Float64}\\
+			\hline
+			alogrytm & obliczona wartość & błąd bezwzględny & błąd względny\\
+			\hline
+			Forward & 1.0251881368296672e-10 & 1.1258452438296672e-10 & 11.184955313981627 \\ \hline
+			Backward & -1.5643308870494366e-10 & 1.4636737800494365e-10 & 14.541186645165915 \\ \hline
+			Descending & 0.0 & 1.00657107e-11 & 1.0 \\ \hline
+			Ascending & 0.0 & 1.00657107e-11 & 1.0 \\ \hline
+		\end{tabular}
+	\end{table}
+
+	\begin{table}[h!]
+	\centering
+	\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\multicolumn{4}{c}{Dla Float32}\\
+			\hline
+			alogrytm & obliczona wartość & błąd bezwzględny & błąd względny\\
+			\hline
+			Forward & -0.4999443 & 0.49994429944939167 & 4.9668057661282845e10 \\ \hline
+			Backward & -0.4543457 & 0.4543457031149343 & 4.51379655800096e10 \\ \hline
+			Descending & -0.5 & 0.4999999999899343 & 4.967359135306107e10 \\ \hline
+			Ascending & -0.5 & 0.4999999999899343 & 4.967359135306107e10 \\ \hline
+		\end{tabular}
+	\end{table}
+	
+	Patrząc na wyniki nasuwa się kilka ważnych wniosków. Wartości obliczone przez program nie są równe wartości dokładnej bez względu na użyty algorytm. Ponadto różnice w wartościach obliczonych przez poszczególne algorytmy okazały się kompletnie nieintuicyjne. Algorytm c (descending), który wydaje się \textit{najgorszy} okazał się widocznie lepszy od algorytmu a i b (dla Float64) i na dodatek dał taki sam wynik jak algorytm d (ascending) (dla Float64 i Float32), który wydaje się \textit{najlepszy}. Przy czym przez \textit{najlepszy/najgorszy} rozumiem taki który oblicza wartość odpowiednio najdokładniej/najmniej dokładnie. \newline
+	Inną rzeczą wartą zauważenia jest też fakt, że różnice w błędach dla dwóch testowanych typów okazały się bardzo duże - błędy dla Float64 były znacznie mniejsze.
+	Kolejnym wnioskiem jest to, że licząc iloczyn skalarny dla Float64 otrzymaliśmy w 2 przypadkach wartość 0.0, co nieuważnemu użytkownikowi dałoby podstawy żeby twierdzić, że wekotry x i y są prostopadłe, kiedy w rzeczywistości tak nie jest. 
+	
+	\section{Zadanie 6}
+	
+	
+	
+	\section*{Second Section}
 	
 	Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  
 	Etiam lobortis facilisissem.  Nullam nec mi et neque pharetra 
