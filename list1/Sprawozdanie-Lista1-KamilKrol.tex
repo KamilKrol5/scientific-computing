@@ -81,7 +81,7 @@
 		\begin{tabular}{|c|c|c|}
 			\multicolumn{3}{c}{Iteracyjne wyznaczanie eta}\\
 			\hline
-			& obliczona \textit{eta} & nextfloat(type)  \\
+			& obliczona \textit{eta} & nextfloat(type(0))  \\
 			\hline
 			Float16 & 6.0e-8 & 6.0e-8 \\
 			\hline
@@ -93,11 +93,12 @@
 	\end{table}
 
 	Wartości obliczone przeze mnie okazały się takie same jak zwrócone przez funkcje wbudowane w język Julia.
-	Kolejnym pytaniem jest: Jaki związek ma liczba \textit{eta} z liczbą $MIN_{sub}$?
+	Kolejnym pytaniem jest: Jaki związek ma liczba \textit{eta} z liczbą $MIN_{sub}$?\newline
+	$MIN_{sub}$ jest najmniejszą liczbą zdenormalizowaną (subnormalną), tzn. taką gdzie cecha liczby jest wypełniona zerami. Inaczej najmniejsza możliwa do przechowania w danym systemie liczba. Liczba \textit{eta} jest równa liczbie $MIN_{sub}$, są one tożsame. Są to liczby tak małe, że nie da się ich pomniejszyć manipulując cechą.
 	\colorbox{BurntOrange}{TO DO}\newline
-	Innym pytaniem z treści zadania jest: co zwracają funkcje \textit{floatmin}(Float32) i \textit{floatmin}(Float64) i jaki jest związek zwracanych wartości z liczbą $MIN_nor$?
+	Innym pytaniem z treści zadania jest: co zwracają funkcje \textit{floatmin}(Float32) i \textit{floatmin}(Float64) i jaki jest związek zwracanych wartości z liczbą $MIN_{nor}$?\newline
 		\colorbox{BurntOrange}{TO DO}
-	
+	Funkcje te zwracają najmniejsze liczby znormalizowane dla danego typu, a jest to dokładnie $MIN_{nor}$. Liczby znromalizowane to takie gdzie w mantysie zakładamy niepisaną jedynkę, tzn. wartość mantysy '0011...' oznacza '1.0011...' (inaczej niż w subnormalnych) i cecha nie jest zerem. Inaczej są to liczby, które można pomniejszyć zmniejszając wartość cechy.
 	\subsection{Liczba MAX}
 	Kolejnym zadaniem do zrobienia było wyznaczenie (iteracyjnie) liczby \textit{MAX} dla wszystkich typów zmiennopozycyjnych Float16, Float32, Float64 i porównanie wyników z wartościami zwracanymi przez funkcje:
 	\mbox{\textit{floatmax}(Float16)}, \mbox{\textit{floatmax}(Float32)}, \mbox{\textit{floatmax}(Float64)} oraz z danymi zawartymi w pliku nagłówkowym float.h dowolnej instalacji języka C. Liczbę \textit{MAX} interpretuję jako największą wartość jaką można przechować w danym typie zmiennoprzecinkowym. Przy wyznaczaniu tej wartości musiałem pamiętać aby mantysa była wypełniona jedynkami. By to uzyskać postanowiłem wziąć liczbę \textit{zaraz przed} liczbą 2.0 czyli 2.0 - \textit{macheps}. Ten rezultat mogłem uzyskać też biorąc liczbę \textit{zaraz przed} 1.0, wtedy byłoby to \(1.0 - \frac{\textit{macheps}}{2}\).
@@ -120,6 +121,68 @@
 	\end{table}
 	
 	Ponownie wartości wyznaczone przeze mnie okazały się takie same jak te wyznaczone przez funkcje z języka Julia.
+	
+	\section{Zadanie 2}
+	
+	Zadanie to dotyczyło sprawdzenia eksperymentalnie w języku Julia
+	słuszności tezy Kahana dla wszystkich typów zmiennopozycyjnych \mbox{Float16}, \mbox{Float32}, \mbox{Float64}. Wyniki programu zamieściłem w poniższej tabeli:
+	\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|}
+			\multicolumn{3}{c}{}\\
+			\hline
+			& Obliczony eps wg. wzoru Kahana & Wartość funkcji eps(type)\\
+			\hline
+			Float16 & -2.220446049250313e-16 & 2.220446049250313e-16 \\
+			\hline
+			Float32 & 1.1920929e-7 & 1.1920929e-7\\
+			\hline
+			Float64 &-2.220446049250313e-16 &2.220446049250313e-16\\
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	Ponadto mój program sprawdzał, czy wartości bezwzględne otrzymanych eps są równe i okazało się że tak jest. Wnioskiem z doświadczenia jest to, że teza Kahana jest słuszna - macheps można obliczyć stosując zaproponowany przez niego wzór. W celu otrzymania macheps należy na wynik otrzymany ze wzoru \(3(4/3-1)-1\) nałożyć wartość bezwzględną. 
+	
+	\section{Zadanie 3} 
+	
+	Celem tego zadania było eksperymentalne sprawdzenie, że w arytmetyce \mbox{Float64} liczby zmiennopozycyjne są równomiernie rozmieszczone w [1, 2] z
+	krokiem \(\delta = 2^{-52}\).
+	Mój program zaczynał od liczby 1.0 i z każdą iteracją dodawał do niej liczbę $\delta$. W celu zidentyfikowania czy wybrany krok jest poprawny drukowałem kolejne wartości liczb i obserwowałem jak się zmieniają. Rezultaty w tabeli poniżej. 
+	
+		\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|}
+			\multicolumn{2}{c}{} \\
+			\hline
+			& bitowa reprezentacja \\
+			\hline
+			$1.0 + 1\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000001 \\
+			\hline                    
+			$1.0 + 2\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000010 \\
+			\hline                    
+			$1.0 + 3\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000011 \\
+			\hline             
+			$1.0 + 4\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000100 \\
+			\hline             
+			$1.0 + 5\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000101 \\
+			\hline             
+			$1.0 + 6\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000110 \\
+			\hline             
+			$1.0 + 7\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000000111 \\
+			\hline             
+			$1.0 + 8\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000001000 \\
+			\hline             
+			$1.0 + 9\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000001001 \\
+			\hline
+			... & ... \\
+			\hline
+		\end{tabular}
+	\end{table}
+
+	Widać w kolejnych rekordach, że wybrany krok - $\delta$ jest poprawny (dla przedziału [1,2]), ponieważ wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy.
 	
 	\section{Second Section}
 	
