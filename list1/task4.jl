@@ -15,7 +15,6 @@ function main()
     end
 
     println("The smallest number x for which x ∗ ( 1.0 / x ) != 1.0 is: $(number) ($(bitstring(number)))")
-    println("nextfloat(1.0) = $(nextfloat(1.0))")
 end
 
 main()
