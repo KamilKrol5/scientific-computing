@@ -31,10 +31,11 @@ end
 function main()
     fromMathFormulaResult = derivative(1.0)
     println("From mathematical formula: f'(1.0) = $fromMathFormulaResult")
-    for n = 0:54
+    for n = 0:58
         h = 2.0 ^ (-n)
         approxFormulaResult = approximationDerivative(h, 1.0)
-        println("n = $n; val = $approxFormulaResult; Error: $(abs(fromMathFormulaResult - approxFormulaResult))")
+        println("n = $n; val = $approxFormulaResult; Error: $(abs(fromMathFormulaResult - approxFormulaResult)); h + 1 = $(1.0 + h)")
+        # println("$n & $approxFormulaResult & $(abs(fromMathFormulaResult - approxFormulaResult)) & $(1.0 + h)\\\\ \\hline")
     end
 end
 
