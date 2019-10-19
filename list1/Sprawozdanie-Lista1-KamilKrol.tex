@@ -130,7 +130,6 @@
 		\centering
 		\label{tab:table1}
 		\begin{tabular}{|c|c|c|}
-			\multicolumn{3}{c}{}\\
 			\hline
 			& Obliczony eps wg. wzoru Kahana & Wartość funkcji eps(type)\\
 			\hline
@@ -155,7 +154,6 @@
 		\centering
 		\label{tab:table1}
 		\begin{tabular}{|c|c|}
-			\multicolumn{2}{c}{} \\
 			\hline
 			& bitowa reprezentacja \\
 			\hline
@@ -177,11 +175,11 @@
 			\hline             
 		%%	$1.0 + 9\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000001001 \\
 		%%	\hline
-			... & ... \\
-			\hline
+			\multicolumn{2}{c}{and more ...} \\
 		\end{tabular}
 	\end{table}
 
+	\newpage 
 	Widać w kolejnych rekordach, że wybrany krok - $\delta$ jest poprawny (dla przedziału [1,2]), ponieważ wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy. \newline 
 	Pojawia się pytanie: Jak rozmieszczone są liczby zmiennopozycyjne w przedziale \([\frac{1}{2},1]\), a jak w przedziale \mbox{[2, 4]} i jak
 	mogą być przedstawione dla rozpatrywanego przedziału? \newline
@@ -278,14 +276,101 @@
 	Inną rzeczą wartą zauważenia jest też fakt, że różnice w błędach dla dwóch testowanych typów okazały się bardzo duże - błędy dla Float64 były znacznie mniejsze.
 	Kolejnym wnioskiem jest to, że licząc iloczyn skalarny dla Float64 otrzymaliśmy w 2 przypadkach wartość 0.0, co nieuważnemu użytkownikowi dałoby podstawy żeby twierdzić, że wekotry x i y są prostopadłe, kiedy w rzeczywistości tak nie jest. 
 	
-	\section{Zadanie 6}
+	\clearpage
+	\section*{Zadanie 6}
+	
+	Celem zadania było policzenie i porównanie wartości dwóch matematycznie równych funkcji (\textit{f} i \textit{g}) dla argumentów: \(8^{-1}, 8^{-2}, 8^{-3}, ...\) i określenie które z otrzymanych wyników są wiarygodne.
+	\[f(x) = \sqrt{x^2 + 1} - 1\]
+	\[g(x) = \frac{x^2}{\sqrt{x^2 + 1} + 1}\]
+	W tabeli poniżej znajdują się wyniki mojego programu.
+	\begin{table}[!h]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			x & f(x) & g(x) & f = g \\ \hline
+			$8^{-1}$ & 0.0077822185373186414 & 0.0077822185373187065 & false \\ \hline
+			$8^{-2}$ & 0.00012206286282867573 & 0.00012206286282875901 & false \\ \hline
+			$8^{-3}$ & 1.9073468138230965e-6 & 1.907346813826566e-6 & false \\ \hline
+			$8^{-4}$ & 2.9802321943606103e-8 & 2.9802321943606116e-8 & false \\ \hline
+			$8^{-5}$ & 4.656612873077393e-10 & 4.6566128719931904e-10 & false \\ \hline
+			$8^{-6}$ & 7.275957614183426e-12 & 7.275957614156956e-12 & false \\ \hline
+			$8^{-7}$ & 1.1368683772161603e-13 & 1.1368683772160957e-13 & false \\ \hline
+			$8^{-8}$ & 1.7763568394002505e-15 & 1.7763568394002489e-15 & false \\ \hline
+			$8^{-9}$ & 0.0 & 2.7755575615628914e-17 & false \\ \hline
+			$8^{-10}$ & 0.0 & 4.336808689942018e-19 & false \\ \hline
+			$8^{-11}$ & 0.0 & 6.776263578034403e-21 & false \\ \hline
+			$8^{-12}$ & 0.0 & 1.0587911840678754e-22 & false \\ \hline
+			$8^{-13}$ & 0.0 & 1.6543612251060553e-24 & false \\ \hline
+			$8^{-14}$ & 0.0 & 2.5849394142282115e-26 & false \\ \hline
+			\multicolumn{4}{c}{$\vdots$} \\ \hline
+			$8^{-25}$ & 0.0 & 3.503246160812043e-46 & false \\ \hline
+			$8^{-26}$ & 0.0 & 5.473822126268817e-48 & false \\ \hline
+			$8^{-27}$ & 0.0 & 8.552847072295026e-50 & false \\ \hline
+			$8^{-28}$ & 0.0 & 1.3363823550460978e-51 & false \\ \hline
+			$8^{-29}$ & 0.0 & 2.088097429759528e-53 & false \\ \hline
+			$8^{-30}$ & 0.0 & 3.2626522339992623e-55 & false \\ \hline
+		\end{tabular}
+	\end{table}
+
+	Widać, że dla żadnego z badanych argumentów funkcje nie są równe. Widać również, że począwszy od \(8^{-9}\) funkcja \textit{f} daje wartość równą 0.0 podczas kiedy funkcja \textit{g} nie. Zastanówmy się skąd mogła się wziąć ta wartość 0.0. Rozważmy sytuację kiedy liczba $x \ll 1.0$. W takim przypadku może wystąpić zjawisko tzw. pochłonięcia. Przy wykonywaniu dodawania cechy liczb są wyrównywane i w przypadku znacznej różnicy w wartościach liczb, cyfry liczby $x^2$ mogą zostać całkiem pochłonięte gdyż przy takiej samej cesze mantysy nie są w stanie uwzględnić cyfr znaczących dla obu liczb. W rezultacie pod pierwiastkiem pojawia się wartość 1.0. Stąd po wykonaniu dodawania otrzymujemy \(\sqrt{1} - 1 = 0\).\newline
+	Zobaczmy jak to wygląda dla x = \(8^{-9}\). Pierwsze co robimy to podnosimy x do kwadratu. Mamy:
+	 \(({8^{-9}})^2 = 8^{-18} = ({2^3})^{-18} = 2^{3 \cdot (-18)} = 2^{-54} = x_0\). Nasza mantysa może przechować maksymalnie 52 cyfry. Reprezentacje liczb, które będziemy do siebie dodawać są dokładne. (Przez zapis 000...0 rozumiemy 52 zera)
+	 \(1.0 = 2^0 \cdot 1.000...0;\space\space2^{-54} = 2^{-54} \cdot 1.000...0\). (W obu przypadkach mantysy wypełnione zerami). Teraz chcemy wyrównać cechy do większej z nich, zatem mantysę (wraz z niepisaną jedynką z przodu - 1.mantysa) liczby $2^{-54}$ przesuwamy o 54 miejsca. Teraz przystępujemy do dodawania (dodajemy w dwa razy większej precyzji) $x^2 + 1.0 = 1.\underbrace{000...001}_{54 cyfry}$.
+	 W rezultacie ostatnia jedynka uciekła poza 52. pozycję i zostanie ucięta - otrzymujemy 1.000...0 - same zera po przecinku. Następnie liczmy z tego pierwiastek i odejmujemy od tego 1.0: \(\sqrt{1.0} - 1.0 = 1.0 - 1.0 = 0.0\). Stąd właśnie wzięło się nasze zero w wyniku.\newline
+	 Rodzi się pytanie, dlaczego funkcja \textit{g} nie zachowała się tak jak \textit{f}. Widać, że w mianowniku wystąpi podobny problem - cały pierwiastek w pewnym momencie będzie równy 1.0, a co za tym idzie wartość całego mianownika przyjmie wartość 2.0. (Warto nadmienić, że dzielenie przez 2 jest wykonywane dokładnie). Jednak pozostanie tu licznik, który nadal będzie wpływał na wynik funkcji. Zwróćmy uwagę na to, że w momencie w którym pochłonęliśmy x obliczając wartość \textit{f(x)} straciliśmy całkiem informację o argumencie - jego wartość straciła znaczenie i nie mogła już wpłynąć na wartość funkcji. Inaczej jest z fukcją \textit{g}, w momencie pochłonięcia x-a w mianowniku, x nie stracił możliwości wpływania na wartość funkcji. Podsumowując, funkcja \textit{g} jest odporniejsza na zjawisko pochłaniania niż funkcja \textit{f}. Stąd wartości funkcji \textit{g} są bardziej wiarygodne.
+	\clearpage
+	\section*{Zadanie 7}
+	
+	Ostatnie zadanie polegało na obliczeniu przybliżonej wartości funkcji \(f(x) = sin(x) + cos(3x)\) w punkcie $x_0 = 1$ korzystając ze wzoru:
+	\[f'(x) \approx \widetilde{f'}(x) = \frac{f(x_0) - f(x_0 + h)}{h}\]
+	Ponadto dla \(h = 2^{-n} (n = 0,1,2,3,4,...,54)\) trzeba było obliczyć błędy  \mbox{\(|f'(x) - \widetilde{f'}(x)|\)}. Wyniki działania mojego programu znajdują się w tabeli poniżej.
+	
+	
+	\begin{table}[!h]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			n & $\widetilde{f'}(1)$ & \(|f'(x) - \widetilde{f'}(x)|\) & h+1\\ \hline
+			0 & 2.0179892252685967 & 1.9010469435800585 & 2.0\\ \hline
+			1 & 1.8704413979316472 & 1.753499116243109 & 1.5\\ \hline
+			2 & 1.1077870952342974 & 0.9908448135457593 & 1.25\\ \hline
+			3 & 0.6232412792975817 & 0.5062989976090435 & 1.125\\ \hline
+			4 & 0.3704000662035192 & 0.253457784514981 & 1.0625\\ \hline
+			5 & 0.24344307439754687 & 0.1265007927090087 & 1.03125\\ \hline
+			6 & 0.18009756330732785 & 0.0631552816187897 & 1.015625\\ \hline
+			7 & 0.1484913953710958 & 0.03154911368255764 & 1.0078125\\ \hline
+			8 & 0.1327091142805159 & 0.015766832591977753 & 1.00390625\\ \hline
+			9 & 0.1248236929407085 & 0.007881411252170345 & 1.001953125\\ \hline
+			\multicolumn{4}{c}{$\cdots$} \\ \hline
+			34 & 0.11694145202636719 & 8.296621709646956e-7 & 1.0000000000582077\\ \hline
+			35 & 0.11693954467773438 & 2.7370108037771956e-6 & 1.0000000000291038\\ \hline
+			36 & 0.116943359375 & 1.0776864618478044e-6 & 1.000000000014552\\ \hline
+			37 & 0.1169281005859375 & 1.4181102600652196e-5 & 1.000000000007276\\ \hline
+			38 & 0.116943359375 & 1.0776864618478044e-6 & 1.000000000003638\\ \hline
+			39 & 0.11688232421875 & 5.9957469788152196e-5 & 1.000000000001819\\ \hline
+			40 & 0.1168212890625 & 0.0001209926260381522 & 1.0000000000009095\\ \hline
+			41 & 0.116943359375 & 1.0776864618478044e-6 & 1.0000000000004547\\ \hline
+			42 & 0.11669921875 & 0.0002430629385381522 & 1.0000000000002274\\ \hline
+			43 & 0.1162109375 & 0.0007313441885381522 & 1.0000000000001137\\ \hline
+			44 & 0.1171875 & 0.0002452183114618478 & 1.0000000000000568\\ \hline
+			45 & 0.11328125 & 0.003661031688538152 & 1.0000000000000284\\ \hline
+			46 & 0.109375 & 0.007567281688538152 & 1.0000000000000142\\ \hline
+			47 & 0.109375 & 0.007567281688538152 & 1.000000000000007\\ \hline
+			48 & 0.09375 & 0.023192281688538152 & 1.0000000000000036\\ \hline
+			49 & 0.125 & 0.008057718311461848 & 1.0000000000000018\\ \hline
+			50 & 0.0 & 0.11694228168853815 & 1.0000000000000009\\ \hline
+			51 & 0.0 & 0.11694228168853815 & 1.0000000000000004\\ \hline
+			52 & -0.5 & 0.6169422816885382 & 1.0000000000000002\\ \hline
+			53 & 0.0 & 0.11694228168853815 & 1.0\\ \hline
+			54 & 0.0 & 0.11694228168853815 & 1.0\\ \hline
+		\end{tabular}
+	\end{table}
+	
+	Widać, że dla n = 53 i 54 wartość $\widetilde{f'}(1)$ wyniosła 0, a wartość h + 1 = 1. Patrząc na definicję \textit{macheps} z zadania 1. możemy stwierdzić, że liczba h wraz ze wzrostem liczby n zbliżała się do \textit{macheps}. (Zwróćmy uwagę, że dla $n = 52$, h wyniosło $2^{-52} = \textit{macheps}$ i na to, że wartość $x_0 = 1$ jest tu kluczowa). Skutkowało to, że od wartości $n = 53$ wyrażenie $f(1) - f(1 + h)$ przybierało postać $f(1) - f(1) = 0$. Wyjaśnia to dlaczego malejące h przestaje od pewnego momentu zwiększać dokładność przybliżenia wartości pochodnej. Dla $n\space \textgreater\space 2^{-52}$, h zostaje pochłonięte podczas dodawania w liczniku i przez to później licznik przyjmuje wartość 0.
 	
 	
 	
-	\section*{Second Section}
-	
-	Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  
-	Etiam lobortis facilisissem.  Nullam nec mi et neque pharetra 
-	sollicitudin.  Praesent imperdiet mi necante...
 	
 \end{document}
