@@ -9,6 +9,7 @@ println("Range: [1,2], Delta = 2^(-52)")
 for i = 1:9
     #(1 + i * delta) reprezentation
     println("1.0 + $i * delta = $(bitstring(beginning + i * delta))")
+    # println("\$1.0 + $i\\delta\$ &  $(bitstring(beginning + i * delta)) \\\\ \\hline")
 end
     
 #Range [0.5,1] delta=2^(-53)
@@ -17,7 +18,8 @@ beginning = Float64(0.5) #beginning of the range [0.5,1]
 println("Range: [0.5,1], Delta = 2^(-53)")
 for i = 1:9
     #(1 + i * delta) reprezentation
-    println("1.0 + $i * delta = $(bitstring(beginning + i * delta))")
+    println("0.5 + $i * delta = $(bitstring(beginning + i * delta))")
+    # println("\$0.5 + $i\\delta\$ &  $(bitstring(beginning + i * delta)) \\\\ \\hline")
 end
 
 #Range [2,4] delta=2^(-51)
@@ -26,7 +28,8 @@ beginning = Float64(2.0) #beginning of the range [2,4]
 println("Range: [2,4], Delta = 2^(-51)")
 for i = 1:9
     #(1 + i * delta) reprezentation
-    println("1.0 + $i * delta = $(bitstring(beginning + i * delta))")
+    println("2.0 + $i * delta = $(bitstring(beginning + i * delta))")
+    # println("\$2.0 + $i\\delta\$ &  $(bitstring(beginning + i * delta)) \\\\ \\hline")
 end
 
 #The closer to 0 the step is smaller (here: 2^-53), the farther from 0 the step is bigger (here: 2^-51)
