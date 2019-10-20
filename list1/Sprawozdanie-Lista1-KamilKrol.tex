@@ -182,65 +182,67 @@
 			\hline             
 		%%	$1.0 + 9\delta$ & 0|01111111111|0000000000000000000000000000000000000000000000001001 \\
 		%%	\hline
-			\multicolumn{2}{c}{...} \\
+			\multicolumn{2}{c}{\vdots} \\
 		\end{tabular}
 	\end{table}
 
 	Widać w kolejnych rekordach, że wybrany krok - $\delta$ jest poprawny (dla przedziału [1,2]), ponieważ wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy. \newline 
 	Pojawia się pytanie: Jak rozmieszczone są liczby zmiennopozycyjne w przedziale \([\frac{1}{2},1]\), a jak w przedziale \mbox{[2, 4]} i jak
 	mogą być przedstawione dla rozpatrywanego przedziału? \newline
-	Liczbę $\delta$ dla przedziału \([\frac{1}{2},1]\) będziemy nazywać $\delta_1$, a dla \mbox{[2, 4]}  $\delta_4$. Liczb we wszystkich trzech wspomianych przedziałach jest tyle samo (w tej reprezentacji). Np. między 1 i 2 jest tyle samo liczb co między 2 i 4, a tych jest tyle samo co w przedziale [4,8] itd. Granicami tych przedziałów są potęgi liczby 2. Jak można z tą wiedzą wyznaczyć $\delta$ dla przedziałów  \([\frac{1}{2},1]\) \mbox{i [2, 4]?} Wiemy, że $\delta$ dla przedziału [1,2] wynosi \(\delta = 2^{-52}\). Długość przedziału \([\frac{1}{2},1]\) jest 2 razy mniejsza od długości [1,2], więc naturalnym kandydatem dla liczby $\delta_1$ (dla przedziału \([\frac{1}{2},1]\)) wydaje się liczba $\delta$ podzielona przez 2. Zatem mamy \(\delta_1 = 2^{-53}\). \newline 
-	Przedział \mbox{[2, 4]} ma długość dwa razy większą niż \mbox{[1, 2]}, więc kandydatem na liczbę $\delta_4$ będzie liczba 2 razy więszka od $\delta$. W związku z tym mamy \(\delta_4 = 2^{-51}\).
-	Pozostaje te wartości eksperymentalnie sprawdzić. W poniższej tabeli znajdują się wyniki programu, który sprawdza liczby $\delta_1$ i $\delta_4$ w analogiczny sposób jak przy sprawdzaniu $\delta$ dla przedziału \mbox{[1,2]}.
+	Liczbę $\delta$ dla przedziału \([\frac{1}{2},1]\) będziemy nazywać $\delta_{\frac{1}{2}}$, a dla \mbox{[2, 4]}  $\delta_2$. Liczb we wszystkich trzech wspomianych przedziałach jest tyle samo (w tej reprezentacji). Np. między 1 i 2 jest tyle samo liczb co między 2 i 4, a tych jest tyle samo co w przedziale [4,8] itd. Granicami tych przedziałów są potęgi liczby 2. Jak można z tą wiedzą wyznaczyć $\delta$ dla przedziałów  \([\frac{1}{2},1]\) \mbox{i [2, 4]?} Wiemy, że $\delta$ dla przedziału [1,2] wynosi \(\delta = 2^{-52}\). Długość przedziału \([\frac{1}{2},1]\) jest 2 razy mniejsza od długości [1,2], więc naturalnym kandydatem dla liczby $\delta_{\frac{1}{2}}$ (dla przedziału \([\frac{1}{2},1]\)) wydaje się liczba $\delta$ podzielona przez 2. Zatem mamy \(\delta_{\frac{1}{2}} = 2^{-53}\). \newline 
+	Przedział \mbox{[2, 4]} ma długość dwa razy większą niż \mbox{[1, 2]}, więc kandydatem na liczbę $\delta_2$ będzie liczba 2 razy więszka od $\delta$. W związku z tym mamy \(\delta_2 = 2^{-51}\).
+	Pozostaje te wartości eksperymentalnie sprawdzić. W poniższej tabeli znajdują się wyniki programu, który sprawdza liczby $\delta_{\frac{1}{2}}$ i $\delta_2$ w analogiczny sposób jak przy sprawdzaniu $\delta$ dla przedziału \mbox{[1,2]}.
 	
 	\begin{table}[h!]
 	\centering
 	\label{tab:table1}
 		\begin{tabular}{|c|c|}
-			\multicolumn{2}{c}{\(\delta_1 = 2^{-53}\)} \\
+			\multicolumn{2}{c}{\(\delta_{\frac{1}{2}} = 2^{-53}\)} \\
 			\hline
 			& bitowa reprezentacja \\
 			\hline
-			$0.5 + 1\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000001 \\ \hline
-			$0.5 + 2\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000010 \\ \hline
-			$0.5 + 3\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000011 \\ \hline
-			$0.5 + 4\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000100 \\ \hline
-			$0.5 + 5\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000101 \\ \hline
-			$0.5 + 6\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000110 \\ \hline
-			$0.5 + 7\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000000111 \\ \hline
-			$0.5 + 8\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000001000 \\ \hline
-			$0.5 + 9\delta$ &  0|01111111110|0000000000000000000000000000000000000000000000001001 \\ \hline
+			$0.5 + 1\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000001 \\ \hline
+			$0.5 + 2\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000010 \\ \hline
+			$0.5 + 3\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000011 \\ \hline
+			$0.5 + 4\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000100 \\ \hline
+			$0.5 + 5\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000101 \\ \hline
+			$0.5 + 6\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000110 \\ \hline
+			$0.5 + 7\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000000111 \\ \hline
+			$0.5 + 8\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000001000 \\ \hline
+			$0.5 + 9\delta_{\frac{1}{2}}$ &  0|01111111110|0000000000000000000000000000000000000000000000001001 \\ \hline
+			\multicolumn{2}{c}{\vdots} \\
 		\end{tabular}
 	\end{table}
 	\begin{table}[h!]
 		\centering
 		\label{tab:table1}
 			\begin{tabular}{|c|c|}
-			\multicolumn{2}{c}{\(\delta_4 = 2^{-51}\)} \\
+			\multicolumn{2}{c}{\(\delta_2 = 2^{-51}\)} \\
 			\hline
 			& bitowa reprezentacja \\
 			\hline
-			$2.0 + 1\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000001 \\ \hline
-			$2.0 + 2\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000010 \\ \hline
-			$2.0 + 3\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000011 \\ \hline
-			$2.0 + 4\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000100 \\ \hline
-			$2.0 + 5\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000101 \\ \hline
-			$2.0 + 6\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000110 \\ \hline
-			$2.0 + 7\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000000111 \\ \hline
-			$2.0 + 8\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000001000 \\ \hline
-			$2.0 + 9\delta$ &  0|10000000000|0000000000000000000000000000000000000000000000001001 \\ \hline
+			$2.0 + 1\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000001 \\ \hline
+			$2.0 + 2\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000010 \\ \hline
+			$2.0 + 3\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000011 \\ \hline
+			$2.0 + 4\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000100 \\ \hline
+			$2.0 + 5\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000101 \\ \hline
+			$2.0 + 6\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000110 \\ \hline
+			$2.0 + 7\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000000111 \\ \hline
+			$2.0 + 8\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000001000 \\ \hline
+			$2.0 + 9\delta_2$ &  0|10000000000|0000000000000000000000000000000000000000000000001001 \\ \hline
+			\multicolumn{2}{c}{\vdots} \\
 		\end{tabular}
 	\end{table}
 
 	\newpage 
-	Widać, że wartości $\delta_1$ i $\delta_4$ są poprawne z tego samego powodu co poprzednio - wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy.
+	Widać, że wartości $\delta_{\frac{1}{2}}$ i $\delta_2$ są poprawne z tego samego powodu co poprzednio - wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy.
 	
 	\section*{Zadanie 4}
 
-	Celem tego zadania było eksperymentalne znalezienie w arytmetyce Float64 (double) najmniejszej liczby zmiennopozycyjnej x w przedziale (1,2) takiej, że \(x \cdot (\frac{1}{x}) \neq 1\). 
+	Celem tego zadania było eksperymentalne znalezienie w arytmetyce Float64 (double) liczby zmiennopozycyjnej x w przedziale (1,2) takiej, że \(x \cdot (\frac{1}{x}) \neq 1\). 
 	Wynik mojego programu to: 1.000000057228997. Reprezentacja tej liczby w arytmetyce Float64 to: \newline 
 	$$0 01111111111 0000000000000000000000001111010111001011111100101010$$
-	Mantysa zinterpretowana jako samodzielna liczba to 257736490. Oznacza to, że program musiał wykonać aż 257736490 - 1 = 257736480 iteracji.
+	Mantysa zinterpretowana jako samodzielna liczba to 257736490. Oznacza to, że program musiał wykonać aż 257736490 - 1 = 257736489 iteracji.
 	Kolejnym krokiem w zadaniu było znalezienie najmniejszej takiej liczby x. Przez najmniejszą taką liczbę rozumiem tu najmniejszą liczbę $\textgreater 0$. Wynik działania programu to $5.0e-324$. Jest to wartość $MIN_{sub}$.  Reprezentacja tej liczby w arytmetyce Float64 to: \newline 
 	$$0 00000000000 0000000000000000000000000000000000000000000000000001$$
 	Matematycznie mamy \( MIN_{sub} \cdot (\frac{1}{MIN_{sub}}) = 1\), a program stwierdził, że tak nie jest. Dlaczego? Przyjrzyjmy się obliczonej przez komputer wartości: $\frac{1}{MIN_{sub}} = Inf$. Stąd później $MIN_{sub} \cdot(\frac{1}{MIN_{sub}}) = MIN_{sub} \cdot Inf = Inf \ne 1$. Stąd właśnie wziął się taki wynik programu. Wnioskiem z zadania jest to, że ze względu na ograniczenia reprezentacji liczb, niektóre działania (nawet te podstawowe) mogą dawać błędne wyniki.
