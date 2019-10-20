@@ -235,11 +235,14 @@
 	
 	\section*{Zadanie 4}
 
-	Celem tego zadania było eksperymentalne znalezienie w arytmetyce Float64 (double) najmniejszej liczby zmiennopozycyjnej x w przedziale (1,2) takiej, że \(x \cdot \frac{1}{x} \neq 1\). 
+	Celem tego zadania było eksperymentalne znalezienie w arytmetyce Float64 (double) najmniejszej liczby zmiennopozycyjnej x w przedziale (1,2) takiej, że \(x \cdot (\frac{1}{x}) \neq 1\). 
 	Wynik mojego programu to: 1.000000057228997. Reprezentacja tej liczby w arytmetyce Float64 to: \newline 
-	\mbox{0 01111111111 0000000000000000000000001111010111001011111100101010}.\newline
+	$$0 01111111111 0000000000000000000000001111010111001011111100101010$$
 	Mantysa zinterpretowana jako samodzielna liczba to 257736490. Oznacza to, że program musiał wykonać aż 257736490 - 1 = 257736480 iteracji.
-	\colorbox{BurntOrange}{TO DO} Wnioski?\newline
+	Kolejnym krokiem w zadaniu było znalezienie najmniejszej takiej liczby x. Przez najmniejszą taką liczbę rozumiem tu najmniejszą liczbę $\textgreater 0$. Wynik działania programu to $5.0e-324$. Jest to wartość $MIN_{sub}$.  Reprezentacja tej liczby w arytmetyce Float64 to: \newline 
+	$$0 00000000000 0000000000000000000000000000000000000000000000000001$$
+	Matematycznie mamy \( MIN_{sub} \cdot (\frac{1}{MIN_{sub}}) = 1\), a program stwierdził, że tak nie jest. Dlaczego? Przyjrzyjmy się obliczonej przez komputer wartości: $\frac{1}{MIN_{sub}} = Inf$. Stąd później $MIN_{sub} \cdot(\frac{1}{MIN_{sub}}) = MIN_{sub} \cdot Inf = Inf \ne 1$. Stąd właśnie wziął się taki wynik programu. Wnioskiem z zadania jest to, że ze względu na ograniczenia reprezentacji liczb, niektóre działania (nawet te podstawowe) mogą dawać błędne wyniki.
+	
 	
 	\section*{Zadanie 5}
 	Zadanie to polegało na eksperymentalnym obliczeniu iloczynu skalarnego dwóch wektorów x i y. \newline
