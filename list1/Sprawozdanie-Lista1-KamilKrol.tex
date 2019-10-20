@@ -323,7 +323,7 @@
 	\section*{Zadanie 7}
 	
 	Ostatnie zadanie polegało na obliczeniu przybliżonej wartości funkcji \(f(x) = sin(x) + cos(3x)\) w punkcie $x_0 = 1$ korzystając ze wzoru:
-	\[f'(x) \approx \widetilde{f'}(x) = \frac{f(x_0) - f(x_0 + h)}{h}\]
+	\[f'(x) \approx \widetilde{f'}(x) = \frac{f(x_0 + h) - f(x_0)}{h}\]
 	Ponadto dla \(h = 2^{-n} (n = 0,1,2,3,4,...,54)\) trzeba było obliczyć błędy  \mbox{\(|f'(x) - \widetilde{f'}(x)|\)}. Wyniki działania mojego programu znajdują się w tabeli poniżej.
 	
 	
@@ -368,7 +368,7 @@
 		\end{tabular}
 	\end{table}
 	
-	Widać, że dla n = 53 i 54 wartość $\widetilde{f'}(1)$ wyniosła 0, a wartość h + 1 = 1. Patrząc na definicję \textit{macheps} z zadania 1. możemy stwierdzić, że liczba h wraz ze wzrostem liczby n zbliżała się do \textit{macheps}. (Zwróćmy uwagę, że dla $n = 52$, h wyniosło $2^{-52} = \textit{macheps}$ i na to, że wartość $x_0 = 1$ jest tu kluczowa). Skutkowało to, że od wartości $n = 53$ wyrażenie $f(1) - f(1 + h)$ przybierało postać $f(1) - f(1) = 0$. Wyjaśnia to dlaczego malejące h przestaje od pewnego momentu zwiększać dokładność przybliżenia wartości pochodnej. Dla $n\space \textgreater\space 2^{-52}$, h zostaje pochłonięte podczas dodawania w liczniku i przez to później licznik przyjmuje wartość 0.
+	Widać, że dla n = 53 i 54 wartość $\widetilde{f'}(1)$ wyniosła 0, a wartość h + 1 = 1. Patrząc na definicję \textit{macheps} z zadania 1. możemy stwierdzić, że liczba h wraz ze wzrostem liczby n zbliżała się do \textit{macheps}. (Zwróćmy uwagę, że dla $n = 52$, h wyniosło $2^{-52} = \textit{macheps}$ i na to, że wartość $x_0 = 1$ jest tu kluczowa). Skutkowało to, że od wartości $n = 53$ wyrażenie $f(1 + h) - f(1)$ przybierało postać $f(1) - f(1) = 0$. Wyjaśnia to dlaczego malejące h przestaje od pewnego momentu zwiększać dokładność przybliżenia wartości pochodnej. Dla $n\space \textgreater\space 2^{-52}$, h zostaje pochłonięte podczas dodawania w liczniku i przez to później licznik przyjmuje wartość 0.
 	
 	
 	
