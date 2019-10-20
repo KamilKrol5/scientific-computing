@@ -61,11 +61,11 @@
 			\hline
 			& obliczony \textit{macheps} & eps(type) & wartość z pliku float.h \\
 			\hline
-			Float16 & 0.000977 & 0.000977 & xd \\
+			Float16 & 0.000977 & 0.000977 & - \\
 			\hline
-			Float32 & 1.1920929e-7 & 1.1920929e-7 & xd \\
+			Float32 & 1.1920929e-7 & 1.1920929e-7 & 1.1920929e-7 \\
 			\hline
-			Float64 & 2.220446049250313e-16 & 2.220446049250313e-16 & xd \\
+			Float64 & 2.220446049250313e-16 & 2.220446049250313e-16 & 2.220446049250313e-16 \\
 			\hline
 		\end{tabular}
 	\end{table}
@@ -80,6 +80,7 @@
 	\subsection*{Eta}
 	Kolejnym zadaniem jest wyznaczenie liczby \textit{eta} takiej, że \textit{eta} \textgreater\space0.0 dla wszystkich typów zmiennopozycyjnych Float16, Float32, Float64.
 	Wyniki napisanego przeze mnie programu, który iteracyjnie wyznacza te liczby, umieściłem w poniższej tabeli. Ponadto wartości otrzymanych liczb \textit{eta} porównałem z wartościami zwracanymi przez funkcje: \mbox{\textit{nextfloat}(Float16(0.0))}, \mbox{\textit{nextfloat}(Float32(0.0))}, \mbox{\textit{nextfloat}(Float64(0.0)}
+	\clearpage
 	
 	\begin{table}[h!]
 		\centering
@@ -100,7 +101,7 @@
 
 	Wartości obliczone przeze mnie okazały się takie same jak zwrócone przez funkcje wbudowane w język Julia.
 	Kolejnym pytaniem jest: Jaki związek ma liczba \textit{eta} z liczbą $MIN_{sub}$?\newline
-	$MIN_{sub}$ jest najmniejszą liczbą zdenormalizowaną (subnormalną), tzn. taką gdzie cecha liczby jest wypełniona zerami. Inaczej najmniejsza możliwa do przechowania w danym systemie liczba. Liczba \textit{eta} jest równa liczbie $MIN_{sub}$, są one tożsame. Są to liczby tak małe, że nie da się ich pomniejszyć manipulując cechą.
+	$MIN_{sub}$ jest najmniejszą liczbą zdenormalizowaną (subnormalną), tzn. taką gdzie cecha liczby jest wypełniona zerami. Inaczej najmniejsza możliwa do przechowania w danym systemie liczba. Liczba \textit{eta} jest równa liczbie $MIN_{sub}$. Są to liczby tak małe, że nie da się ich pomniejszyć manipulując cechą.
 	\newline
 	Innym pytaniem z treści zadania jest: co zwracają funkcje \textit{floatmin}(Float32) i \textit{floatmin}(Float64) i jaki jest związek zwracanych wartości z liczbą $MIN_{nor}$?\newline
 	Funkcje te zwracają najmniejsze liczby znormalizowane dla danego typu, a jest to dokładnie $MIN_{nor}$. Liczby znromalizowane to takie gdzie w mantysie zakładamy niepisaną jedynkę, tzn. wartość mantysy '0011...' oznacza '1.0011...' (inaczej niż w subnormalnych) i cecha nie jest zerem. Inaczej są to liczby, które można pomniejszyć zmniejszając wartość cechy.
@@ -116,11 +117,11 @@
 			\hline
 			& Obliczony \textit{MAX} & maxfloat(type) & wartość z pliku float.h \\
 			\hline
-			Float16 & 6.55e4 & 6.55e4 & xd \\
+			Float16 & 6.55e4 & 6.55e4 & - \\
 			\hline
-			Float32 & 3.4028235e38 & 3.4028235e38 & xd \\
+			Float32 & 3.4028235e38 & 3.4028235e38 & 3.4028235e38 \\
 			\hline
-			Float64 & 1.7976931348623157e308 & 1.7976931348623157e308 & xd \\
+			Float64 & 1.7976931348623157e308 & 1.7976931348623157e308 & 1.7976931348623157e308 \\
 			\hline
 		\end{tabular}
 	\end{table}
@@ -231,6 +232,7 @@
 		\end{tabular}
 	\end{table}
 
+	\newpage 
 	Widać, że wartości $\delta_1$ i $\delta_4$ są poprawne z tego samego powodu co poprzednio - wartości zmieniają się na najmniej znaczących bitach (na końcu) w sposób umożliwiający przejście przez wszystkie możliwe wartości mantysy.
 	
 	\section*{Zadanie 4}
