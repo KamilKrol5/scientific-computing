@@ -242,7 +242,7 @@
 	Kolejnym krokiem w zadaniu było znalezienie najmniejszej takiej liczby x. Przez najmniejszą taką liczbę rozumiem tu najmniejszą liczbę $\textgreater 0$. Wynik działania programu to $5.0e-324$. Jest to wartość $MIN_{sub}$.  Reprezentacja tej liczby w arytmetyce Float64 to: \newline 
 	$$0 00000000000 0000000000000000000000000000000000000000000000000001$$
 	Matematycznie mamy \( MIN_{sub} \cdot (\frac{1}{MIN_{sub}}) = 1\), a program stwierdził, że tak nie jest. Dlaczego? Przyjrzyjmy się obliczonej przez komputer wartości: $\frac{1}{MIN_{sub}} = Inf$. Stąd później $MIN_{sub} \cdot(\frac{1}{MIN_{sub}}) = MIN_{sub} \cdot Inf = Inf \ne 1$. Stąd właśnie wziął się taki wynik programu. Wnioskiem z zadania jest to, że ze względu na ograniczenia reprezentacji liczb, niektóre działania (nawet te podstawowe) mogą dawać błędne wyniki.
-	
+	\clearpage
 	
 	\section*{Zadanie 5}
 	Zadanie to polegało na eksperymentalnym obliczeniu iloczynu skalarnego dwóch wektorów x i y. \newline
@@ -280,10 +280,10 @@
 		\end{tabular}
 	\end{table}
 	
-	\clearpage
 	Patrząc na wyniki nasuwa się kilka ważnych wniosków. Wartości obliczone przez program nie są równe wartości dokładnej bez względu na użyty algorytm. Ponadto różnice w wartościach obliczonych przez poszczególne algorytmy okazały się kompletnie nieintuicyjne. Algorytm c (descending), który wydaje się \textit{najgorszy} okazał się widocznie lepszy od algorytmu a i b (dla Float64) i na dodatek dał taki sam wynik jak algorytm d (ascending) (dla Float64 i Float32), który wydaje się \textit{najlepszy}. Przy czym przez \textit{najlepszy/najgorszy} rozumiem taki który oblicza wartość odpowiednio najdokładniej/najmniej dokładnie. \newline
-	Inną rzeczą wartą zauważenia jest też fakt, że różnice w błędach dla dwóch testowanych typów okazały się bardzo duże - błędy dla Float64 były znacznie mniejsze.
+	Inną rzeczą wartą zauważenia jest też fakt, że różnice w błędach dla dwóch testowanych typów okazały się bardzo duże - błędy dla Float64 były znacznie mniejsze niż te dla Float32.
 	Kolejnym wnioskiem jest to, że licząc iloczyn skalarny dla Float64 otrzymaliśmy w 2 przypadkach wartość 0.0, co nieuważnemu użytkownikowi dałoby podstawy żeby twierdzić, że wekotry x i y są prostopadłe, kiedy w rzeczywistości tak nie jest. 
+	\clearpage
 
 	\section*{Zadanie 6}
 	
@@ -385,7 +385,8 @@
 	
 	Widać, że dla n = 53 i 54 wartość $\widetilde{f'}(1)$ wyniosła 0 (dla dalszych wartości też tak jest), a wartość $h + 1 = 1$. Patrząc na definicję \textit{macheps} z zadania 1. możemy stwierdzić, że liczba h wraz ze wzrostem liczby n zbliżała się do \textit{macheps}. (Zwróćmy uwagę, że dla $n = 52$, h wyniosło $2^{-52} = \textit{macheps}$ i na to, że wartość $x_0 = 1$ jest tu kluczowa). Skutkowało to, że od wartości $n = 53$ wyrażenie $f(1 + h) - f(1)$ przybierało postać $f(1) - f(1) = 0$. Dla $n\space \textgreater\space 2^{-52}$, h zostaje pochłonięte podczas dodawania w liczniku i przez to później licznik przyjmuje wartość 0. Wyjaśnia to dlaczego wartości h+1 od pewnego momentu są równe dokładnie 1.\newline
 	Kiedy przyjrzymy się dokładniej wartościom błędów bezwzględnych widzimy, że dokładność przybliżenia zaczeła się pogarszać dużo wcześniej niż przy \(2^{-53}\). Wartość dla funkcji \(2^{-28}\) wydaje się najdokładniejsza, gdyż błąd bezwzględny jest wtedy najmniejszy. Dalsze wartości mają już większy błąd.
-	Uzasadnieniem dlaczego się tak dzieje jest zjawisko utraty cyfr znaczących. Zwróćmy uwagę, że kiedy komputer oblicza przybliżoną wartość pochodnej w punkcie $x_0 = 1$ według wzoru podanego powyżej, liczby w liczniku tj. $f(x_0 + h)$ i $f(x_0)$ mają wartości bardzo bliskie sobie. Kiedy następuje ich odejmowanie następuje zjawisko utraty cyfr znaczących. 
+	Uzasadnieniem dlaczego się tak dzieje jest zjawisko utraty cyfr znaczących. \newline
+	Zwróćmy uwagę, że kiedy komputer oblicza przybliżoną wartość pochodnej w punkcie $x_0 = 1$ według wzoru podanego powyżej, liczby w liczniku tj. $f(x_0 + h)$ i $f(x_0)$ mają wartości bardzo bliskie sobie. Kiedy następuje ich odejmowanie następuje zjawisko utraty cyfr znaczących. 
 	Wyjaśnia to dlaczego malejące h przestaje od pewnego momentu zwiększać dokładność przybliżenia wartości pochodnej. Wynika z tego, że należy unikać odejmowania liczb bliskich sobie, ponieważ narażamy się na wyżej opisane zjawisko.
 	
 	
