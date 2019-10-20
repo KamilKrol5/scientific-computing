@@ -22,6 +22,6 @@ for n = 1:30
     x = Float64(8)^(-n)
     f_ = f(Float64, x)
     g_ = g(Float64, x)
-    # println("For x = 8^(-$n) - $(@sprintf("%.30f",x)):    f = $f_;    g = $g_;   Is it equal? $(f_ == g_)")
-    println("\$8^{-$n}\$ & $f_ & $g_ & $(f_ == g_) \\\\ \\hline")
+    println("For x = 8^(-$n) - $(@sprintf("%.30f",x)):    f = $f_;    g = $g_;   Is it equal? $(f_ == g_)")
+    # println("\$8^{-$n}\$ & $f_ & $g_ & $(f_ == g_) \\\\ \\hline")
 end
