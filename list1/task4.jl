@@ -17,6 +17,8 @@ function main()
     
         println("The smallest number x for which x ∗ ( 1.0 / x ) != 1.0 is: $(number) ($(bitstring(number)))")
 
+
+        # computing number which is larger than 0
         start = nextfloat(Float64(0.0)) #first number in range (0,1)
         end_ = Float64(1.0) #end of the range (0,1) (exclusive)
         number = start; #sought number
