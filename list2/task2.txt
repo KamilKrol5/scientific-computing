@@ -1,0 +1,2 @@
+#author Kamil Król
+Limit of f(x) when x goes to infinity is 1.0
