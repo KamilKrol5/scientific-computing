@@ -33,9 +33,10 @@ y1 = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049]
 x2 = [2.718281828, -3.141592654, 1.414213562, 0.577215664, 0.301029995]
 y2 = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049]
 
-realValue = -1.00657107000000e-11
+realValue1 = -1.00657107000000e-11
+realValue2 = -0.004296343192495245
 
-function runExperiment(x, y)
+function runExperiment(x, y, realValue)
     for type in types
         forward = scalarProductForwardFunctional(x, y, type)
         backward = scalarProductBackwardFunctional(x, y, type)
@@ -46,19 +47,19 @@ function runExperiment(x, y)
         absErrDesc = abs(realValue - descending)
         absErrAsc = abs(realValue - ascedning)
         println("Type: $type")
-        println("Scalar Product (Forward) = ",forward, " absolute error = $absErrForward, relative error = $(abs(absErrForward/realValue))")
-        println("Scalar Product (Backward) = ",backward, " absolute error = $absErrBackward, relative error = $(abs(absErrBackward/realValue))")
-        println("Scalar Product (Descending) = ",descending, " absolute error = $absErrDesc, relative error = $(abs(absErrDesc/realValue))")
-        println("Scalar Product (Ascending) = ",ascedning, " absolute error = $absErrAsc, relative error = $(abs(absErrAsc/realValue))")
-        # println("Forward & $forward & $absErrForward & $(abs(absErrForward/realValue)) \\\\ \\hline")
-        # println("Backward & $backward & $absErrBackward & $(abs(absErrBackward/realValue)) \\\\ \\hline")
-        # println("Descending & $descending & $absErrDesc & $(abs(absErrDesc/realValue)) \\\\ \\hline")
-        # println("Ascending & $ascedning & $absErrAsc & $(abs(absErrAsc/realValue)) \\\\ \\hline")
+        # println("Scalar Product (Forward) = ",forward, " absolute error = $absErrForward, relative error = $(abs(absErrForward/realValue))")
+        # println("Scalar Product (Backward) = ",backward, " absolute error = $absErrBackward, relative error = $(abs(absErrBackward/realValue))")
+        # println("Scalar Product (Descending) = ",descending, " absolute error = $absErrDesc, relative error = $(abs(absErrDesc/realValue))")
+        # println("Scalar Product (Ascending) = ",ascedning, " absolute error = $absErrAsc, relative error = $(abs(absErrAsc/realValue))")
+        println("Forward & $forward & $absErrForward & $(abs(absErrForward/realValue)) \\\\ \\hline")
+        println("Backward & $backward & $absErrBackward & $(abs(absErrBackward/realValue)) \\\\ \\hline")
+        println("Descending & $descending & $absErrDesc & $(abs(absErrDesc/realValue)) \\\\ \\hline")
+        println("Ascending & $ascedning & $absErrAsc & $(abs(absErrAsc/realValue)) \\\\ \\hline")
         println()
     end
 end
 
-runExperiment(x1, y1)
-runExperiment(x2, y2)
+runExperiment(x1, y1, realValue1)
+runExperiment(x2, y2, realValue2)
 
 println("Real value: −1.00657107e−11")
