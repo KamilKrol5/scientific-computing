@@ -1,2 +1,3 @@
 #author Kamil Król
+f(x) = lim x to inf (e^(x)*ln(1+e^(-x)))
 Limit of f(x) when x goes to infinity is 1.0
