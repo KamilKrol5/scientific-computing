@@ -281,151 +281,124 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 	
 	Widzimy, że zmiana jednego ze współczynników o wartość rzędu $2^{-23}$ sprawiła, że wilelomian ma już pierwiastki zespolone. Wnioskiem z zadania jest fakt, że zadanie to jest źle uwarunkowane, ponieważ małe zaburzenia współczynników powodują znaczne zmiany w wynikach.
 	
+	\clearpage
+	
 	\section*{Zadanie 5}
-	Zadanie to polegało na eksperymentalnym obliczeniu iloczynu skalarnego dwóch wektorów x i y. \newline
-	\mbox{x = [2.718281828, -3.141592654, 1.414213562, 0.5772156649, 0.3010299957]}\newline
-	\mbox{y = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049].}\newline
-	W treści zadania są podane 4 algorytmy: \newline a (forward),b (backward),c (descending),d (ascending), które zaimplementowałem. Algorytmy są opisane w treści zadania, więc nie będę ich tu opisywać. Kolejnym krokiem w zadaniu było porównanie otrzymanych wartości z wartościa prawdziwą, zrealizowałem to licząc błąd bezwzględny i względny. Przypomnijmy - wartość dokładna (z dokładnością do 15 cyfr, według treści zadania) wynosi \(-1.00657107000000\cdot10^{-11}\). Wyniki mojego programu znajdują się w tabeli poniżej:
-	
-	
-	\begin{table}[h!]
-	\centering
-	\label{tab:table1}
+	Celem zadania było wykonanie eksperymentów opisanych w treści zadania, które dotyczyły równania rekurencyjnego opisującego model logistyczny/model wzrostu populacji. Równanie:
+	$$p_{n+1} := p_n + rp_n(1-p_n), \ \textrm{dla} \ n = 0, 1, \dots$$
+	gdzie $r$ jest pewną daną stałą, $r(1-p_n)$ jest czynnikiem wzrostu populacji, a $p_0$ jest wielkością populacji stanowiącą procent maksymalnej wielkości populacji dla danego stanu środowiska.
+	W tabeli poniżej znajdują się wyniki pierwszego eksperymentu polegającego na wykonaniu 40 iteracji danego wyrażenia rekurencyjnego w arytmetyce Float32 dla danych $p_0 = 0.01$ i $r = 3$, a później ponownym wykonananiu 40 iteracji, ale z obcięciem wyniku w iteracji 10.
+	\begin{table}[!h]
+		\centering
+		\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|}
-			\multicolumn{4}{c}{Dla Float64}\\
 			\hline
-			alogrytm & obliczona wartość & błąd bezwzględny & błąd względny\\
+			numer iteracji & bez modyfikacji & z modyfikacją \\
 			\hline
-			Forward & 1.0251881368296672e-10 & 1.1258452438296672e-10 & 11.184955313981627 \\ \hline
-			Backward & -1.5643308870494366e-10 & 1.4636737800494365e-10 & 14.541186645165915 \\ \hline
-			Descending & 0.0 & 1.00657107e-11 & 1.0 \\ \hline
-			Ascending & 0.0 & 1.00657107e-11 & 1.0 \\ \hline
+			1 & 0.0397       & 0.0397 \\ \hline
+			2 & 0.15407173   & 0.15407173 \\ \hline
+			3 & 0.5450726    & 0.5450726 \\ \hline
+			4 & 1.2889781    & 1.2889781 \\ \hline
+			5 & 0.1715188    & 0.1715188 \\ \hline
+			6 & 0.5978191    & 0.5978191 \\ \hline
+			7 & 1.3191134    & 1.3191134 \\ \hline
+			8 & 0.056273222  & 0.056273222 \\ \hline
+			9 & 0.21559286   & 0.21559286 \\ \hline
+			10 & 0.7229306    & 0.722 \\ \hline
+			11 & 1.3238364    & 1.3241479 \\ \hline
+			12 & 0.037716985  & 0.036488414 \\ \hline
+			13 & 0.14660022   & 0.14195944 \\ \hline
+			14 & 0.521926     & 0.50738037 \\ \hline
+			15 & 1.2704837    & 1.2572169 \\ \hline
+			16 & 0.2395482    & 0.28708452 \\ \hline
+			17 & 0.7860428    & 0.9010855 \\ \hline
+			18 & 1.2905813    & 1.1684768 \\ \hline
+			19 & 0.16552472   & 0.577893 \\ \hline
+			20 & 0.5799036    & 1.3096911 \\ \hline
+			21 & 1.3107498    & 0.09289217 \\ \hline
+			22 & 0.088804245  & 0.34568182 \\ \hline
+			23 & 0.3315584    & 1.0242395 \\ \hline
+			24 & 0.9964407    & 0.94975823 \\ \hline
+			25 & 1.0070806    & 1.0929108 \\ \hline
+			26 & 0.9856885    & 0.7882812 \\ \hline
+			27 & 1.0280086    & 1.2889631 \\ \hline
+			28 & 0.9416294    & 0.17157483 \\ \hline
+			29 & 1.1065198    & 0.59798557 \\ \hline
+			30 & 0.7529209    & 1.3191822 \\ \hline
+			31 & 1.3110139    & 0.05600393 \\ \hline
+			32 & 0.0877831    & 0.21460639 \\ \hline
+			33 & 0.3280148    & 0.7202578 \\ \hline
+			34 & 0.9892781    & 1.3247173 \\ \hline
+			35 & 1.021099     & 0.034241438 \\ \hline
+			36 & 0.95646656   & 0.13344833 \\ \hline
+			37 & 1.0813814    & 0.48036796 \\ \hline
+			38 & 0.81736827   & 1.2292118 \\ \hline
+			39 & 1.2652004    & 0.3839622 \\ \hline
+			40 & 0.25860548   & 1.093568 \\ \hline
 		\end{tabular}
 	\end{table}
 
-	\begin{table}[h!]
-	\centering
-	\label{tab:table1}
-		\begin{tabular}{|c|c|c|c|}
-			\multicolumn{4}{c}{Dla Float32}\\
-			\hline
-			alogrytm & obliczona wartość & błąd bezwzględny & błąd względny\\
-			\hline
-			Forward & -0.4999443 & 0.49994429944939167 & 4.9668057661282845e10 \\ \hline
-			Backward & -0.4543457 & 0.4543457031149343 & 4.51379655800096e10 \\ \hline
-			Descending & -0.5 & 0.4999999999899343 & 4.967359135306107e10 \\ \hline
-			Ascending & -0.5 & 0.4999999999899343 & 4.967359135306107e10 \\ \hline
-		\end{tabular}
-	\end{table}
-	
-	Patrząc na wyniki nasuwa się kilka ważnych wniosków. Wartości obliczone przez program nie są równe wartości dokładnej bez względu na użyty algorytm. Ponadto różnice w wartościach obliczonych przez poszczególne algorytmy okazały się kompletnie nieintuicyjne. Algorytm c (descending), który wydaje się \textit{najgorszy} okazał się widocznie lepszy od algorytmu a i b (dla Float64) i na dodatek dał taki sam wynik jak algorytm d (ascending) (dla Float64 i Float32), który wydaje się \textit{najlepszy}. Przy czym przez \textit{najlepszy/najgorszy} rozumiem taki który oblicza wartość odpowiednio najdokładniej/najmniej dokładnie. \newline
-	Inną rzeczą wartą zauważenia jest też fakt, że różnice w błędach dla dwóch testowanych typów okazały się bardzo duże - błędy dla Float64 były znacznie mniejsze niż te dla Float32.
-	Kolejnym wnioskiem jest to, że licząc iloczyn skalarny dla Float64 otrzymaliśmy w 2 przypadkach wartość 0.0, co nieuważnemu użytkownikowi dałoby podstawy żeby twierdzić, że wektory x i y są prostopadłe, kiedy w rzeczywistości tak nie jest. 
 	\clearpage
 
+	W tabeli poniżej znajdują się wyniki eksperymentu drugiego, który polegał na wykonaniu 40 iteracji tego samego wyrażenia rekurencyjnego w arytmetyce Float32 oraz Float64 dla danych $p_0 = 0.01$ i $r = 3$, a później porównaniu otrzymanych wyników.
+
+		\begin{table}[!h]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			numer iteracji & Float32 & Float64 \\
+			\hline
+			1 & 0.0397      	    &  0.0397 \\ \hline
+			2 & 0.15407173  		& 0.15407173000000002 \\ \hline
+			3 & 0.5450726   		& 0.5450726260444213 \\ \hline
+			4 & 1.2889781   		& 1.2889780011888006 \\ \hline
+			5 & 0.1715188   		& 0.17151914210917552 \\ \hline
+			6 & 0.5978191   		& 0.5978201201070994 \\ \hline
+			7 & 1.3191134   		& 1.3191137924137974 \\ \hline
+			8 & 0.056273222 		& 0.056271577646256565 \\ \hline
+			9 & 0.21559286  		& 0.21558683923263022 \\ \hline
+			10 & 0.7229306  		& 0.722914301179573 \\ \hline
+			11 & 1.3238364  		& 1.3238419441684408 \\ \hline
+			12 & 0.037716985		& 0.03769529725473175 \\ \hline
+			13 & 0.14660022 		& 0.14651838271355924 \\ \hline
+			14 & 0.521926   		& 0.521670621435246 \\ \hline
+			15 & 1.2704837  		& 1.2702617739350768 \\ \hline
+			16 & 0.2395482  		& 0.24035217277824272 \\ \hline
+			17 & 0.7860428  		& 0.7881011902353041 \\ \hline
+			18 & 1.2905813  		& 1.2890943027903075 \\ \hline
+			19 & 0.16552472 		& 0.17108484670194324 \\ \hline
+			20 & 0.5799036  		& 0.5965293124946907 \\ \hline
+			21 & 1.3107498  		& 1.3185755879825978 \\ \hline
+			22 & 0.088804245		& 0.058377608259430724 \\ \hline
+			23 & 0.3315584  		& 0.22328659759944824 \\ \hline
+			24 & 0.9964407  		& 0.7435756763951792 \\ \hline
+			25 & 1.0070806  		& 1.315588346001072 \\ \hline
+			26 & 0.9856885  		& 0.07003529560277899 \\ \hline
+			27 & 1.0280086  		& 0.26542635452061003 \\ \hline
+			28 & 0.9416294  		& 0.8503519690601384 \\ \hline
+			29 & 1.1065198  		& 1.2321124623871897 \\ \hline
+			30 & 0.7529209  		& 0.37414648963928676 \\ \hline
+			31 & 1.3110139  		& 1.0766291714289444 \\ \hline
+			32 & 0.0877831  		& 0.8291255674004515 \\ \hline
+			33 & 0.3280148  		& 1.2541546500504441 \\ \hline
+			34 & 0.9892781  		& 0.29790694147232066 \\ \hline
+			35 & 1.021099   		& 0.9253821285571046 \\ \hline
+			36 & 0.95646656 		& 1.1325322626697856 \\ \hline
+			37 & 1.0813814  		& 0.6822410727153098 \\ \hline
+			38 & 0.81736827 		& 1.3326056469620293 \\ \hline
+			39 & 1.2652004  		& 0.0029091569028512065 \\ \hline
+			40 & 0.25860548 		& 0.011611238029748606 \\ \hline
+		\end{tabular}
+	\end{table}
+
+	Z pierwszej tabeli widać, że zaburzenie wartości w 10 iteracji zmienia całkowicie wyniki w dalszych iteracjach. Od tego miejsca nie widać żadnej zależności między wynikami. Widać zatem, że w przypadku równania rekurencyjnego małe zaburzenie danych całkowicie zmieniło następne wyniki. Kolejna tabela pokazuje doświadczenie gdzie żadne zaburzenie nie zostało wprowadzone, jedyna różnica to arytmetyka w jakiej były wykonywane obliczenia. Widać, że na początku wartości są podobne, ale później tak jak w poprzednim eksperymencie zaczynają od siebie odbiegać dając na końcu zupełnie różne wyniki. Oba eksperymenty ukazują jak drobne błędy np. te związane z dokładnością przechowywanych danych mogą się kumulować i wpływać na wyniki. 
+	Jest to zjawisko chaosu w układach sprzężeń zwrotnych. Czym są układy sprzężeń zwrotnych? Są to układy gdzie dane wyjściowe jednego procesu są danymi wejściowymi dla kolejnego kroku obliczeń. Wnioskiem z zadania jest to, że równanie rekurencyjne jest niestabilne. Ponadto widać, że zjawisko chaosu jest trudne lub wręcz niemożliwe do wyeliminowania - dokładność obliczeń możemy ulepszyć poprzez zwiększanie precyzji arytmetyki, ale dla każdej arytmetyki pojawi się moment, w którym obliczenia stracą dokładność. 
+	
 	\section*{Zadanie 6}
 	
-	Celem zadania było policzenie i porównanie wartości dwóch matematycznie równych funkcji (\textit{f} i \textit{g}) dla argumentów: \(8^{-1}, 8^{-2}, 8^{-3}, ...\) i określenie które z otrzymanych wyników są wiarygodne.
-	\[f(x) = \sqrt{x^2 + 1} - 1\]
-	\[g(x) = \frac{x^2}{\sqrt{x^2 + 1} + 1}\]
-	W tabeli poniżej znajdują się wyniki mojego programu.
-	\begin{table}[!h]
-		\centering
-		\label{tab:table1}
-		\begin{tabular}{|c|c|c|c|}
-			\hline
-			x & f(x) & g(x) & f = g \\ \hline
-			$8^{-1}$ & 0.0077822185373186414 & 0.0077822185373187065 & false \\ \hline
-			$8^{-2}$ & 0.00012206286282867573 & 0.00012206286282875901 & false \\ \hline
-			$8^{-3}$ & 1.9073468138230965e-6 & 1.907346813826566e-6 & false \\ \hline
-			$8^{-4}$ & 2.9802321943606103e-8 & 2.9802321943606116e-8 & false \\ \hline
-			$8^{-5}$ & 4.656612873077393e-10 & 4.6566128719931904e-10 & false \\ \hline
-			$8^{-6}$ & 7.275957614183426e-12 & 7.275957614156956e-12 & false \\ \hline
-			$8^{-7}$ & 1.1368683772161603e-13 & 1.1368683772160957e-13 & false \\ \hline
-			$8^{-8}$ & 1.7763568394002505e-15 & 1.7763568394002489e-15 & false \\ \hline
-			$8^{-9}$ & 0.0 & 2.7755575615628914e-17 & false \\ \hline
-			$8^{-10}$ & 0.0 & 4.336808689942018e-19 & false \\ \hline
-			$8^{-11}$ & 0.0 & 6.776263578034403e-21 & false \\ \hline
-			$8^{-12}$ & 0.0 & 1.0587911840678754e-22 & false \\ \hline
-			$8^{-13}$ & 0.0 & 1.6543612251060553e-24 & false \\ \hline
-			$8^{-14}$ & 0.0 & 2.5849394142282115e-26 & false \\ \hline
-			$8^{-15}$ & 0.0 & 4.0389678347315804e-28 & false \\ \hline
-			$8^{-16}$ & 0.0 & 6.310887241768095e-30 & false \\ \hline
-			$8^{-17}$ & 0.0 & 9.860761315262648e-32 & false \\ \hline
-			$8^{-18}$ & 0.0 & 1.5407439555097887e-33 & false \\ \hline
-			$8^{-19}$ & 0.0 & 2.407412430484045e-35 & false \\ \hline
-			\multicolumn{4}{c}{$\vdots$} \\ \hline
-			$8^{-23}$ & 0.0 & 1.4349296274686127e-42 & false \\ \hline
-			$8^{-24}$ & 0.0 & 2.2420775429197073e-44 & false \\ \hline
-			$8^{-25}$ & 0.0 & 3.503246160812043e-46 & false \\ \hline
-			$8^{-26}$ & 0.0 & 5.473822126268817e-48 & false \\ \hline
-			$8^{-27}$ & 0.0 & 8.552847072295026e-50 & false \\ \hline
-			$8^{-28}$ & 0.0 & 1.3363823550460978e-51 & false \\ \hline
-			$8^{-29}$ & 0.0 & 2.088097429759528e-53 & false \\ \hline
-			$8^{-30}$ & 0.0 & 3.2626522339992623e-55 & false \\ \hline
-		\end{tabular}
-	\end{table}
-
-	\clearpage
-	Widać, że dla żadnego z badanych argumentów funkcje nie są równe. Widać również, że począwszy od \(8^{-9}\) funkcja \textit{f} daje wartość równą 0.0 podczas kiedy funkcja \textit{g} nie. Zastanówmy się skąd mogła się wziąć ta wartość 0.0. Rozważmy sytuację kiedy liczba $x \ll 1.0$. W takim przypadku może wystąpić zjawisko tzw. pochłonięcia. Przy wykonywaniu dodawania cechy liczb są wyrównywane i w przypadku znacznej różnicy w wartościach liczb, cyfry liczby $x^2$ mogą zostać całkiem pochłonięte gdyż przy takiej samej cesze mantysy nie są w stanie uwzględnić cyfr znaczących dla obu liczb. W rezultacie pod pierwiastkiem pojawia się wartość 1.0. Stąd po wykonaniu dodawania otrzymujemy \(\sqrt{1} - 1 = 0\).\newline
-	Zobaczmy jak to wygląda dla x = \(8^{-9}\). Pierwsze co robimy to podnosimy x do kwadratu. Mamy:
-	 \(({8^{-9}})^2 = 8^{-18} = ({2^3})^{-18} = 2^{3 \cdot (-18)} = 2^{-54} = x_0\). Nasza mantysa może przechować maksymalnie 52 cyfry. Reprezentacje liczb, które będziemy do siebie dodawać są dokładne. (Przez zapis 000...0 rozumiemy 52 zera)
-	 \(1.0 = 2^0 \cdot 1.000...0;\space\space2^{-54} = 2^{-54} \cdot 1.000...0\). (W obu przypadkach mantysy wypełnione zerami). Teraz chcemy wyrównać cechy do większej z nich, zatem mantysę (wraz z niepisaną jedynką z przodu - 1.mantysa) liczby $2^{-54}$ przesuwamy o 54 miejsca. Teraz przystępujemy do dodawania (dodajemy w dwa razy większej precyzji) $x^2 + 1.0 = 1.\underbrace{000...001}_{54 cyfry}$.
-	 W rezultacie ostatnia jedynka uciekła poza 52. pozycję i zostanie ucięta - otrzymujemy 1.000...0 - same zera po przecinku. Następnie liczmy z tego pierwiastek i odejmujemy od tego 1.0: \(\sqrt{1.0} - 1.0 = 1.0 - 1.0 = 0.0\). Stąd właśnie wzięło się nasze zero w wyniku.\newline
-	 Rodzi się pytanie, dlaczego funkcja \textit{g} nie zachowała się tak jak \textit{f}. Widać, że w mianowniku wystąpi podobny problem - cały pierwiastek w pewnym momencie będzie równy 1.0, a co za tym idzie wartość całego mianownika przyjmie wartość 2.0. (Warto nadmienić, że dzielenie przez 2 jest wykonywane dokładnie). Jednak pozostanie tu licznik, który nadal będzie wpływał na wynik funkcji. Zwróćmy uwagę na to, że w momencie w którym pochłonęliśmy x obliczając wartość \textit{f(x)} straciliśmy całkiem informację o argumencie - jego wartość straciła znaczenie i nie mogła już wpłynąć na wartość funkcji. Inaczej jest z fukcją \textit{g}, w momencie pochłonięcia x-a w mianowniku, x nie stracił możliwości wpływania na wartość funkcji. Podsumowując, funkcja \textit{g} jest odporniejsza na zjawisko pochłaniania niż funkcja \textit{f}. Stąd wartości funkcji \textit{g} są bardziej wiarygodne.
-	\clearpage
-	\section*{Zadanie 7}
-	
-	Ostatnie zadanie polegało na obliczeniu przybliżonej wartości funkcji \(f(x) = sin(x) + cos(3x)\) w punkcie $x_0 = 1$ korzystając ze wzoru:
-	\[f'(x) \approx \widetilde{f'}(x) = \frac{f(x_0 + h) - f(x_0)}{h}\]
-	Ponadto dla \(h = 2^{-n} (n = 0,1,2,3,4,...,54)\) trzeba było obliczyć błędy  \(|f'(x) - \widetilde{f'}(x)|\). Dokładną wartość pochodnej funkcji możemy obliczyć z matematycznego wzoru: \(f'(x) = cos(x) - 3sin(3x)\). Wyniki działania mojego programu znajdują się w tabeli poniżej.
-	
-	
-	\begin{table}[!h]
-		\centering
-		\label{tab:table1}
-		\begin{tabular}{|c|c|c|c|}
-			\hline
-			n & $\widetilde{f'}(1)$ & \(|f'(x) - \widetilde{f'}(x)|\) & h+1\\ \hline
-			0 & 2.0179892252685967 & 1.9010469435800585 & 2.0\\ \hline
-			1 & 1.8704413979316472 & 1.753499116243109 & 1.5\\ \hline
-			2 & 1.1077870952342974 & 0.9908448135457593 & 1.25\\ \hline
-			3 & 0.6232412792975817 & 0.5062989976090435 & 1.125\\ \hline
-			4 & 0.3704000662035192 & 0.253457784514981 & 1.0625\\ \hline
-			5 & 0.24344307439754687 & 0.1265007927090087 & 1.03125\\ \hline
-			6 & 0.18009756330732785 & 0.0631552816187897 & 1.015625\\ \hline
-			\multicolumn{4}{c}{$\cdots$} \\ \hline
-			26 & 0.11694233864545822 & 5.6956920069239914e-8 & 1.0000000149011612\\ \hline
-			27 & 0.11694231629371643 & 3.460517827846843e-8 & 1.0000000074505806\\ \hline
-			28 & 0.11694228649139404 & 4.802855890773117e-9 & 1.0000000037252903\\ \hline
-			29 & 0.11694222688674927 & 5.480178888461751e-8 & 1.0000000018626451\\ \hline
-			30 & 0.11694216728210449 & 1.1440643366000813e-7 & 1.0000000009313226\\ \hline
-			31 & 0.11694216728210449 & 1.1440643366000813e-7 & 1.0000000004656613\\ \hline
-			32 & 0.11694192886352539 & 3.5282501276157063e-7 & 1.0000000002328306\\ \hline
-			33 & 0.11694145202636719 & 8.296621709646956e-7 & 1.0000000001164153\\ \hline
-			34 & 0.11694145202636719 & 8.296621709646956e-7 & 1.0000000000582077\\ \hline
-			35 & 0.11693954467773438 & 2.7370108037771956e-6 & 1.0000000000291038\\ \hline
-			36 & 0.116943359375 & 1.0776864618478044e-6 & 1.000000000014552\\ \hline
-			\multicolumn{4}{c}{$\cdots$} \\ \hline
-			44 & 0.1171875 & 0.0002452183114618478 & 1.0000000000000568\\ \hline
-			45 & 0.11328125 & 0.003661031688538152 & 1.0000000000000284\\ \hline
-			46 & 0.109375 & 0.007567281688538152 & 1.0000000000000142\\ \hline
-			47 & 0.109375 & 0.007567281688538152 & 1.000000000000007\\ \hline
-			48 & 0.09375 & 0.023192281688538152 & 1.0000000000000036\\ \hline
-			49 & 0.125 & 0.008057718311461848 & 1.0000000000000018\\ \hline
-			50 & 0.0 & 0.11694228168853815 & 1.0000000000000009\\ \hline
-			51 & 0.0 & 0.11694228168853815 & 1.0000000000000004\\ \hline
-			52 & -0.5 & 0.6169422816885382 & 1.0000000000000002\\ \hline
-			53 & 0.0 & 0.11694228168853815 & 1.0\\ \hline
-			54 & 0.0 & 0.11694228168853815 & 1.0\\ \hline
-		\end{tabular}
-	\end{table}
-	
-	Widać, że dla n = 53 i 54 wartość $\widetilde{f'}(1)$ wyniosła 0 (dla dalszych wartości też tak jest), a wartość $h + 1 = 1$. Patrząc na definicję \textit{macheps} z zadania 1. możemy stwierdzić, że liczba h wraz ze wzrostem liczby n zbliżała się do \textit{macheps}. (Zwróćmy uwagę, że dla $n = 52$, h wyniosło $2^{-52} = \textit{macheps}$ i na to, że wartość $x_0 = 1$ jest tu kluczowa). Skutkowało to, że od wartości $n = 53$ wyrażenie $f(1 + h) - f(1)$ przybierało postać $f(1) - f(1) = 0$. Dla $h\space \le\space 2^{-53}$, h zostaje pochłonięte podczas dodawania w liczniku i przez to później licznik przyjmuje wartość 0. Wyjaśnia to dlaczego wartości h+1 od pewnego momentu są równe dokładnie 1.\newline
-	Kiedy przyjrzymy się dokładniej wartościom błędów bezwzględnych widzimy, że dokładność przybliżenia zaczeła się pogarszać dużo wcześniej niż przy \(2^{-53}\). Wartość dla funkcji \(2^{-28}\) wydaje się najdokładniejsza, gdyż błąd bezwzględny jest wtedy najmniejszy. Dalsze wartości mają już większy błąd.
-	Uzasadnieniem dlaczego się tak dzieje jest zjawisko utraty cyfr znaczących. \newline
-	Zwróćmy uwagę, że kiedy komputer oblicza przybliżoną wartość pochodnej w punkcie $x_0 = 1$ według wzoru podanego powyżej, liczby w liczniku tj. $f(x_0 + h)$ i $f(x_0)$ mają wartości bardzo bliskie sobie. Kiedy następuje ich odejmowanie następuje zjawisko utraty cyfr znaczących. 
-	Wyjaśnia to dlaczego malejące h przestaje od pewnego momentu zwiększać dokładność przybliżenia wartości pochodnej. Wynika z tego, że należy unikać odejmowania liczb bliskich sobie, ponieważ narażamy się na wyżej opisane zjawisko.
+	Celem zadania było sprawdzenie zachowania pewnego równania rekurencyjnego poprzez wykonanie 40 iteracji dla podanych w treści zadania zestawów danych. Równanie:
+	$$x_{n+1} := x^2_n + c, \ \textrm{dla} \ n = 0,1,\dots$$
 	
 	
 	

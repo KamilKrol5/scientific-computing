@@ -12,6 +12,7 @@ function test1(type)
     population_result = p_0
     for i = 1:number_of_iterations
         population_result = population(r, population_result, type)
+        println("$i & $population_result \\\\ \\hline")
     end
     return population_result
 end
@@ -24,6 +25,7 @@ function test2(type)
     population_result = p_0
     for i = 1:number_of_iterations_part1
         population_result = population(r, population_result, type)
+        println("$i & $population_result \\\\ \\hline")
     end
 
     # manipulating data
@@ -32,6 +34,7 @@ function test2(type)
 
     for i = (number_of_iterations_part1+1):number_of_iterations_part2
         population_result = population(r, population_result, type)
+        println("$i & $population_result \\\\ \\hline")
     end
 
     return population_result
