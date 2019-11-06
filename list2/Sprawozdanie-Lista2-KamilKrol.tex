@@ -210,13 +210,83 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 	
 	\section*{Zadanie 4}
 
-	xd
+	Celem zadania było obliczenie dwudziestu zer wielomianu Wilkinsona w postaci naturalnej, a następnie sprawdzenie otrzymanych pierwiastków $z_k$ poprzez obliczenie $|P(z_k)|$, $|p(z_k)|$ i $|z_k-k|$ dla $1\leq k\leq 20$. Na końcu należało powtórzyć eksperyment Wilkinsona, który polegał na zamianie współczynnika przy $x^{19}$ równego -210 na $-210 -2^{23}$. Przez P będziemy oznaczać wielomian Wilkinsona w postaci naturalnej, a przez
+	p ten sam wielomian w postaci iloczynowej.	
+	$$p(x) = (x-20)(x-19)(x-18)\dots(x-6)(x-5)(x-4)(x-3)(x-2)(x-1)$$
+	W poniższej tabeli znajdują się wyniki eksperymentu, który sprawdzał wartości pierwiastków.
+	
+	\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			$k$ & $z_k$ & $|P(z_k)|$ & $|p(z_k)|$ & $|z_k-k|$ \\
+			\hline
+			1 & 0.9999999999996989 & 36352.0 & 5.517824e6 & 3.0109248427834245e-13 \\ \hline
+			2 & 2.0000000000283182 & 181760.0 & 7.378697629901744e19 & 2.8318236644508943e-11 \\ \hline
+			3 & 2.9999999995920965 & 209408.0 & 3.320413931687578e20 & 4.0790348876384996e-10 \\ \hline
+			4 & 3.9999999837375317 & 3.106816e6 & 8.854437035384718e20 & 1.626246826091915e-8 \\ \hline
+			5 & 5.000000665769791 & 2.4114688e7 & 1.8446752056545675e21 & 6.657697912970661e-7 \\ \hline
+			6 & 5.999989245824773 & 1.20152064e8 & 3.320394888870126e21 & 1.0754175226779239e-5 \\ \hline
+			7 & 7.000102002793008 & 4.80398336e8 & 5.423593016891272e21 & 0.00010200279300764947 \\ \hline
+			8 & 7.999355829607762 & 1.682691072e9 & 8.26205014011023e21 & 0.0006441703922384079 \\ \hline
+			9 & 9.002915294362053 & 4.465326592e9 & 1.196559421646318e22 & 0.002915294362052734 \\ \hline
+			10 & 9.990413042481725 & 1.2707126784e10 & 1.6552601335207813e22 & 0.009586957518274986 \\ \hline
+			11 & 11.025022932909318 & 3.5759895552e10 & 2.2478332979247994e22 & 0.025022932909317674 \\ \hline
+			12 & 11.953283253846857 & 7.216771584e10 & 2.8869446884129956e22 & 0.04671674615314281 \\ \hline
+			13 & 13.07431403244734 & 2.15723629056e11 & 3.807325552825022e22 & 0.07431403244734014 \\ \hline
+			14 & 13.914755591802127 & 3.65383250944e11 & 4.612719853149547e22 & 0.08524440819787316 \\ \hline
+			15 & 15.075493799699476 & 6.13987753472e11 & 5.901011420239329e22 & 0.07549379969947623 \\ \hline
+			16 & 15.946286716607972 & 1.555027751936e12 & 7.01087410689741e22 & 0.05371328339202819 \\ \hline
+			17 & 17.025427146237412 & 3.777623778304e12 & 8.568905825727875e22 & 0.025427146237412046 \\ \hline
+			18 & 17.99092135271648 & 7.199554861056e12 & 1.0144799361089491e23 & 0.009078647283519814 \\ \hline
+			19 & 19.00190981829944 & 1.0278376162816e13 & 1.1990376202486947e23 & 0.0019098182994383706 \\ \hline
+			20 & 19.999809291236637 & 2.7462952745472e13 & 1.4019117414364248e23 & 0.00019070876336257925 \\ \hline
+		\end{tabular}
+	\end{table}
+
+	Widać, że pierwiastki nie zostały obliczone dokładnie. Zwróćmy uwagę na wyniki dla k = 1, dla tego przypadku popełniony błąd bezwzględny był rzędu $10^{-13}$. Wydaje się, że nie jest to duży błąd. Kiedy popatrzymy na wartość wielomianu $|P(z_1)|$ to zamiast oczekiwanego 0, otrzymujemy 36352. Co dzieje się dla większych k? Dla k = 19 zamiast 0 otrzymujemy około $10^{13}$. Tak ogromny błąd całkowicie wyklucza sensowność obliczeń. 
+	Kiedy popatrzymy na wartości $|p(z_k)|$ to popełnione błędy są jeszcze większe i sięgają rzędu $10^{23}$. Skąd wzięły się tak ogromne błędy? Na początku przyjrzyjmy się postaci normalnej wielomianu P. Ostatnie współczynniki P to między innymi: 13803759753640704000, -8752948036761600000 i 2432902008176640000. Jeżeli uwzględnimy fakt, że arytmetyka Float64 ma w języku Julia od 15 do 17 cyfr znaczących to widzimy, że współczynniki te nie dadzą się przechować dokładnie w tej arytmetyce. Stąd właśnie biorą się tak duże błędy przy obliczaniu $|P(z_k)|$. Teraz zobaczmy skąd biorą się błędy przy obliczaniu wartości $|p(z_k)|$. Zauważmy, że dla wielomianu w postaci iloczynowej błąd popełniony przy obliczaniu pierwiastka jest mnożony przez czynnik rzędu 19!. Stąd w tym przypadku biorą się tak ogromne błędy. 
+	Teraz powtórzmy eksperyment Wilkinsona zamieniając w wielomianie P współczynnik -210 na $-210 -2^{23}$. W tabeli poniżej znajdują się pierwiastki zaburzonego wielomianu.
+	
+	\begin{table}[h!]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|}
+			\hline
+			część rzeczywista & część urojona \\
+			\hline
+			-8.865769941588573 & -3.4046322682057264im \\ \hline
+			-8.865769941588573 & 3.4046322682057264im \\ \hline
+			-4.247664066417391 & -6.419261223367462im \\ \hline
+			-4.247664066417391 & 6.419261223367462im \\ \hline
+			-0.7464546423257191 & -5.95141991054467im \\ \hline
+			-0.7464546423257191 & 5.95141991054467im \\ \hline
+			0.9999999997221236 & 0.0im \\ \hline
+			1.1377572287964575 & -4.670665242945042im \\ \hline
+			1.1377572287964575 & 4.670665242945042im \\ \hline
+			2.000692699312875 & 0.0im \\ \hline
+			2.086386552448566 & -3.4062233634074466im \\ \hline
+			2.086386552448566 & 3.4062233634074466im \\ \hline
+			2.526310875701247 & -2.3152371089860093im \\ \hline
+			2.526310875701247 & 2.3152371089860093im \\ \hline
+			2.5729744507561003 & 0.0im \\ \hline
+			2.6484261575929047 & -0.6383381720916199im \\ \hline
+			2.6484261575929047 & 0.6383381720916199im \\ \hline
+			2.675402970959691 & -1.4005752583277125im \\ \hline
+			2.675402970959691 & 1.4005752583277125im \\ \hline
+			8.388817997542582e6 & 0.0im \\ \hline
+		\end{tabular}
+	\end{table}
+	
+	Widzimy, że zmiana jednego ze współczynników o wartość rzędu $2^{-23}$ sprawiła, że wilelomian ma już pierwiastki zespolone. Wnioskiem z zadania jest fakt, że zadanie to jest źle uwarunkowane, ponieważ małe zaburzenia współczynników powodują znaczne zmiany w wynikach.
 	
 	\section*{Zadanie 5}
 	Zadanie to polegało na eksperymentalnym obliczeniu iloczynu skalarnego dwóch wektorów x i y. \newline
 	\mbox{x = [2.718281828, -3.141592654, 1.414213562, 0.5772156649, 0.3010299957]}\newline
 	\mbox{y = [1486.2497, 878366.9879, -22.37492, 4773714.647, 0.000185049].}\newline
 	W treści zadania są podane 4 algorytmy: \newline a (forward),b (backward),c (descending),d (ascending), które zaimplementowałem. Algorytmy są opisane w treści zadania, więc nie będę ich tu opisywać. Kolejnym krokiem w zadaniu było porównanie otrzymanych wartości z wartościa prawdziwą, zrealizowałem to licząc błąd bezwzględny i względny. Przypomnijmy - wartość dokładna (z dokładnością do 15 cyfr, według treści zadania) wynosi \(-1.00657107000000\cdot10^{-11}\). Wyniki mojego programu znajdują się w tabeli poniżej:
+	
 	
 	\begin{table}[h!]
 	\centering
