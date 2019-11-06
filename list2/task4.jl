@@ -34,15 +34,14 @@ function wilkinsonPolynomialMultiplicaive(x)
     
 end
 
-# println("$(wilkinsonPolynomialMultiplicaive(25)), $(wilkinsonPolynomialNatural(25))")
-
 rootsOfP = roots(Poly(reverse(p)))
 println("Roots of P: $rootsOfP")
 for (index, r) in enumerate(rootsOfP)
     P_z_k = abs(wilkinsonPolynomialNatural(r))
     p_z_k = abs(wilkinsonPolynomialMultiplicaive(r))
     z_k_minus_k = abs(r - index)
-    println("z_$index = $r, P_z_$index = $P_z_k, p_z_$index = $p_z_k, |z_$index - $index| = $z_k_minus_k")
+    # println("z_$index = $r, P_z_$index = $P_z_k, p_z_$index = $p_z_k, |z_$index - $index| = $z_k_minus_k")
+    println("$index & $r & $P_z_k & $p_z_k & $z_k_minus_k \\\\ \\hline")
 end
 
 #wilkinson experiment
@@ -59,3 +58,6 @@ P2 = Poly(reverse(p2))
 
 println()
 println("Zeros of polynomial in wilkinson experiment: $(roots(P2))")
+for r in roots(P2)
+    println("$(real(r)) & $(imag(r))im \\\\ \\hline")
+end
