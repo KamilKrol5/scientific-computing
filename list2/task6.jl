@@ -19,9 +19,11 @@ for test in tests
     c = test[1]
     x_0 = test[2]
     result = x_0
-    println("Test: c = $c, x_0 = $x_0")
+    # println("Test: c = $c, x_0 = $x_0")
     for i = 1:number_of_iterations
         result = recursion(result, c)
-        println("c = $c, x_0 = $x_0, x_$i = $result")
+        # println("c = $c, x_0 = $x_0, x_$i = $result")
+        println("$c & $x_0 & $result &")
     end
+    println()
 end
