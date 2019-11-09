@@ -62,10 +62,10 @@
 		\hline
 		alogrytm & obliczona wartość & błąd bezwzględny & błąd względny\\
 		\hline
-		Forward & -0.004296342739891585 & 0.004296342729825875 & 4.2682954615672344e8 \\ \hline
-		Backward & -0.004296342998713953 & 0.004296342988648243 & 4.2682957186999655e8 \\ \hline
-		Descending & -0.004296342842280865 & 0.004296342832215154 & 4.268295563288099e8 \\ \hline
-		Ascending & -0.004296342842280865 & 0.004296342832215154 & 4.268295563288099e8 \\ \hline
+		Forward & -0.004296342739891585 & 4.526036594121319e-10 & 1.0534625357739803e-7 \\ \hline
+		Backward & -0.004296342998713953 & 1.9378129136049527e-10 & 4.51037737625309e-8 \\ \hline
+		Descending & -0.004296342842280865 & 3.502143800654389e-10 & 8.151452627834422e-8 \\ \hline
+		Ascending & -0.004296342842280865 & 3.502143800654389e-10 & 8.151452627834422e-8 \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -93,14 +93,14 @@
 		\hline
 		alogrytm & obliczona wartość & błąd bezwzględny & błąd względny\\
 		\hline
-		Forward & -0.4999443 & 0.49994429944939167 & 4.9668057661282845e10 \\ \hline
-		Backward & -0.4543457 & 0.4543457031149343 & 4.51379655800096e10 \\ \hline
-		Descending & -0.5 & 0.4999999999899343 & 4.967359135306107e10 \\ \hline
-		Ascending & -0.5 & 0.4999999999899343 & 4.967359135306107e10 \\ \hline
+Forward & -0.4999443 & 0.4956479562669622 & 115.36507538148926 \\ \hline
+Backward & -0.4543457 & 0.4500493599325048 & 104.7517248432669 \\ \hline
+Descending & -0.5 & 0.4957036568075048 & 115.37804002096217 \\ \hline
+Ascending & -0.5 & 0.4957036568075048 & 115.37804002096217 \\ \hline
 	\end{tabular}
 \end{table}
 
-Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla obu zestawów testowych. Drugą obserwacją jest to, że dla typu Float64 niewielkie zmiany w danych wejściowych spowodowały duże różnice w wynikach. Wnioskiem z zadania jest to, że obliczanie iloczynku skalarnego jest zadaniem źle uwarunkowanym.
+Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla obu zestawów testowych. Powodem takiego zachowania jest to, że wprowadzone zmiany nie zmieniły reprezentacji tych liczb w tej arytmetyce, ponieważ jej dokładność jest za mała. Drugą obserwacją jest to, że dla typu Float64 niewielkie zmiany w danych wejściowych spowodowały duże różnice w wynikach. W tej sytuacji usunięcie ostatnich cyfr zmniejszyło błąd reprezentacji dzięki czemu wyniki były dokładniejsze (widać to po znacznie mniejszych wartościach błędów względnych). Wnioskiem z zadania jest to, że obliczanie iloczynu skalarnego jest zadaniem źle uwarunkowanym.
 
 
 	
@@ -121,16 +121,16 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 	\begin{figure}[!htbp]
 		\includegraphics[scale=0.9]{task2_plot_desmos_broken}
 		\centering
-		\caption{Wykres funkcji f(x) narysowany w programie desmos}
+		\caption{Wykres funkcji f(x) narysowany w programie Desmos}
 	\end{figure}
 	\clearpage
 	\begin{figure}[!htbp]
-		\includegraphics[scale=0.5]{task2_plot_pyplot}
+		\includegraphics[scale=0.7]{task2_plot_pyplot}
 		\centering
 		\caption{Wykres funkcji f(x) narysowany w programie pyplot}
 	\end{figure}
 
-	Na wykresach można zaobserwować ze dla x pomiędzy 30, a 40 funkcja zaczyna się zachowywać w nieoczekiwany sposób. Widać też, że dla dwóch programów zachowanie jest różne. Ponadto żaden z wykresów nie pokazuje właściwego przebiegu funkcji, ponieważ jej granicą przy x zmierzającym do nieskończoności jest 1, a nie jak sugerują wykresy wartość 0. Ostatnią rzeczą do zrobienia w tym zadaniu jest wyjaśnienie tego zjawiska. W tym celu przyjrzyjmy się dokładniej funkcji  $f(x) = e^{x}\cdot ln(1+e^{-x})$. Ze wzoru widać, że im większy argument x weźmiemy tym mamy do czynienia z mnożeniem coraz większej liczby z coraz mniejszą. Inna rzecz to \textit{to co dzieje się pod logarytmem}.
+	Na wykresach można zaobserwować że dla x pomiędzy 30 a 40 funkcja zaczyna się zachowywać w nieoczekiwany sposób. Widać też, że dla dwóch programów zachowanie jest różne. Ponadto żaden z wykresów nie pokazuje właściwego przebiegu funkcji, ponieważ jej granicą przy x zmierzającym do nieskończoności jest 1, a nie jak sugerują wykresy wartość 0. Ostatnią rzeczą do zrobienia w tym zadaniu jest wyjaśnienie tego zjawiska. W tym celu przyjrzyjmy się dokładniej funkcji  $f(x) = e^{x}\cdot ln(1+e^{-x})$. Ze wzoru widać, że im większy argument x weźmiemy tym mamy do czynienia z mnożeniem coraz większej liczby z coraz mniejszą, a w związku z tym z utratą dokładności obliczeń. Jest to przyczyna oscylacji funkcji w przedziale $[30,40]$. Inna rzecz to \textit{to co dzieje się pod logarytmem}.
 	Jest tam dodawanie liczby 1 do bardzo małej liczby (w przypadku odpowiednio dużego x). Jeżeli czynnik $e^{-x}$ jest odpowiednio mały to następuje zjawisko pochłonięcia tej wartości i otrzymujemy wartość 1.0. Zauważmy, że $e^{-37} < 2^{-53} < eps()$ oraz $ln(1) = 0$. Daje to w rezultacie mnożenie $e^{-x}\cdot ln(1)=e^{-x}\cdot0 = 0$, a następnie błędny wykres. Wnioskiem z zadania jest to, że bardzo małe zmiany w danych spowodowały duże różnice w wyniku. Zatem jest to przykład zadania, które jest źle uwarunkowane.
 	
 	\clearpage
@@ -185,24 +185,24 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 			\hline
 			rozmiar & rank & cond & błąd względny dla gaussa & błąd względny dla odwrotności \\ 
 			\hline
-			5 x 5 & 5 & 1.0 & 2.2752801345137457e-16 & 1.1102230246251565e-16 \\ \hline
-			5 x 5 & 5 & 10.0 & 3.8459253727671276e-16 & 2.482534153247273e-16 \\ \hline
-			5 x 5 & 5 & 1000.0 & 9.239830705567284e-15 & 8.255760547102576e-15 \\ \hline
-			5 x 5 & 5 & 1.0e7 & 2.677573588098912e-10 & 1.4018261081995785e-10 \\ \hline
-			5 x 5 & 5 & 1.0e12 & 1.1188918281429124e-5 & 1.5777474445400015e-5 \\ \hline
-			5 x 5 & 4 & 1.0e16 & 0.5599366084107262 & 0.570943572080464 \\ \hline
-			10 x 10 & 10 & 1.0 & 3.6821932062951477e-16 & 2.1925147983971603e-16 \\ \hline
-			10 x 10 & 10 & 10.0 & 2.6272671962866383e-16 & 3.6316343785083587e-16 \\ \hline
-			10 x 10 & 10 & 1000.0 & 3.155065537791195e-15 & 4.089480552672362e-15 \\ \hline
-			10 x 10 & 10 & 1.0e7 & 1.1578006231204614e-10 & 1.1234229352336132e-10 \\ \hline
-			10 x 10 & 10 & 1.0e12 & 3.319411920794968e-6 & 6.607249479556569e-6 \\ \hline
-			10 x 10 & 9 & 1.0e16 & 0.09597742941854902 & 0.08790571295190734 \\ \hline
-			20 x 20 & 20 & 1.0 & 5.7635440208947e-16 & 3.9720546451956367e-16 \\ \hline
-			20 x 20 & 20 & 10.0 & 4.256659361141682e-16 & 4.902612130890297e-16 \\ \hline
-			20 x 20 & 20 & 1000.0 & 4.556042017608055e-15 & 7.992372100964234e-15 \\ \hline
-			20 x 20 & 20 & 1.0e7 & 1.197252918540844e-10 & 3.1220980667373144e-11 \\ \hline
-			20 x 20 & 20 & 1.0e12 & 4.354484314307619e-5 & 4.162108310059814e-5 \\ \hline
-			20 x 20 & 19 & 1.0e16 & 0.0675922370477866 & 0.09120905545435168 \\ \hline
+5 x 5 & 5 & $\approx1.0$ & 2.8522145930998397e-16 & 1.7901808365247238e-16 \\ \hline
+5 x 5 & 5 & $\approx10.0$ & 6.861860919632454e-16 & 3.3674731643402955e-16 \\ \hline
+5 x 5 & 5 & $\approx1000.0$ & 2.938162811804851e-14 & 2.585346872266395e-14 \\ \hline
+5 x 5 & 5 & $\approx1.0e7$ & 1.600947789479836e-10 & 1.0757596219352109e-10 \\ \hline
+5 x 5 & 5 & $\approx1.0e12$ & 1.7114279594016988e-5 & 2.257611195209549e-5 \\ \hline
+5 x 5 & 4 & $\approx1.0e16$ & 0.23911323646084065 & 0.24987007579750867 \\ \hline
+10 x 10 & 10 & $\approx1.0$ & 2.937374022976103e-16 & 2.579925170969555e-16 \\ \hline
+10 x 10 & 10 & $\approx10.0$ & 3.040470972244059e-16 & 1.8242825833464351e-16 \\ \hline
+10 x 10 & 10 & $\approx1000.0$ & 4.7589719986982775e-14 & 4.9583112156472015e-14 \\ \hline
+10 x 10 & 10 & $\approx1.0e7$ & 5.908397149456726e-11 & 6.035098734232515e-11 \\ \hline
+10 x 10 & 10 & $\approx1.0e12$ & 2.690988209513334e-5 & 2.8608639990839446e-5 \\ \hline
+10 x 10 & 9 & $\approx1.0e16$ & 0.47733677715478207 & 0.44010801896736096 \\ \hline
+20 x 20 & 20 & $\approx1.0$ & 5.4672143489065705e-16 & 3.5717446649531166e-16 \\ \hline
+20 x 20 & 20 & $\approx10.0$ & 6.875319960193875e-16 & 7.182207712846219e-16 \\ \hline
+20 x 20 & 20 & $\approx1000.0$ & 1.5382920267640914e-14 & 1.9531849215189054e-14 \\ \hline
+20 x 20 & 20 & $\approx1.0e7$ & 4.936720925835152e-11 & 7.868469640811294e-11 \\ \hline
+20 x 20 & 20 & $\approx1.0e12$ & 4.364457931127145e-6 & 3.844384073399806e-6 \\ \hline
+20 x 20 & 19 & $\approx1.0e16$ & 0.015612189989446842 & 0.027926955723047063 \\ \hline
 		\end{tabular}
 	\end{table}
 
@@ -211,7 +211,7 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 	
 	\section*{Zadanie 4}
 
-	Celem zadania było obliczenie dwudziestu zer wielomianu Wilkinsona w postaci naturalnej, a następnie sprawdzenie otrzymanych pierwiastków $z_k$ poprzez obliczenie $|P(z_k)|$, $|p(z_k)|$ i $|z_k-k|$ dla $1\leq k\leq 20$. Na końcu należało powtórzyć eksperyment Wilkinsona, który polegał na zamianie współczynnika przy $x^{19}$ równego -210 na $-210 -2^{23}$. Przez P będziemy oznaczać wielomian Wilkinsona w postaci naturalnej, a przez
+	Celem zadania było obliczenie dwudziestu zer wielomianu Wilkinsona w postaci naturalnej, a następnie sprawdzenie otrzymanych pierwiastków $z_k$ poprzez obliczenie $|P(z_k)|$, $|p(z_k)|$ i $|z_k-k|$ dla $1\leq k\leq 20$. Na końcu należało powtórzyć eksperyment Wilkinsona, który polegał na zamianie współczynnika przy $x^{19}$ równego $-210$ na $-210 -2^{23}$. Przez P będziemy oznaczać wielomian Wilkinsona w postaci naturalnej, a przez
 	p ten sam wielomian w postaci iloczynowej.	
 	$$p(x) = (x-20)(x-19)(x-18)\dots(x-6)(x-5)(x-4)(x-3)(x-2)(x-1)$$
 	W poniższej tabeli znajdują się wyniki eksperymentu, który sprawdzał wartości pierwiastków.
@@ -257,30 +257,30 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 			\hline
 			część rzeczywista & część urojona \\
 			\hline
-			-8.865769941588573 & -3.4046322682057264im \\ \hline
-			-8.865769941588573 & 3.4046322682057264im \\ \hline
-			-4.247664066417391 & -6.419261223367462im \\ \hline
-			-4.247664066417391 & 6.419261223367462im \\ \hline
-			-0.7464546423257191 & -5.95141991054467im \\ \hline
-			-0.7464546423257191 & 5.95141991054467im \\ \hline
-			0.9999999997221236 & 0.0im \\ \hline
-			1.1377572287964575 & -4.670665242945042im \\ \hline
-			1.1377572287964575 & 4.670665242945042im \\ \hline
-			2.000692699312875 & 0.0im \\ \hline
-			2.086386552448566 & -3.4062233634074466im \\ \hline
-			2.086386552448566 & 3.4062233634074466im \\ \hline
-			2.526310875701247 & -2.3152371089860093im \\ \hline
-			2.526310875701247 & 2.3152371089860093im \\ \hline
-			2.5729744507561003 & 0.0im \\ \hline
-			2.6484261575929047 & -0.6383381720916199im \\ \hline
-			2.6484261575929047 & 0.6383381720916199im \\ \hline
-			2.675402970959691 & -1.4005752583277125im \\ \hline
-			2.675402970959691 & 1.4005752583277125im \\ \hline
-			8.388817997542582e6 & 0.0im \\ \hline
+			0.9999999999998357 & 0.0im \\ \hline
+			2.0000000000550373 & 0.0im \\ \hline
+			2.99999999660342 & 0.0im \\ \hline
+			4.000000089724362 & 0.0im \\ \hline
+			4.99999857388791 & 0.0im \\ \hline
+			6.000020476673031 & 0.0im \\ \hline
+			6.99960207042242 & 0.0im \\ \hline
+			8.007772029099446 & 0.0im \\ \hline
+			8.915816367932559 & 0.0im \\ \hline
+			10.095455630535774 & -0.6449328236240688im \\ \hline
+			10.095455630535774 & 0.6449328236240688im \\ \hline
+			11.793890586174369 & -1.6524771364075785im \\ \hline
+			11.793890586174369 & 1.6524771364075785im \\ \hline
+			13.992406684487216 & -2.5188244257108443im \\ \hline
+			13.992406684487216 & 2.5188244257108443im \\ \hline
+			16.73074487979267 & -2.812624896721978im \\ \hline
+			16.73074487979267 & 2.812624896721978im \\ \hline
+			19.5024423688181 & -1.940331978642903im \\ \hline
+			19.5024423688181 & 1.940331978642903im \\ \hline
+			20.84691021519479 & 0.0im \\ \hline
 		\end{tabular}
 	\end{table}
 	
-	Widzimy, że zmiana jednego ze współczynników o wartość rzędu $2^{-23}$ sprawiła, że wilelomian ma już pierwiastki zespolone. Wnioskiem z zadania jest fakt, że zadanie to jest źle uwarunkowane, ponieważ małe zaburzenia współczynników powodują znaczne zmiany w wynikach.
+	Widzimy, że zmiana jednego ze współczynników o wartość rzędu $2^{-23}$ sprawiła, że wielomian ma już pierwiastki zespolone. Wnioskiem z zadania jest fakt, że zadanie to jest źle uwarunkowane, ponieważ małe zaburzenia współczynników powodują znaczne zmiany w wynikach.
 	
 	\clearpage
 	
@@ -405,7 +405,7 @@ Pierwszą obserwacją jest fakt, że wyniki dla typu Float32 są takie same dla 
 	
 	
 
-	Obserwując wyniki dla c = -2 widać, że dla $x_0 = 1$ oraz dla $x_0 = 2$ rekurencja okazała się stabilna. Inna rzecz jaką można zauważyć, to fakt, że dla wartości nieznacznie odchylonej od 2.0 tzn. $x_0 = 1.99999999999999$ wyniki są zupełnie różne niż dla $x_0 = 2$. Widać zatem bardzo dużą czułość na warunki początkowe. Obserwując wyniki dla c = -1 widać, że otrzymane ciągi dla $x_0 = 1$ jak i $x_0 = -1$ są identyczne. Wynika to z podnoszenia tej wartości do kwadratu. Ostatnie dwie kolumny pokazują sytuację gdzie oba ciągi po jakimś czasie się stabilizują. Zarówno dla $x_0 = 0.25$ jak i $x_0 = 0.75$ otrzymujemy naprzemienne ciągi -1 i 1. Poniżej iteracje graficzne.
+	Obserwując wyniki dla c = -2 widać, że dla $x_0 = 1$ oraz dla $x_0 = 2$ rekurencja okazała się stabilna. Inna rzecz jaką można zauważyć, to fakt, że dla wartości nieznacznie odchylonej od 2.0 tzn. $x_0 = 1.99999999999999$ wyniki są zupełnie różne niż dla $x_0 = 2$. Widać zatem bardzo dużą czułość na warunki początkowe. Obserwując wyniki dla $c = -1$ widać, że otrzymane ciągi dla $x_0 = 1$ jak i $x_0 = -1$ są identyczne. Wynika to z podnoszenia tej wartości do kwadratu. Ostatnie dwie kolumny pokazują sytuację gdzie oba ciągi po jakimś czasie się stabilizują. Zarówno dla $x_0 = 0.25$ jak i $x_0 = 0.75$ otrzymujemy naprzemienne ciągi -1 i 1. Poniżej iteracje graficzne.
 	
 
 \begin{figure}[!htbp]
