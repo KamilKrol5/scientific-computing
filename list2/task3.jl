@@ -52,7 +52,7 @@ function randomMatrixExperiment()
             invError = relativeError(x, invResult)
 
             # println("size = $n x $n, rank = $(rank(A)), cond = $(cond(A)), gauss error = $gaussError, inversion error = $invError")
-            println("$n x $n & $(rank(A)) & $(c) & $gaussError & $invError \\\\ \\hline")
+            println("$n x $n & $(rank(A)) & \$\\approx$(c)\$ & $gaussError & $invError \\\\ \\hline")
         end
     end
 end
