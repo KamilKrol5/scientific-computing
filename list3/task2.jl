@@ -27,5 +27,5 @@ function mstycznych(f, f_prim, x0::Float64, delta::Float64, epsilon::Float64, ma
         x0 = x1                             # updating the approximation
     end
 
-    return "error", "error", "error", 1   # the result was not computed in maxit iterations
+    return "error", "error", "error", 1   # the result was not computed in maxit iterations so error
 end
