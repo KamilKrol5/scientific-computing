@@ -15,19 +15,19 @@ max_iterations = 40
 
 println("Bisection method:")
 root, value, iterations, error = mbisekcji(f, 1.5, 2.0, delta, epsilon)
-println("root: $(root), value: $(value), number of iterations: $(iterations), error: $(error)")
+println("root: $root, value: $value, number of iterations: $iterations, error: $error")
 # println("$root & $value & $iterations & $error \\\\ \\hline")
 # println("$root & $value & $iterations \\\\ \\hline")
 
 println("Newton method:")
 root, value, iterations, error = mstycznych(f, f′, 1.5, delta, epsilon, max_iterations)
-println("root: $(root), value: $(value), number of iterations: $(iterations), error: $(error)")
+println("root: $root, value: $value, number of iterations: $iterations, error: $error")
 # println("$root & $value & $iterations & $error \\\\ \\hline")
 # println("$root & $value & $iterations \\\\ \\hline")
 
 println("Secant method:")
 root, value, iterations, error = msiecznych(f, 1.0, 2.0, delta, epsilon, max_iterations)
-println("root: $(root), value: $(value), number of iterations: $(iterations), error: $(error)")
+println("root: $root, value: $value, number of iterations: $iterations, error: $error")
 # println("$root & $value & $iterations & $error \\\\ \\hline")
 # println("$root & $value & $iterations \\\\ \\hline")
 
