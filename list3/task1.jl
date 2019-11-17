@@ -7,7 +7,7 @@
 function mbisekcji(f, a::Float64, b::Float64, delta::Float64, epsilon::Float64)
     value_in_left_bound = f(a)
     value_in_right_bound = f(b)
-    range_length = value_in_right_bound - value_in_left_bound   # the length of range [a,b]
+    range_length = b - a   # the length of range [a,b]
     iterations = 0
     if (sign(value_in_left_bound) == sign(value_in_right_bound)) # function does not change its sign in range [a,b]
         return "error", "error", "error", 1
