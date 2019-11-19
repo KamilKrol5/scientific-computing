@@ -32,15 +32,57 @@
 	\maketitle
 	
 	\section*{Zadanie 1}
-	Celem tego zadania było powtórzenie zadania 5 z listy 1, ale ze zmianą danych i 
+	Celem tego zadania było napisanie funkcji w języku Julia, która rozwiązuje równanie $f(x) = 0$ metodą bisekcji oraz opis tej metody.\\
+	\textbf{Dane:}
+	\begin{enumerate}[]
+		\item $f(x)$ -- funkcja ciągła w przedziale $[a,b]$,
+		\item $[a,b]$ -- przedział początkowy, w którym szukamy zera funkcji $f$ i który spełnia warunek $f(a)f(b)< 0$,
+		\item $\epsilon, \delta$ -- dokładności obliczeń.
+	\end{enumerate}
+	\textbf{Opis:}\\
+	Zanim przystąpimy do opisu tej metody przypomnijmy twierdzenie Darboux. Mówi ono, że jeżeli funkcja $f$ jest ciągła na przedziale $[a,b]$ i $f(a)f(b)<0$ czyli wartości funkcji $f$ na końcach przedziału mają różne znaki, to istnieje taki punkt $c\in[a,b]$, dla którego $f(c)=0$. Metoda bisekcji korzysta właśnie z tego twierdzenia do znalezienia miejsc zerowych funkcji $f$. Stąd biorą się wymagania co do danych tzn. funkcja $f$ ciagła na $[a,b]$ oraz warunek $f(a)f(b)< 0$. Metoda bisekcji polega na iteracyjnym połowieniu przedziału początkowego. Początkowy przedział $[a,b]$ spełnia warunek $f(a)f(b)< 0$ z warunków początkowych. Następnie ten przedział jest połowiony. W wyniku podziału otrzymujemy przedziały $[a,c]$ oraz $[c,b]$ gdzie $c$ jest środkiem przedziału $[a,b]$. Teraz musimy sprawdzić, który z tych przedziałów spełnia warunek mówiący o tym, że wartości funkcji $f$ na jego końcach mają różne znaki. Wybieramy przedział spełniający ten warunek i dla niego powtarzamy tę procedurę. Kończymy w momencie kiedy znajdziemy zero funkcji z zadaną dokładnością tj. $|f(c)|<\epsilon$ lub kiedy szerokość przedziału, w którym szukamy zera jest dostatecznie mała tzn. $b-a<\delta$.\\
+	\textbf{Uwagi implementacyjne:}\\
+	Na początek zastanówmy się w jaki sposób można obliczyć środek przedziału $[a,b]$. Najprostszą metodą wydaje się obliczenie średniej arytmetycznej tj. $c=\frac{a+b}{2}$. Z numerycznego punktu widzenia jest to metoda ryzykowna, gdyż w pewnych przypadkach moglibyśmy otrzymać środek przedziału $c$ nienależący do przedziału $[a,b]$. Dlatego środek przedziału obliczamy ze wzoru: $c = a + \frac{b-a}{2}$. Kolejnym niebezpieczeństwem jest sprawdzanie warunku $f(*)f(c)< 0$. Mnożenie po lewej stronie nierówności może w rezultacie dać nadmiar lub niedomiar. Można go uniknąć poprzez jawne sprawdzenie znaków $f(*)$ i $f(c)$ tj. $sign(f(*)) \neq sign(f(c))$.
+	
+	
+	\clearpage
 	
 	\section*{Zadanie 2}
 	
-	Celem zadania 
+	Celem tego zadania było napisanie funkcji w języku Julia, która rozwiązuje równanie $f(x) = 0$ metodą Newtona oraz opis tej metody. Metoda Newtona nazywana jest też metodą stycznych.\\
+	\textbf{Dane:}
+	\begin{enumerate}[]
+		\item $[a,b]$ -- przedział na którym wykonywać będziemy obliczenia,
+		\item $f(x)$, $f'(x)$  -- funkcja $f$ należąca do klasy $C^2[a,b]$ oraz pochodna funkcji $f$
+		\item $x_0$ -- przybliżenie początkowe,
+		\item $\epsilon, \delta$ -- dokładności obliczeń,
+		\item \texttt{maxit} -- maksymalna dopuszczalna liczba iteracji.
+	\end{enumerate}
+	\textbf{Opis:}\\
+	Dodatkowym założeniem jest to, że szukamy pierwiastka $r$ dla którego $f'(r)\ne0$, tzn. pierwiastek $r$ jest pierwiastkiem jednokrotnym. Metoda Newtona opiera się na linearyzacji funkcji (zastąpieniu jej funkcją liniową) przez użycie jej rozwinięcia w szereg Taylora.
+	$$f(x) = f(x_n ) + f'(x_n )(x-x_n) + O((x-x_n )^2)\text{ -- rozwinięcie w szereg Taylora}$$
+	$$f(x)\approx f(x_n ) + f'(x_n )(x-x_n) \text{ -- linearyzacja}$$
+	Mamy zatem równianie $f(x_n ) + f'(x_n )(x_{n+1}-x_n) = 0$ co po przekształceniu daje wzór rekurencyjny $x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}$. Jest to wzór na kolejne przybliżenia zera funkcji. Widać, też dlaczego pojawia się założenie o tym że $f'(r)\ne0$ -- dzielilibyśmy wtedy przez 0. Zauważmy teraz, że styczna do wykresu funkcji $f$ w punkcie $x_n$ przecina oś OX w punkcie $(x_{n+1},0)$. Stąd właśnie bierze się alternatywna nazwa metody Newtona - metoda stycznych.
+	\begin{figure}[!htbp]
+		\includegraphics[scale=0.7]{newton}
+		\centering
+		\caption{Interpretacja graficzna metody Newtona -- grafika z wykładu}
+	\end{figure}
+	Na początku algorytmu następuje sprawdzenie czy wartość $f(x_0)$ jest dostatecznie bliska zeru tzn. $|f(x_0)|<\epsilon$. Jeśli tak to kończymy pracę algorytmu i zwracamy wynik. W przeciwnym wypadku przystępujemy do następnego kroku i sprawdzamy czy wartość pochodnej nie jest zbyt bliska zeru tj. $|f'(x_0)|<\epsilon$. Jeśli by się tak stało dalsze obliczenia nie miałyby sensu. Następnie używając podanego wcześniej wzoru rekurencyjnego wyliczamy iteracyjnie kolejne przybliżenia pierwiastka. Robimy to dopóki nie osiągniemy pożądanej dokładności tj. $|f(x_n)|<\epsilon$ lub nie otrzymamy dostatecznie bliskich sobie przybliżeń tj. $|x_n-x_{n-1}|<\delta$. Jeśli nie uda się spełnić tych warunków w dopuszczalnej liczbie iteracji przerywamy obliczenia. Szczególną sytuacją kiedy nie uda nam się spełnić tych warunków jest to kiedy metoda Newtona okazuje się rozbieżna dla zadanego $x_0$. Inaczej mówiąc, może się tak zdażyć, że dla zadanego przybliżenia początkowego $x_0$ metoda Newtona nie jest zbieżna. Widać zatem, że nie jest to metoda zbieżna globalnie. Dlatego właśnie stosuje się ją często w połączeniu z inna metodą zbieżną globalnie.
+	Metoda Newtona jest szybsza niż metoda bisekcji, ponieważ ma kwadratowy współczynnik zbieżności.
+	\\
+	\textbf{Uwagi implementacyjne:}\\
 
 	\section*{Zadanie 3} 
 	
-	Celem zadania 
+	Celem tego zadania było napisanie funkcji w języku Julia, która rozwiązuje równanie $f(x) = 0$ metodą siecznych oraz opis tej metody.\\
+	\textbf{Dane:}
+	\begin{enumerate}[]
+		
+		\item $\epsilon, \delta$ -- dokładności obliczeń.
+	\end{enumerate}
+
+	\clearpage
 	
 	\section*{Zadanie 4}
 
@@ -107,61 +149,6 @@
 	Widać, że oba pierwiastki występują dość blisko siebie oraz fakt, że znacznym ułatwieniem w znaleznieniu przedziałów początkowych była znajomość przebiegu funkcji $f$. Na wykresie od razu widać było, że powinniśmy się spodziewać dokładnie dwóch miejsc zerowych oraz gdzie się ich spodziewać. Bez pomocy jaką była znajomość przebiegu funkcji $f$ nie wiedzielibyśmy nawet ilu miejsc zerowych powinniśmy się spodziewać. Innym wnioskiem jest fakt, że znalezione miejsce zerowe zależy od wybranego przedziału początkowego. Ogólniejszym wnioskiem jest to, że bez dobrej znajomości przebiegu funkcji metoda bisekcji może być problematyczna do zastosowania. 
 
 	\clearpage
-
-	W tabeli poniżej znajdują się wyniki eksperymentu drugiego, który polegał na wykonaniu 40 iteracji tego samego wyrażenia rekurencyjnego w arytmetyce Float32 oraz Float64 dla danych $p_0 = 0.01$ i $r = 3$, a później porównaniu otrzymanych wyników.
-
-		\begin{table}[!h]
-		\centering
-		\label{tab:table1}
-		\begin{tabular}{|c|c|c|c|}
-			\hline
-			numer iteracji & Float32 & Float64 \\
-			\hline
-			1 & 0.0397      	    &  0.0397 \\ \hline
-			2 & 0.15407173  		& 0.15407173000000002 \\ \hline
-			3 & 0.5450726   		& 0.5450726260444213 \\ \hline
-			4 & 1.2889781   		& 1.2889780011888006 \\ \hline
-			5 & 0.1715188   		& 0.17151914210917552 \\ \hline
-			6 & 0.5978191   		& 0.5978201201070994 \\ \hline
-			7 & 1.3191134   		& 1.3191137924137974 \\ \hline
-			8 & 0.056273222 		& 0.056271577646256565 \\ \hline
-			9 & 0.21559286  		& 0.21558683923263022 \\ \hline
-			10 & 0.7229306  		& 0.722914301179573 \\ \hline
-			11 & 1.3238364  		& 1.3238419441684408 \\ \hline
-			12 & 0.037716985		& 0.03769529725473175 \\ \hline
-			13 & 0.14660022 		& 0.14651838271355924 \\ \hline
-			14 & 0.521926   		& 0.521670621435246 \\ \hline
-			15 & 1.2704837  		& 1.2702617739350768 \\ \hline
-			16 & 0.2395482  		& 0.24035217277824272 \\ \hline
-			17 & 0.7860428  		& 0.7881011902353041 \\ \hline
-			18 & 1.2905813  		& 1.2890943027903075 \\ \hline
-			19 & 0.16552472 		& 0.17108484670194324 \\ \hline
-			20 & 0.5799036  		& 0.5965293124946907 \\ \hline
-			21 & 1.3107498  		& 1.3185755879825978 \\ \hline
-			22 & 0.088804245		& 0.058377608259430724 \\ \hline
-			23 & 0.3315584  		& 0.22328659759944824 \\ \hline
-			24 & 0.9964407  		& 0.7435756763951792 \\ \hline
-			25 & 1.0070806  		& 1.315588346001072 \\ \hline
-			26 & 0.9856885  		& 0.07003529560277899 \\ \hline
-			27 & 1.0280086  		& 0.26542635452061003 \\ \hline
-			28 & 0.9416294  		& 0.8503519690601384 \\ \hline
-			29 & 1.1065198  		& 1.2321124623871897 \\ \hline
-			30 & 0.7529209  		& 0.37414648963928676 \\ \hline
-			31 & 1.3110139  		& 1.0766291714289444 \\ \hline
-			32 & 0.0877831  		& 0.8291255674004515 \\ \hline
-			33 & 0.3280148  		& 1.2541546500504441 \\ \hline
-			34 & 0.9892781  		& 0.29790694147232066 \\ \hline
-			35 & 1.021099   		& 0.9253821285571046 \\ \hline
-			36 & 0.95646656 		& 1.1325322626697856 \\ \hline
-			37 & 1.0813814  		& 0.6822410727153098 \\ \hline
-			38 & 0.81736827 		& 1.3326056469620293 \\ \hline
-			39 & 1.2652004  		& 0.0029091569028512065 \\ \hline
-			40 & 0.25860548 		& 0.011611238029748606 \\ \hline
-		\end{tabular}
-	\end{table}
-
-	Z pierwszej tabeli widać, że zaburzenie wartości w 10 iteracji zmienia całkowicie wyniki w dalszych iteracjach. Od tego miejsca nie widać żadnej zależności między wynikami. Widać zatem, że w przypadku równania rekurencyjnego małe zaburzenie danych całkowicie zmieniło następne wyniki. Kolejna tabela pokazuje doświadczenie gdzie żadne zaburzenie nie zostało wprowadzone, jedyna różnica to arytmetyka w jakiej były wykonywane obliczenia. Widać, że na początku wartości są podobne, ale później tak jak w poprzednim eksperymencie zaczynają od siebie odbiegać dając na końcu zupełnie różne wyniki. Oba eksperymenty ukazują jak drobne błędy np. te związane z dokładnością przechowywanych danych mogą się kumulować i wpływać na wyniki. 
-	Jest to zjawisko chaosu w układach sprzężeń zwrotnych. Czym są układy sprzężeń zwrotnych? Są to układy gdzie dane wyjściowe jednego procesu są danymi wejściowymi dla kolejnego kroku obliczeń. Wnioskiem z zadania jest to, że to równanie rekurencyjne jest niestabilne. Ponadto widać, że zjawisko chaosu jest trudne lub wręcz niemożliwe do wyeliminowania - dokładność obliczeń możemy ulepszyć poprzez zwiększanie precyzji arytmetyki, ale dla każdej arytmetyki pojawi się moment, w którym obliczenia stracą dokładność. 
 	
 	\section*{Zadanie 6}
 	
@@ -180,24 +167,6 @@
 	\centering
 	\caption{$c = -2$, $x_0 = 1$}
 \end{figure}
-\clearpage
-\begin{figure}[!htbp]
-	\includegraphics[scale=1]{e1-x-1andxe-x.png}
-	\centering
-	\caption{$c = -2$, $x_0 = -1$}
-\end{figure}
-\begin{figure}[!htbp]
-	\includegraphics[scale=1]{e1-x-1andxe-x.png}
-	\centering
-	\caption{$c = -2$, $x_0 = 1.99999999999999$}
-\end{figure}
-\begin{figure}[!htbp]
-	\includegraphics[scale=1]{e1-x-1andxe-x.png}
-	\centering
-	\caption{$c = -1$, $x_0 = 1$}
-\end{figure}
-
-
 
 Wnioski. Zauważmy, że w tym zadaniu również mamy do czynienia ze zjawiskiem sprzężenia zwrotnego. W całym zadaniu możemy wyróżnić 3 typy doświadczeń. Pierwszy z nich to dwa pierwsze doświadczenia oraz te z c = -1 i $x_0 \in \{-1,1\}$, w którch otrzymano ciągi stałe lub naprzemienne, są to układy stabilne. Zauważmy też, że punkty $-1$ i $2$ są punktami stałymi funkcji $x^2 - 2$. Właśnie dlatego w dwóch pierwszych doświadczeniach wartości zbiegają do tych wartości. Drugi typ to doświadczenie z $x_0 = 1.99999999999999$. Tutaj ciąg był chaotyczny. Jest to układ niestabilny. Trzeci typ doświadczenia reprezentują dwa ostatnie eksperymenty. W obu z nich układ początkowo był chaotyczny, ale po którymś kroku zaczął się stabilizować. Są to układy stabilne.
 
@@ -250,57 +219,6 @@ Wnioski. Zauważmy, że w tym zadaniu również mamy do czynienia ze zjawiskiem 
 			38 & -1 &	 2 &	 1.8145742550678174 \\ \hline
 			39 & -1 &	 2 &	 1.2926797271549244 \\ \hline
 			40 & -1 &	 2 &	 -0.3289791230026702 \\ \hline
-		\end{tabular}
-	\end{table}
-	
-	\begin{table}[!h]
-		\centering
-		\label{tab:table1}
-		\begin{tabular}{|c|c|c|c|c|}
-			\multicolumn{5}{c}{$c = -1$} \\
-			\hline
-			numer iteracji & $x_0 = 1$ & $x_0 = -1$ & $x_0 = 0.25$ & $x_0 = 0.75$ \\
-			\hline
-			1	&0 &	0 &	-0.4375 &	 -0.9375 \\ \hline	
-			2	& -1 &	 -1 &	 -0.80859375 &	 -0.12109375 \\ \hline	
-			3	& 0 &	 0 &	 -0.3461761474609375 &	 -0.9853363037109375 \\ \hline	
-			4	& -1 &	 -1 &	 -0.8801620749291033 &	 -0.029112368589267135 \\ \hline	
-			5	& 0 &	 0 &	 -0.2253147218564956 &	 -0.9991524699951226 \\ \hline	
-			6	& -1 &	 -1 &	 -0.9492332761147301 &	 -0.0016943417026455965 \\ \hline	
-			7	& 0 &	 0 &	 -0.0989561875164966 &	 -0.9999971292061947 \\ \hline	
-			8	& -1 &	 -1 &	 -0.9902076729521999 &	 -5.741579369278327e-6 \\ \hline	
-			9	& 0 &	 0 &	 -0.01948876442658909 &	 -0.9999999999670343 \\ \hline	
-			10&	 -1 &	 -1 &	 -0.999620188061125 &	 -6.593148249578462e-11 \\ \hline	
-			11&	 0 &	 0 &	 -0.0007594796206411569 &	 -1.0 \\ \hline	
-			12&	 -1 &	 -1 &	 -0.9999994231907058 &	 0.0 \\ \hline	
-			13&	 0 &	 0 &	 -1.1536182557003727e-6 &	 -1.0 \\ \hline	
-			14&	 -1 &	 -1 &	 -0.9999999999986692 &	 0.0 \\ \hline	
-			15&	 0 &	 0 &	 -2.6616486792363503e-12 &	 -1.0 \\ \hline	
-			16&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			17&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			18&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			19&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			20&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			21&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			22&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			23&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			24&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			25&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			26&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			27&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			28&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			29&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			30&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			31&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			32&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			33&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			34&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			35&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			36&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			37&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			38&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
-			39&	 0 &	 0 &	 0.0 &	 -1.0 \\ \hline	
-			40&	 -1 &	 -1 &	 -1.0 &	 0.0 \\ \hline	
 		\end{tabular}
 	\end{table}
 
