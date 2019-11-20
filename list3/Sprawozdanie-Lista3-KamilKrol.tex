@@ -71,18 +71,35 @@
 	Na początku algorytmu następuje sprawdzenie czy wartość $f(x_0)$ jest dostatecznie bliska zeru tzn. $|f(x_0)|<\epsilon$. Jeśli tak to kończymy pracę algorytmu i zwracamy wynik. W przeciwnym wypadku przystępujemy do następnego kroku i sprawdzamy czy wartość pochodnej nie jest zbyt bliska zeru tj. $|f'(x_0)|<\epsilon$. Jeśli by się tak stało dalsze obliczenia nie miałyby sensu. Następnie używając podanego wcześniej wzoru rekurencyjnego wyliczamy iteracyjnie kolejne przybliżenia pierwiastka. Robimy to dopóki nie osiągniemy pożądanej dokładności tj. $|f(x_n)|<\epsilon$ lub nie otrzymamy dostatecznie bliskich sobie przybliżeń tj. $|x_n-x_{n-1}|<\delta$. Jeśli nie uda się spełnić tych warunków w dopuszczalnej liczbie iteracji przerywamy obliczenia. Szczególną sytuacją kiedy nie uda nam się spełnić tych warunków jest to kiedy metoda Newtona okazuje się rozbieżna dla zadanego $x_0$. Inaczej mówiąc, może się tak zdażyć, że dla zadanego przybliżenia początkowego $x_0$ metoda Newtona nie jest zbieżna. Widać zatem, że nie jest to metoda zbieżna globalnie. Dlatego właśnie stosuje się ją często w połączeniu z inna metodą zbieżną globalnie.
 	Metoda Newtona jest szybsza niż metoda bisekcji, ponieważ ma kwadratowy współczynnik zbieżności.
 	\\
-	\textbf{Uwagi implementacyjne:}\\
+	%\textbf{Uwagi implementacyjne:}\\
 
 	\section*{Zadanie 3} 
 	
 	Celem tego zadania było napisanie funkcji w języku Julia, która rozwiązuje równanie $f(x) = 0$ metodą siecznych oraz opis tej metody.\\
 	\textbf{Dane:}
 	\begin{enumerate}[]
-		
-		\item $\epsilon, \delta$ -- dokładności obliczeń.
+		\item $[a,b]$ -- przedział na którym wykonywać będziemy obliczenia,
+		\item $f(x)$ -- funkcja $f$ należąca do klasy $C^2[a,b]$,
+		\item $x_0$, $x_1$ -- przybliżenia początkowe,
+		\item $\epsilon, \delta$ -- dokładności obliczeń,
+		\item \texttt{maxit} -- maksymalna dopuszczalna liczba iteracji.
 	\end{enumerate}
-
+	\textbf{Opis:}\\
+	Dodatkowym założeniem jest to, że szukamy pierwiastka $r$ dla którego $f'(r)\ne0$, tzn. pierwiastek $r$ jest pierwiastkiem jednokrotnym -- tak samo jak dla metody Newtona.
+	Zanim przystąpimy do opisu metody siecznych przyjrzyjmy się jeszcze raz metodzie Newtona. Wadą metody Newtona jest konieczność obliczenia pochodnej funkcji $f$. Metoda siecznych różni się od metody Newtona tym, że zamiast obliczać wartość $f'(x_n)$, aproksymujemy ją używając następującej formuły: $f'(x_n) \approx \dfrac{f(x_n)-f(x_{n-1})}{x_n-x_{n-1}}$. Przypomnijmy, że w metodzie Newtona kolejne przybliżenia otrzymywaliśmy ze wzoru rekurencyjnego: $x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}$. Kiedy pochodną funkcji $f$ zastąpimy powyższym przybliżeniem otrzymujemy wzór: $x_{n+1} := x_n - f(x_n)\dfrac{x_n-x_{n-1}}{f(x_n)-f(x_{n-1})}$. Widzimy zatem, że metoda siecznych jest modyfikacją meotdy Newtona, która \textit{ucieka} od liczenia wartości pochodnej funkcji $f$. Kiedy przyjrzymy się dokładniej otrzymanemu wzorowi rekurencyjnemu widzimy, że pojawiła się potrzeba znajomości dwóch poprzednich wartości $x$. Dlatego właśnie w danych pojawia się $x_0$, $x_1$. Warunkiem końcowym jest znalezienie pierwiastka z pożądaną dokładnością tj. $|f(x_n)|<\epsilon$ lub otrzymanie dostatecznie bliskich sobie przybliżeń tj. $|x_n-x_{n-1}|<\delta$. (Warunki takie same jak dla metody Newtona). Może się zdarzyć, że dla zadanych przybliżeń początkowych metoda siecznych nie jest zbieżna, ponieważ metoda siecznych nie jest zbieżna globalnie. Zatem w przypadku nieosiągnięcia warunków końcowych w maksymalnej dopuszczalnej liczbie iteracji zwracany jest błąd. Współczynnik zbieżności metody siecznych wynosi $\alpha = \frac{1+\sqrt{5}}{2}\approx1.618$. 
+	Interpretacja graficzna tej metody wygląda w następujący sposób. Każne kolejne przybliżenie pierwiastka $x_{n+2}$ to przecięcie siecznej poprowadzonej przez punkty $(x_n$, $f(x_n))$ i $(x_{n+1}$, $f(x_{n+1}))$, gdzie $x_n$ i $x_{n+1}$ to dwa poprzednie przybliżenia, z osią OX. Poniżej grafika.
+	\begin{figure}[!htbp]
+		\includegraphics[scale=0.59]{secant}
+		\centering
+		\caption{Interpretacja graficzna metody siecznych -- grafika z wykładu}
+	\end{figure}
 	\clearpage
+
+	\noindent\textbf{Uwagi implementacyjne:}\\
+	W implementacji tej metody dodano warunek mówiący, że kolejne wartości bezwzględne wartości funkcji tworzą ciąg nierosnący tzn. $|f(x_n)| \leq |f(x_{n+1})|$. W przypadku kiedy trafią się wartości $x_n$ i $x_{n+1}$, które nie spełniają tego warunku, są one ze sobą zamieniane.
+	
+	
+	
 	
 	\section*{Zadanie 4}
 
