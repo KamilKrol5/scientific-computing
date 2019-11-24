@@ -9,6 +9,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{enumerate}
+\usepackage[font=small]{caption}
 \DeclareGraphicsExtensions{.png}
 \graphicspath{ {./} }
 \geometry{
@@ -68,6 +69,7 @@
 		\centering
 		\caption{Interpretacja graficzna metody Newtona -- grafika z wykładu}
 	\end{figure}
+
 	Na początku algorytmu następuje sprawdzenie czy wartość $f(x_0)$ jest dostatecznie bliska zeru tzn. $|f(x_0)|<\epsilon$. Jeśli tak to kończymy pracę algorytmu i zwracamy wynik. W przeciwnym wypadku przystępujemy do następnego kroku i sprawdzamy czy wartość pochodnej nie jest zbyt bliska zeru tj. $|f'(x_0)|<\epsilon$. Jeśli by się tak stało dalsze obliczenia nie miałyby sensu. Następnie używając podanego wcześniej wzoru rekurencyjnego wyliczamy iteracyjnie kolejne przybliżenia pierwiastka. Robimy to dopóki nie osiągniemy pożądanej dokładności tj. $|f(x_n)|<\epsilon$ lub nie otrzymamy dostatecznie bliskich sobie przybliżeń tj. $|x_n-x_{n-1}|<\delta$. Jeśli nie uda się spełnić tych warunków w dopuszczalnej liczbie iteracji przerywamy obliczenia. Szczególną sytuacją kiedy nie uda nam się spełnić tych warunków jest to kiedy metoda Newtona okazuje się rozbieżna dla zadanego $x_0$. Inaczej mówiąc, może się tak zdażyć, że dla zadanego przybliżenia początkowego $x_0$ metoda Newtona nie jest zbieżna. Widać zatem, że nie jest to metoda zbieżna globalnie. Dlatego właśnie stosuje się ją często w połączeniu z inna metodą zbieżną globalnie.
 	Metoda Newtona jest szybsza niż metoda bisekcji, ponieważ ma kwadratowy współczynnik zbieżności.
 	\\
@@ -169,75 +171,117 @@
 	
 	\section*{Zadanie 6}
 	
-	Celem zadania było sprawdzenie zachowania pewnego równania rekurencyjnego poprzez wykonanie 40 iteracji dla podanych w treści zadania zestawów danych. Równanie:
-	$$x_{n+1} := x^2_n + c, \ \textrm{dla} \ n = 0,1,\dots$$
-	
-	Wyniki znajdują się w tabelach na końcu paragrafu.
-	
-	
+	Celem zadania było znalezienie miejsc zerowych funkcji $f_1(x)=e^{1-x}-1$ oraz $f_2(x)=xe^{-x}$ przy pomocy metod bisekcji, stycznych oraz siecznych z dokładnością obliczeń $\delta=\epsilon=10^{-5}$. Przyblizenia początkowe oraz przedział początkowy należało dobrać samodzielnie.\\
+	W celu wzynaczenie danych startowych narysowałem wykresy obu funkcji. Wykresy poniżej.
 
-	Obserwując wyniki dla c = -2 widać, że dla $x_0 = 1$ oraz dla $x_0 = 2$ rekurencja okazała się stabilna. Inna rzecz jaką można zauważyć, to fakt, że dla wartości nieznacznie odchylonej od 2.0 tzn. $x_0 = 1.99999999999999$ wyniki są zupełnie różne niż dla $x_0 = 2$. Widać zatem bardzo dużą czułość na warunki początkowe. Obserwując wyniki dla $c = -1$ widać, że otrzymane ciągi dla $x_0 = 1$ jak i $x_0 = -1$ są identyczne. Wynika to z podnoszenia tej wartości do kwadratu. Ostatnie dwie kolumny pokazują sytuację gdzie oba ciągi po jakimś czasie się stabilizują. Zarówno dla $x_0 = 0.25$ jak i $x_0 = 0.75$ otrzymujemy naprzemienne ciągi -1 i 1. Poniżej iteracje graficzne.
-	
+	\begin{figure}[!htbp]
+		\includegraphics[width=\textwidth]{e1-x-1andxe-x.png}
+		\centering
+		\caption{Wykresy funkcji $f_1(x)=e^{1-x}-1$ oraz $f_2(x)=xe^{-x}$ narysowane w programie Desmos.}
+	\end{figure}
+	\noindent\textbf{Metoda bisekcji}
 
-\begin{figure}[!htbp]
-	\includegraphics[scale=1]{e1-x-1andxe-x.png}
-	\centering
-	\caption{$c = -2$, $x_0 = 1$}
-\end{figure}
-
-Wnioski. Zauważmy, że w tym zadaniu również mamy do czynienia ze zjawiskiem sprzężenia zwrotnego. W całym zadaniu możemy wyróżnić 3 typy doświadczeń. Pierwszy z nich to dwa pierwsze doświadczenia oraz te z c = -1 i $x_0 \in \{-1,1\}$, w którch otrzymano ciągi stałe lub naprzemienne, są to układy stabilne. Zauważmy też, że punkty $-1$ i $2$ są punktami stałymi funkcji $x^2 - 2$. Właśnie dlatego w dwóch pierwszych doświadczeniach wartości zbiegają do tych wartości. Drugi typ to doświadczenie z $x_0 = 1.99999999999999$. Tutaj ciąg był chaotyczny. Jest to układ niestabilny. Trzeci typ doświadczenia reprezentują dwa ostatnie eksperymenty. W obu z nich układ początkowo był chaotyczny, ale po którymś kroku zaczął się stabilizować. Są to układy stabilne.
-
+	\noindent Widać, że $f_1$ ma tylko jedno miejsce zerowe i jest nim $x=1$. Na podstawie wykresu wybrałem przedziały startowe dla metody bisekcji dla funkcji $f_1$.
 	
 	\begin{table}[!h]
 		\centering
 		\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|}
-			\multicolumn{4}{c}{$c = -2$} \\
 			\hline
-			numer iteracji & $x_0 = 1$ & $x_0 = 2$ & $x_0 = 1.99999999999999$\\
+			przedział & pierwiastek - $r$ & $f_1(r)$ & liczba potrzebych iteracji\\
 			\hline
-			1 & -1 &	 2 &	 1.99999999999996 \\ \hline
-			2 & -1 &	 2 &	 1.9999999999998401 \\ \hline
-			3 & -1 &	 2 &	 1.9999999999993605 \\ \hline
-			4 & -1 &	 2 &	 1.999999999997442 \\ \hline
-			5 & -1 &	 2 &	 1.9999999999897682 \\ \hline
-			6 & -1 &	 2 &	 1.9999999999590727 \\ \hline
-			7 & -1 &	 2 &	 1.999999999836291 \\ \hline
-			8 & -1 &	 2 &	 1.9999999993451638 \\ \hline
-			9 & -1 &	 2 &	 1.9999999973806553 \\ \hline
-			10 & -1 &	 2 &	 1.999999989522621 \\ \hline
-			11 & -1 &	 2 &	 1.9999999580904841 \\ \hline
-			12 & -1 &	 2 &	 1.9999998323619383 \\ \hline
-			13 & -1 &	 2 &	 1.9999993294477814 \\ \hline
-			14 & -1 &	 2 &	 1.9999973177915749 \\ \hline
-			15 & -1 &	 2 &	 1.9999892711734937 \\ \hline
-			16 & -1 &	 2 &	 1.9999570848090826 \\ \hline
-			17 & -1 &	 2 &	 1.999828341078044 \\ \hline
-			18 & -1 &	 2 &	 1.9993133937789613 \\ \hline
-			19 & -1 &	 2 &	 1.9972540465439481 \\ \hline
-			20 & -1 &	 2 &	 1.9890237264361752 \\ \hline
-			21 & -1 &	 2 &	 1.9562153843260486 \\ \hline
-			22 & -1 &	 2 &	 1.82677862987391 \\ \hline
-			23 & -1 &	 2 &	 1.3371201625639997 \\ \hline
-			24 & -1 &	 2 &	 -0.21210967086482313 \\ \hline
-			25 & -1 &	 2 &	 -1.9550094875256163 \\ \hline
-			26 & -1 &	 2 &	 1.822062096315173 \\ \hline
-			27 & -1 &	 2 &	 1.319910282828443 \\ \hline
-			28 & -1 &	 2 &	 -0.2578368452837396 \\ \hline
-			29 & -1 &	 2 &	 -1.9335201612141288 \\ \hline
-			30 & -1 &	 2 &	 1.7385002138215109 \\ \hline
-			31 & -1 &	 2 &	 1.0223829934574389 \\ \hline
-			32 & -1 &	 2 &	 -0.9547330146890065 \\ \hline
-			33 & -1 &	 2 &	 -1.0884848706628412 \\ \hline
-			34 & -1 &	 2 &	 -0.8152006863380978 \\ \hline
-			35 & -1 &	 2 &	 -1.3354478409938944 \\ \hline
-			36 & -1 &	 2 &	 -0.21657906398474625 \\ \hline
-			37 & -1 &	 2 &	 -1.953093509043491 \\ \hline
-			38 & -1 &	 2 &	 1.8145742550678174 \\ \hline
-			39 & -1 &	 2 &	 1.2926797271549244 \\ \hline
-			40 & -1 &	 2 &	 -0.3289791230026702 \\ \hline
+			[0.0, 2.0] & 1.0 & 0.0 & 1 \\ \hline
+			[0.4, 2.4] & 1.000006103515625 & -6.103496998477453e-6 & 16 \\ \hline
+			[-10.0, 25.0] & 1.0000014305114746 & -1.4305104514278355e-6 & 21 \\ \hline
+			[-450.0, 500.0] & 0.9999975562095642 & 2.4437934218468627e-6 & 25 \\ \hline
+			[-10000.0, 10000.0] & 0.9999983012676239 & 1.6987338189444756e-6 & 30 \\ \hline
 		\end{tabular}
+	\caption*{Metoda bisekcji dla $f_1$.}
 	\end{table}
+
+	Widać, że pierwszy wybrany przedział okazał się bardzo \textit{wygodny} dla metody bisekcji bowiem już po jednej iteracji znane było rozwiązanie. Ogólniejszą obserwacją jest to, że metoda bisekcji dała poprawne wyniki nawet dla bardzo \textit{szerokich} przedziałów początkowych. Im większy był przedział tym więcej iteracji było potrzebnych aby otrzymać pierwiastek z zadaną dokładnością.\\
+	Patrząc na wykres można zauważyć, że funkcja $f_2$ podobnie jak funkcja $f_1$ ma jedno miejsce zerowe, tym razem miejscem zerowym jest $x=0$. Intuicyjnie zachowanie metody bisekcji dla tej funkcji powinno być podobne jak dla $f_1$. Zobaczmy.
+	\clearpage
+		\begin{table}[!h]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			przedział & pierwiastek - $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+			\hline
+			[-1.0, 2.0] & 7.62939453125e-6 & 7.62933632381113e-6 & 17 \\ \hline
+			[-10.0, 25.0] & -4.76837158203125e-6 & -4.7683943194530044e-6 & 20 \\ \hline
+			[-450.0, 500.0] & 25.0 & 3.471985966241005e-10 & 1 \\ \hline
+			[-10000.0, 12000.0] & 1000.0 & 0.0 & 1 \\ \hline
+		\end{tabular}
+	\caption*{Metoda bisekcji dla $f_2$.}
+	\end{table}
+
+	Widać, że dla dwóch pierwszych przedziałów wyniki były poprawne, ale dla dwóch kolejnych nie. Dlaczego? Zauważmy, że dla odpowiednio dużych wartości x, odpowiadające im wartości funkcji $f_2$ są bardzo bliskie zeru. Teraz zastanówmy się co się stanie jeśli wartość funkcji będzie tak bliska zeru, że będzie mniejsza od przyjętego $\epsilon$. Wtedy algorytm stwierdzi, że zostało znalezione miejsce zerowe. Zobaczby to teraz na przykładzie przedziału $[-450.0, 500.0]$. Środek tego przedziału to $x_0=25.0$. Mamy $f_2(x_0)=3.471985966241005\cdot10^{-10}<\epsilon$. Stąd mamy wynik, że już po jednej iteracji znaleziono miejsce zerowe. Podobnie dzieje się dla przedziału $[-10000.0, 12000.0]$. Widać zatem, że metoda bisekcji dla $f_2$ wymaga ostrożniejszego dobrania przedziału początkowego.\\
+	\textbf{Metoda Newtona}\\
+	W celu użycia metody Newtona do obliczenia miejsc zerowych podanych funkcji trzeba najpierw policzyć ich pochodne: $f_1'(x) = -e^{1-x}$, 
+	$f_2'(x) = e^{-x} - x\cdot e^{-x} =-e^{-x}\cdot\left(x-1\right)$. Kolejna potrzebna rzecz to przybliżenie początkowe, które wyznaczyłem patrząc na wykresy i biorąc te, które są \textit{niedaleko} zer funkcji. Dla $f_1$ przyjąłem $x_0=1.5$, a dla $f_2$ $x_0=-2.0$. Wyniki w tabeli poniżej.
+
+	\begin{table}[!h]
+	\centering
+	\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			funkcja & $x_0$ & pierwiastek - $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+			\hline
+			$f_1$ & 1.5 & 0.9999999984736215 & 1.5263785790864404e-9 & 4 \\ \hline
+			$f_2$ &-2.0 & -1.425500682806244e-9 & -1.425500684838296e-9 & 7 \\ \hline
+		\end{tabular}
+		\caption*{Metoda Newtona dla $f_1$ i $f_2$.}
+	\end{table}
+
+	Widać, że dla wybranych przeze mnie przybliżeń początkowych wyniki są poprawne.
+	Zastanówmy się dla jakich innych przybliżeń otrzymamy poprawne wyniki i czy istnieją takie, które dadzą błędne wyniki lub zwrócą błąd. Najpierw przyjrzyjmy się pochodnym funkcji.
+	\begin{figure}[!htbp]
+		\includegraphics[height=0.39\textheight]{task6derivatives}
+		\centering
+		\caption{Wykresy pochodnych funkcji $f_1'(x) = -e^{1-x}$, 
+			$f_2'(x) = e^{-x} - x\cdot e^{-x}$ narysowane w programie Desmos.}
+	\end{figure}
+
+	Przypomnijmy sobie jak działa metoda Newtona gdy trafi na $x_0$ dla którego wartość pochodnej funkcji jest bliska zeru tj. $|f'(x_0)|<\epsilon$. Metoda wtedy zwraca błąd. Widzimy już zatem, że nie możemy wziąć takich wartości x jako przybliżenia początkowe, bo otrzymamy błąd. Dotyczy to obu funkcji, ponieważ obie pochodne mają granicę równą 0 przy $x\to\infty$.\\
+	Pozostaje jeszcze inne ważne pytanie, dla jakich $x_0$ metoda Newtona będzie zbieżna? Obliczmy $\phi_1(x) = x - \dfrac{f_1(x)}{f_1'(x)} = x+1-e^{x-1}$ oraz 
+	 $\phi_2(x) = x - \dfrac{f_2(x)}{f_2'(x)} = x-\frac{x}{1-x}$. Zobaczmy wykresy oraz punkty stałe odwzorowań $\phi_1(x)$ oraz $\phi_2(x)$. Wykresy poniżej.
+	\begin{figure}[!htbp]
+		\includegraphics[width=\textwidth]{task6f1phi}
+		\centering
+		\caption{Wykresy odwzorowania $\phi_1(x) = x+1-e^{x-1}$ oraz prosta $y=x$ narysowane w programie Desmos.}
+	\end{figure}
+	\begin{figure}[!htbp]
+	\includegraphics[height=0.40\textheight]{task6f2phi}
+	\centering
+	\caption{Wykresy odwzorowania $\phi_2(x) = x-\frac{x}{1-x}$ oraz prosta $y=x$ narysowane w programie Desmos.}
+	\end{figure}
+	
+	Po wykresie $\phi_1(x)$ widać, że metoda Newtona dla $f_1$ jest zawsze zbieżna. Zatem jedyną rzeczą jaką musimy uwzględnić przy wybieraniu $x_0$ dla $f_1$ to wyżej wspomniany warunek o wartości pochodnej tj. wartość pochodnej w $x_0$ nie będąca zbyt blisko zera. Zauważmy, że punktem stałym tego odwzorowania jest $x=1$ co pokrywa się z pierwiastkiem.\\
+	W treści zadania pojawia się polecenie mówiące żeby sprawdzić co stanie, gdy w metodzie Newtona dla $f_1$ wybierzemy $x_0\in(1,\infty)$. Ogólna odpowiedź to to, że metoda Newtona będzie wtedy zbieżna. Warto jednak dodać, że wynik programu zależy od tego jak duży x wybierzemy. Jeśli weźmiemy na tyle duże $x_0$, że $|f_1'(x_0)|<\epsilon$ to otrzymamy błąd.\\
+	Po wykresie $\phi_2(x)$ widać, że metoda Newtona dla $f_2$ nie jest zawsze zbieżna. Dla $x\in(1,\infty)$ metoda Newtona jest rozbieżna, a dla $x\in(-\infty, 1)$ jest zbieżna. Zatem odpowiedzią na pytanie z treści zadania -- co się stanie co stanie, gdy w metodzie Newtona dla $f_2$ wybierzemy $x_0>1$? -- jest to, że wtedy metoda będzie rozbieżna i nigdy nie otrzymamy poprawnego wyniku. Zauważmy też, że punktem stałym odwzorowania $\phi_2(x)$ jest $x=0$ co pokrywa się z pierwiastkiem funkcji $f_2$. Pozostała jeszcze jedna wartość $x_0$ do sprawdzenia, jest to $x_0=1$. W treści zadania również pojawia się pytanie czy można tę wartość wybrać na przybliżenie początkowe.
+	Na wykresie $\phi_2(x)$ widać, że w punkcie $x_0 = 1$ przebiega asymptota pionowa. Prościej jednak popatrzeć na wykres $f_2'$. Widać na nim, że $f_2'$ ma w $x_0=1$ miejsce zerowe zatem mamy $f_2'(1) =0$ co w rezultacie daje sytuację, że warunek $|f_2'(x_0)|<\epsilon$ jest spełniony. Powoduje to, że metoda Newtona zwróci błąd. Poniżej rezultaty działania metody Newtona dla wyżej opisanych przypadków.
+	\begin{table}[!h]
+		\centering
+		\label{tab:table1}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			funkcja & $x_0$ & pierwiastek - $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+			\hline
+			$f_1$ & 3.0 & 0.9999999710783241 & 2.892167638712806e-8 & 9\\ \hline
+			$f_1$ & 25.0 & \multicolumn{3}{|c|}{błąd - wartość pochodnej funkcji w punkcie $x_0<\epsilon$ } \\ \hline
+			$f_2$ & 5.0 & 15.19428398343915 & 3.827247505782987e-6 & 9\\  \hline
+			$f_2$ & 1.0 & \multicolumn{3}{|c|}{błąd - wartość pochodnej funkcji w punkcie $x_0<\epsilon$ } \\ \hline
+		\end{tabular}
+		\caption*{Metoda Newtona dla $f_1$ i $f_2$ dla przypadków szczególnych.}
+	\end{table}
+	
+	\noindent Dla $f_2$ i $x_0=5.0$ otrzymaliśmy błędny wynik, ponieważ metoda Newtona jest wtedy rozbieżna, ale jeden z warunków końca został spełniony, tj. $f_2(x_0) < \epsilon$ -- dlatego metoda zwróciła jakiś wynik.\\
+	\textbf{Metoda siecznych}\\
+	
+	
+
 
 
 \end{document}
