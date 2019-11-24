@@ -63,7 +63,7 @@
 	Dodatkowym założeniem jest to, że szukamy pierwiastka $r$ dla którego $f'(r)\ne0$, tzn. pierwiastek $r$ jest pierwiastkiem jednokrotnym. Metoda Newtona opiera się na linearyzacji funkcji (zastąpieniu jej funkcją liniową) przez użycie jej rozwinięcia w szereg Taylora.
 	$$f(x) = f(x_n ) + f'(x_n )(x-x_n) + O((x-x_n )^2)\text{ -- rozwinięcie w szereg Taylora}$$
 	$$f(x)\approx f(x_n ) + f'(x_n )(x-x_n) \text{ -- linearyzacja}$$
-	Mamy zatem równianie $f(x_n ) + f'(x_n )(x_{n+1}-x_n) = 0$ co po przekształceniu daje wzór rekurencyjny $x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}$. Jest to wzór na kolejne przybliżenia zera funkcji. Widać, też dlaczego pojawia się założenie o tym że $f'(r)\ne0$ -- dzielilibyśmy wtedy przez 0. Zauważmy teraz, że styczna do wykresu funkcji $f$ w punkcie $x_n$ przecina oś OX w punkcie $(x_{n+1},0)$. Stąd właśnie bierze się alternatywna nazwa metody Newtona - metoda stycznych.
+	Mamy zatem równianie $f(x_n ) + f'(x_n )(x_{n+1}-x_n) = 0$ co po przekształceniu daje wzór rekurencyjny $x_{n+1} = x_n - \dfrac{f(x_n)}{f'(x_n)}$. Jest to wzór na kolejne przybliżenia zera funkcji.  Zauważmy teraz, że styczna do wykresu funkcji $f$ w punkcie $x_n$ przecina oś OX w punkcie $(x_{n+1},0)$. Stąd właśnie bierze się alternatywna nazwa metody Newtona - metoda stycznych.
 	\begin{figure}[!htbp]
 		\includegraphics[scale=0.7]{newton}
 		\centering
@@ -118,7 +118,7 @@
 		\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			metoda & wartość pierwiastka - $r$ & wartość funkcji w punkcie $r$ - $f(r)$ & liczba iteracji \\ \hline
+			metoda & wartość pierwiastka -- $r$ & wartość funkcji w punkcie $r$ -- $f(r)$ & liczba iteracji \\ \hline
 			metoda bisekcji & 1.9337539672851562 & -2.7027680138402843e-7 & 16 \\ \hline
 			metoda Newtona & 1.933753779789742 & -2.2423316314856834e-8 & 4 \\ \hline
 			metoda siecznych & 1.933753644474301 & 1.564525129449379e-7 & 4 \\ \hline
@@ -171,8 +171,8 @@
 	
 	\section*{Zadanie 6}
 	
-	Celem zadania było znalezienie miejsc zerowych funkcji $f_1(x)=e^{1-x}-1$ oraz $f_2(x)=xe^{-x}$ przy pomocy metod bisekcji, stycznych oraz siecznych z dokładnością obliczeń $\delta=\epsilon=10^{-5}$. Przyblizenia początkowe oraz przedział początkowy należało dobrać samodzielnie.\\
-	W celu wzynaczenie danych startowych narysowałem wykresy obu funkcji. Wykresy poniżej.
+	Celem zadania było znalezienie miejsc zerowych funkcji $f_1(x)=e^{1-x}-1$ oraz $f_2(x)=xe^{-x}$ przy pomocy metod bisekcji, stycznych oraz siecznych z dokładnością obliczeń $\delta=\epsilon=10^{-5}$. Przybliżenia początkowe oraz przedział początkowy należało dobrać samodzielnie.\\
+	W celu wzynaczenia danych startowych narysowałem wykresy obu funkcji. Wykresy poniżej.
 
 	\begin{figure}[!htbp]
 		\includegraphics[width=\textwidth]{e1-x-1andxe-x.png}
@@ -188,7 +188,7 @@
 		\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			przedział & pierwiastek - $r$ & $f_1(r)$ & liczba potrzebych iteracji\\
+			przedział & pierwiastek -- $r$ & $f_1(r)$ & liczba potrzebych iteracji\\
 			\hline
 			[0.0, 2.0] & 1.0 & 0.0 & 1 \\ \hline
 			[0.4, 2.4] & 1.000006103515625 & -6.103496998477453e-6 & 16 \\ \hline
@@ -207,7 +207,7 @@
 		\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|}
 			\hline
-			przedział & pierwiastek - $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+			przedział & pierwiastek -- $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
 			\hline
 			[-1.0, 2.0] & 7.62939453125e-6 & 7.62933632381113e-6 & 17 \\ \hline
 			[-10.0, 25.0] & -4.76837158203125e-6 & -4.7683943194530044e-6 & 20 \\ \hline
@@ -217,7 +217,7 @@
 	\caption*{Metoda bisekcji dla $f_2$.}
 	\end{table}
 
-	Widać, że dla dwóch pierwszych przedziałów wyniki były poprawne, ale dla dwóch kolejnych nie. Dlaczego? Zauważmy, że dla odpowiednio dużych wartości x, odpowiadające im wartości funkcji $f_2$ są bardzo bliskie zeru. Teraz zastanówmy się co się stanie jeśli wartość funkcji będzie tak bliska zeru, że będzie mniejsza od przyjętego $\epsilon$. Wtedy algorytm stwierdzi, że zostało znalezione miejsce zerowe. Zobaczby to teraz na przykładzie przedziału $[-450.0, 500.0]$. Środek tego przedziału to $x_0=25.0$. Mamy $f_2(x_0)=3.471985966241005\cdot10^{-10}<\epsilon$. Stąd mamy wynik, że już po jednej iteracji znaleziono miejsce zerowe. Podobnie dzieje się dla przedziału $[-10000.0, 12000.0]$. Widać zatem, że metoda bisekcji dla $f_2$ wymaga ostrożniejszego dobrania przedziału początkowego.\\
+	Widać, że dla dwóch pierwszych przedziałów wyniki były poprawne, ale dla dwóch kolejnych nie. Dlaczego? Zauważmy, że dla odpowiednio dużych wartości x, odpowiadające im wartości funkcji $f_2$ są bardzo bliskie zeru. Teraz zastanówmy się co się stanie jeśli wartość funkcji będzie tak bliska zeru, że będzie mniejsza od przyjętego $\epsilon$. Wtedy algorytm stwierdzi, że zostało znalezione miejsce zerowe. Zobaczmy to teraz na przykładzie przedziału $[-450.0, 500.0]$. Środek tego przedziału to $c=25.0$. Mamy $f_2(c)=3.471985966241005\cdot10^{-10}<\epsilon$. Stąd mamy wynik, że już po jednej iteracji znaleziono miejsce zerowe. Podobnie dzieje się dla przedziału $[-10000.0, 12000.0]$. Widać zatem, że metoda bisekcji dla $f_2$ wymaga ostrożniejszego dobrania przedziału początkowego.\\
 	\textbf{Metoda Newtona}\\
 	W celu użycia metody Newtona do obliczenia miejsc zerowych podanych funkcji trzeba najpierw policzyć ich pochodne: $f_1'(x) = -e^{1-x}$, 
 	$f_2'(x) = e^{-x} - x\cdot e^{-x} =-e^{-x}\cdot\left(x-1\right)$. Kolejna potrzebna rzecz to przybliżenie początkowe, które wyznaczyłem patrząc na wykresy i biorąc te, które są \textit{niedaleko} zer funkcji. Dla $f_1$ przyjąłem $x_0=1.5$, a dla $f_2$ $x_0=-2.0$. Wyniki w tabeli poniżej.
@@ -227,7 +227,7 @@
 	\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			funkcja & $x_0$ & pierwiastek - $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+			funkcja & $x_0$ & pierwiastek -- $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
 			\hline
 			$f_1$ & 1.5 & 0.9999999984736215 & 1.5263785790864404e-9 & 4 \\ \hline
 			$f_2$ &-2.0 & -1.425500682806244e-9 & -1.425500684838296e-9 & 7 \\ \hline
@@ -260,14 +260,14 @@
 	
 	Po wykresie $\phi_1(x)$ widać, że metoda Newtona dla $f_1$ jest zawsze zbieżna. Zatem jedyną rzeczą jaką musimy uwzględnić przy wybieraniu $x_0$ dla $f_1$ to wyżej wspomniany warunek o wartości pochodnej tj. wartość pochodnej w $x_0$ nie będąca zbyt blisko zera. Zauważmy, że punktem stałym tego odwzorowania jest $x=1$ co pokrywa się z pierwiastkiem.\\
 	W treści zadania pojawia się polecenie mówiące żeby sprawdzić co stanie, gdy w metodzie Newtona dla $f_1$ wybierzemy $x_0\in(1,\infty)$. Ogólna odpowiedź to to, że metoda Newtona będzie wtedy zbieżna. Warto jednak dodać, że wynik programu zależy od tego jak duży x wybierzemy. Jeśli weźmiemy na tyle duże $x_0$, że $|f_1'(x_0)|<\epsilon$ to otrzymamy błąd.\\
-	Po wykresie $\phi_2(x)$ widać, że metoda Newtona dla $f_2$ nie jest zawsze zbieżna. Dla $x\in(1,\infty)$ metoda Newtona jest rozbieżna, a dla $x\in(-\infty, 1)$ jest zbieżna. Zatem odpowiedzią na pytanie z treści zadania -- co się stanie co stanie, gdy w metodzie Newtona dla $f_2$ wybierzemy $x_0>1$? -- jest to, że wtedy metoda będzie rozbieżna i nigdy nie otrzymamy poprawnego wyniku. Zauważmy też, że punktem stałym odwzorowania $\phi_2(x)$ jest $x=0$ co pokrywa się z pierwiastkiem funkcji $f_2$. Pozostała jeszcze jedna wartość $x_0$ do sprawdzenia, jest to $x_0=1$. W treści zadania również pojawia się pytanie czy można tę wartość wybrać na przybliżenie początkowe.
+	Po wykresie $\phi_2(x)$ widać, że metoda Newtona dla $f_2$ nie jest zawsze zbieżna. Dla $x\in(1,\infty)$ metoda Newtona jest rozbieżna, a dla $x\in(-\infty, 1)$ jest zbieżna. Zatem odpowiedzią na pytanie z treści zadania -- co się stanie, gdy w metodzie Newtona dla $f_2$ wybierzemy $x_0>1$? -- jest to, że wtedy metoda będzie rozbieżna i nigdy nie otrzymamy poprawnego wyniku. Zauważmy też, że punktem stałym odwzorowania $\phi_2(x)$ jest $x=0$ co pokrywa się z pierwiastkiem funkcji $f_2$. Pozostała jeszcze jedna wartość $x_0$ do sprawdzenia, jest to $x_0=1$. W treści zadania również pojawia się pytanie czy można tę wartość wybrać na przybliżenie początkowe.
 	Na wykresie $\phi_2(x)$ widać, że w punkcie $x_0 = 1$ przebiega asymptota pionowa. Prościej jednak popatrzeć na wykres $f_2'$. Widać na nim, że $f_2'$ ma w $x_0=1$ miejsce zerowe zatem mamy $f_2'(1) =0$ co w rezultacie daje sytuację, że warunek $|f_2'(x_0)|<\epsilon$ jest spełniony. Powoduje to, że metoda Newtona zwróci błąd. Poniżej rezultaty działania metody Newtona dla wyżej opisanych przypadków.
 	\begin{table}[!h]
 		\centering
 		\label{tab:table1}
 		\begin{tabular}{|c|c|c|c|c|}
 			\hline
-			funkcja & $x_0$ & pierwiastek - $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+			funkcja & $x_0$ & pierwiastek -- $r$ & $f(r)$ & liczba potrzebych iteracji\\
 			\hline
 			$f_1$ & 3.0 & 0.9999999710783241 & 2.892167638712806e-8 & 9\\ \hline
 			$f_1$ & 25.0 & \multicolumn{3}{|c|}{błąd - wartość pochodnej funkcji w punkcie $x_0<\epsilon$ } \\ \hline
@@ -279,7 +279,30 @@
 	
 	\noindent Dla $f_2$ i $x_0=5.0$ otrzymaliśmy błędny wynik, ponieważ metoda Newtona jest wtedy rozbieżna, ale jeden z warunków końca został spełniony, tj. $f_2(x_0) < \epsilon$ -- dlatego metoda zwróciła jakiś wynik.\\
 	\textbf{Metoda siecznych}\\
-	
+	Przybliżenia początkowe dla metody siecznych wybrałem, podobnie jak dla metody Newtona, patrząc na wykres funkcji i wybierając wartości $x_0$ i $x_1$ bliskie pierwiastkom. W tabeli znajdują się również wyniki dla przybliżeń początkowych dalekich od pierwiastków.
+	\begin{table}[!h]
+	\centering
+	\label{tab:table1}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		funkcja & $x_0$ & $x_1$ &pierwiastek -- $r$ & $f_2(r)$ & liczba potrzebych iteracji\\
+		\hline
+		$f_1$ & 1.5 & 2.0 & 1.0000034269838276 & -3.4269779555229363e-6 & 5 \\ \hline
+		$f_1$ & 1.0 & 6.5 & 1.0 & 0.0 & 1 \\ \hline
+		$f_1$ &-3.0 & 4.0 & 3.878057075403778 & -0.9437560655326702 & 3 \\ \hline
+		$f_1$ & 10.0 & 40.0 & 10.0 & -0.9998765901959134 & 2 \\ \hline
+		$f_1$ & -1.0 & -0.5 & 0.9999999251013865 & 7.489861642007156e-8 & 7 \\ \hline
+		$f_1$ & -1.0 & 60.0 & 5.058177360022446 & -0.9827195134646629 & 3 \\ \hline
+		$f_2$ & -1.0 & -0.5 & -1.2229958402039555e-7 & -1.2229959897758473e-7 & 6 \\ \hline
+		$f_2$ & -2.0 & 5.0 & 14.699951101212262 & 6.0702732715516805e-6 & 13 \\ \hline
+		$f_2$ & 1.0 & 6.5 & 14.596941777734473 & 6.681755949683885e-6 & 11 \\ \hline
+		$f_2$ & 10.0 & 40.0 & 40.00000000001123 & 1.6993417020980347e-16 & 1 \\ \hline
+		$f_2$ & -17.0 & 0.5 & 0.49999998707573967 & 0.3032653259368365 & 1 \\ \hline
+	\end{tabular}
+	\caption*{Metoda siecznych dla $f_1$ i $f_2$.}
+	\end{table}
+
+	Widać, że wyniki nie zawsze są poprawne. Np. przypadek dla $f_1$, $x_0=-3$ i $x_1=4$ zwrócił zły wynik, ponieważ odległości między kolejnymi przybliżeniami były na tyle małe, że spełniły jeden z warunków końca. Podobnie stało się dla $f_2$, $x_0=-17$ i $x_1=0.5$ (ostatni wiersz tabeli). Dla $f_2$, $x_0=1$ i $x_1=6.5$ lub $x_0=-2$ i $x_1=5$ wynik został zwrócony (zły), ponieważ wartość funkcji w otrzymanym przybliżeniu była mniejsza od $\epsilon$, czyli wystarczająco blisko zera. Dla obu funkcji $f_1$ i $f_2$ łatwo znaleźć dane początkowe, które dadzą zły wynik. Wartości tych pochodnych (używane do przybliżeń) nie są w tej metodzie bezpośrednio obliczane, ale są aproksymowane. Kształt obu funkcji utrudnia dokładne obliczenia. Wartości bezwzględne wartości funkcji dla x ujemnych bardzo gwałtownie rosną przy oddalaniu się od 0. Podobnie, dla x dodatnich, wartości funkcji są coraz bliższe sobie kiedy oddalamy się od 0 w stronę $\infty$. Dla $f_1$ wzięcie dwóch odpowiednio duzych wartości x powoduje otrzymanie stycznej, która jest \textit{prawie pozioma}, a w związku z tym punkt jej przecięcia z osią OX jest \textit{daleko na minusie}. Inaczej -- jest bardzo odległy od faktycznego pierwiastka. Wartości funkcji w x będących \textit{daleko na minusie} są bardzo duże, co skutkuje skontruowaniem kolejnej siecznej, która tym razem jest \textit{prawie pionowa}. Daje to przybliżenie bardzo bliskie jednej z poprzednich wartości (warunek $|x_n-x_{n-1}|<\delta$) co powoduje zakończenie działania metody i zwrócenie wyniku -- niestety często niepoprawnego. Sytuację tą obrazują np. testy dla $f_1$ z przybliżeniami początkowymi $x_0=-3$, $x_1=4$ lub $x_0=10$,$x_1=40$. Dla $f_2$ mamy sytuację, gdzie w miarę oddalania się od 0 do $\infty$ wartości funkcji stają się coraz bliższe zeru. Kiedy wybierzemy odpowiednio duże wartości x skonstruujemy styczną podobnie jak wcześniej \textit{prawie poziomą}, jednak ta ze względu na bliskość osi OX przetnie ją znacznie bliżej jednego z punktów początkowych niż miało to miejsce w poprzednim przypadku (z $f_1$). Ponadto, ze względu na kształt funkcji $f_2$, kolejne przybliżenia będą się coraz bardziej oddalać od zera, a to będzie powodowało zbliżanie się wartości funkcji coraz bardziej do zera, aż warunek końcowy $f_2(x_0)<\epsilon$ zostanie spełniony. Np. tę sytuację obrazuje test dla $f_2$ z danymi początkowymi $x_0=-2$ i $x_1=5$ lub $x_0=10$ i $x_1=40$.
 	
 
 
