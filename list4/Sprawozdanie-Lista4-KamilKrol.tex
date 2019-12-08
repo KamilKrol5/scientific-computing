@@ -18,7 +18,8 @@
 	a4paper,
 	left=25mm,
 	right = 25mm,
-	top=25mm,
+	top=20mm,
+	bottom=20mm
 }
 %%\hyphenchar\font=-1
 
@@ -69,7 +70,8 @@
 
 	\noindent Pierwsza intuicja co do zaprogramowania funkcji obliczającej ilorazy różnicowe to użycie macierzy -- tablicy dwuwymiarowej. Zastanówmy się najpierw czy można to zrobić bardziej efektywnie i jakich danych z powyższej tablicy ilorazów różnicowych potrzebujemy. Interesujące dla nas są tylko dane w pierwszym wierszu tej tablicy. Jeśli dodatkowo zauważymy, że każda kolumna zależy tylko i wyłącznie od poprzedniej kolumny możemy zaproponować rozwiązanie używające tablicy jednowymiarowej. W pierwszym kroku powinniśmy zapisać wartości pierwszej kolumny do jednowymiarowej tablicy. Te dane już mamy, ponieważ są to wartości funkcji w danych węzłach. (Przypomnijmy, że $f[x_i] = f(x_i)$). Następnie w każdym kolejnym kroku powinniśmy wpisywać odpowiednie
 	wartości z kolejnych kolumn na ostatnie miejsca w tablicy. W rezultacie w naszej tablicy otrzymamy tylko wartości ilorazów z pierwszego wiersza.\\
-	\textbf{Pseudokod algorytmu}\\
+	\clearpage
+	\noindent\textbf{Pseudokod algorytmu}\\
 	\begin{algorithm}[h]
 		\DontPrintSemicolon
 		\SetKwProg{Fn}{function}{}{}
@@ -165,6 +167,7 @@
 	\ldots & = \ldots \\
 	W_0(x) &= p_0(x) \nonumber \\
 	\end{align*}
+	\clearpage
 	Dodatkowo mamy też, że $deg(W_k) = deg(W_{k+1}) + 1$. Obie te obserwacje są kluczowe dla wyprowadzenia algorytmu. Przypomnijmy, że wartości $d_0, d_1, \ldots, d_n$ oraz $x_0, \ldots, x_n$ są danymi, a więc są znane.
 	Zastanówmy się jak obliczyć współczynniki wielomianu $W_{n-1}$ w postaci naturalnej. Mamy $deg(W_{n-1}) = deg(W_n) + 1 = 0 + 1 = 1$, a zatem $W_{n-1}$ możemy ogólnie zapisać jako $W_{n-1}(x) = a_{0}x^0 + a_{1}x^1$. Z drugiej strony patrząc na tabelę wyżej możemy go zapisać jako $$W_{n-1}(x) = d_{n-1} + (x - x_{n-1})W_n = d_{n-1} + (x - x_{n-1})d_n = d_{n-1} + xd_n - x_{n-1}d_n = 
 	(d_{n-1} - d_nx_{n-1})x^0 + (d_{n})x^1 $$
@@ -195,7 +198,7 @@
 	\end{algorithm}	
 	
 	
-	
+	\clearpage
 	
 	\section*{Zadanie 4}
 
@@ -221,7 +224,7 @@
 		\item $f(x) = e^x$, $[a, b] = [0,1]$, $n \in \{5,10,15\}$,
 		\item $f(x) = x^2\sin{x}$, $[a, b] = [-1,1]$, $n \in \{5,10,15\}$.
 	\end{enumerate}
-	Poniżej narysowane wykresy dla obu funkcji.
+	Poniżej narysowane wykresy dla obu funkcji. Na przykładach tych funkcji widać, że wybranie równoodległych węzłów dało bardzo dokładne przybliżenia funkcji. Dla żadnego z wykresów nie zaobserwowano rozbieżności. Kolejna rzecz warta zaobserwowania to fakt, że dla wszystkich wartości n funkcje były bardzo dobrze przybliżone.
 	
 		\begin{figure}[!htbp]
 	\centering
@@ -235,11 +238,11 @@
 	\centering
 	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_5.png}} \hfill
 	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_10.png}} \hfill
-	\subfloat[3.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_15.png}} \hfill
+	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_15.png}} \hfill
 	\caption*{Wykres funkcji $x^2\sin{x}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
 \end{figure}	
 
-Na przykładach tych funkcji widać, że wybranie równoodległych węzłów dało bardzo dokładne przybliżenia funkcji. Dla żadnego z wykresów nie zaobserwowano rozbieżności. Kolejna rzecz warta zaobserwowania to fakt, że dla wszystkich wartości n funkcje były bardzo dobrze przybliżone.
+
 
 
 
@@ -247,7 +250,55 @@ Na przykładach tych funkcji widać, że wybranie równoodległych węzłów da�
 	
 	\section*{Zadanie 6}
 	
-	Celem zadania było 
+	Celem zadania było przetestowanie funkcji \texttt{rysujNnfx(f,a,b,n)} (z zadania 4) na następujących przykładach:
+	\begin{enumerate}[(a)]
+		\item $f(x) = |x|$, $[a, b] = [-1,1]$, $n \in \{5,10,15\}$,
+		\item $f(x) = \frac{1}{1+x^2}$, $[a, b] = [-5,5]$, $n \in \{5,10,15\}$.
+	\end{enumerate}
+Wykresy otrzymane za pomocą metody \texttt{rysujNnfx(f,a,b,n)} prezentują poniższe wykresy.
+\begin{figure}[h]
+	\centering
+	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_5.png}} \hfill
+	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_10.png}} \hfill
+	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_15.png}} \hfill
+	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_20.png}} \hfill
+	\caption*{Wykres funkcji $|x|$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
+	\label{fig:3}
+\end{figure}		
+
+\begin{figure}[h]
+	\centering
+	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_5.png}} \hfill
+	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_10.png}} \hfill
+	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_15.png}} \hfill
+	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_20.png}} \hfill
+	\caption*{Wykres funkcji $\frac{1}{1+x^2}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
+	\label{fig:4}
+\end{figure}
+
+Widać, że dla funkcji $|x|$ pojawiają się większe odchylenia niż dla funkcji z zadania poprzedniego. Widać też, że wraz ze zwiększaniem stopnia wielomianu odchylenia/błędy, w szczególności na końcach przedziału, znacznie wzrastają. Dla $n=20$ te odchylenia są już na tyle duże, że wykres traci na czytelności. Dla drugiej funkcji sytuacja wygląda tak samo -- wraz ze zwiększaniem stopnia wielomianu błąd rośnie, a błędy najbardziej rosną na końcach przedziału. Jest to sprzeczne z intuicją, ponieważ zwiększajac stopień wielomianu interpolacyjnego oczekujemy lepszego przybliżenia. Zaobserwowane zjawisko nosi nazwę zjawiska Rungego. (Sama funkcja $\frac{1}{1+x^2}$ nazywana jest funkcją Rungego). Polega ono na tym, że dla pewnych funkcji błąd wielomianu
+interpolacyjnego wyliczonego za pomocą równoodległych węzłów dąży do nieskończoności wraz ze
+wzrostem stopnia tego wielomianu interpolacyjnego.\\
+Pojawia się pytanie czy można poprawić dokładność wielomianów interpolacyjnych dla takich funkcji. Z pomocą przychodzą nam węzły Czebyszewa będące pierwiastkami wielomianów Czebyszewa pierwszego rodzaju. Ich użycie zwiększa liczbę węzłów w miejscach, które są trudniejsze do przybliżenia, czyli między innymi na końcach przedziału. Skutkuje to otrzymaniem dokładniejszego przybliżenia. Poniżej znajdują się wykresy z wielomianami interpolacyjnymi stworzonymi na podstawie węzłów Czebyszewa.
+
+\begin{figure}[h]
+	\centering
+	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_5.png}} \hfill
+	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_10.png}} \hfill
+	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_15.png}} \hfill
+	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_20.png}} \hfill
+	\caption*{Wykres funkcji $|x|$ i jej wielomianu interpolacyjnego skonstruowanego przy pomocy węzłów Czebyszewa}
+	\label{fig:4}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_5.png}} \hfill
+	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_10.png}} \hfill
+	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_15.png}} \hfill
+	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_20.png}} \hfill
+	\caption*{Wykres funkcji $\frac{1}{1+x^2}$ i jej wielomianu interpolacyjnego stworzonego przy pomocy węzłów Czebyszewa}
+	\label{fig:4}
+\end{figure}
 
 
 
