@@ -1,3 +1,5 @@
+# author: Kamil Król
+
 module interpolationLibrary
 
 export shiftIndexesBackwardsByOne, shiftIndexesForwardsByOne, ilorazyRoznicowe, naturalna, warNewton, rysujNnfx

@@ -1,3 +1,5 @@
+# author: Kamil Król
+
 include("./interpolationLibrary.jl")
 using .interpolationLibrary
 
