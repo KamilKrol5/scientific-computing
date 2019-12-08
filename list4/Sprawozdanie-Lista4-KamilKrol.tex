@@ -55,7 +55,7 @@
 		\item dla $k > 1$  $$f[x_i,x_{i+1}, \ldots, x_{i+k}] = \frac{f[x_{i+1},x_{i+2}, \ldots, x_{i+k}] - f[x_{i}, x_{i+1}, \ldots, x_{i+k-1}]}{x_k - x_i}.$$
 	\end{enumerate}
 	Ważnym faktem jest to, że wartość ilorazu różnicowego nie zależy od kolejności węzłów ($x_i$). Kolejny użyteczny fakt to to, że 
-	znajomość węzłów $x_i$ i wartości funkcji $f(x_i)$ (a więc też ilorazów różnicowych zerowego rzędu tj. $f[x_i] = f(x_i)$) pozwala, przy użyciu powyższego wzoru rekurencyjnego, na stworzenie tzw. tablicy ilorazów różnicowych dla wyższych rzędów. Przyjmując, że $d_{ik} = f[x_i,x_{i+1}, \ldots, x_{i+k}]$ można wyrazić ją w następujący sposób:
+	znajomość węzłów $x_i$ i wartości funkcji $f(x_i)$ (a więc też ilorazów różnicowych zerowego rzędu tj. $f[x_i] = f(x_i)$) pozwala, przy użyciu powyższego wzoru rekurencyjnego, na stworzenie tzw. tablicy ilorazów różnicowych dla wyższych rzędów. Przyjmując, że $d_{i,k} = f[x_i,x_{i+1}, \ldots, x_{i+k}]$ można wyrazić ją w następujący sposób:
 \begin{table}[!htbp]
 	\centering
 	\begin{tabular}{cccccc}
@@ -68,7 +68,7 @@
 	\end{tabular}
 \end{table}
 
-	\noindent Pierwsza intuicja co do zaprogramowania funkcji obliczającej ilorazy różnicowe to użycie macierzy -- tablicy dwuwymiarowej. Zastanówmy się najpierw czy można to zrobić bardziej efektywnie i jakich danych z powyższej tablicy ilorazów różnicowych potrzebujemy. Interesujące dla nas są tylko dane w pierwszym wierszu tej tablicy. Jeśli dodatkowo zauważymy, że każda kolumna zależy tylko i wyłącznie od poprzedniej kolumny możemy zaproponować rozwiązanie używające tablicy jednowymiarowej. W pierwszym kroku powinniśmy zapisać wartości pierwszej kolumny do jednowymiarowej tablicy. Te dane już mamy, ponieważ są to wartości funkcji w danych węzłach. (Przypomnijmy, że $f[x_i] = f(x_i)$). Następnie w każdym kolejnym kroku powinniśmy wpisywać odpowiednie
+	\noindent Pierwsza intuicja co do zaprogramowania funkcji obliczającej ilorazy różnicowe to użycie macierzy -- tablicy dwuwymiarowej. Zastanówmy się najpierw czy można to zrobić bardziej efektywnie i jakich danych z powyższej tablicy ilorazów różnicowych potrzebujemy. Interesujące dla nas są tylko dane w pierwszym wierszu tej tablicy. Jeśli dodatkowo zauważymy, że każda kolumna zależy tylko i wyłącznie od poprzedniej kolumny możemy zaproponować rozwiązanie używające tablicy jednowymiarowej. W pierwszym kroku powinniśmy zapisać wartości pierwszej kolumny do jednowymiarowej tablicy. Te dane już mamy, ponieważ są to wartości funkcji w danych węzłach (przypomnijmy, że $f[x_i] = f(x_i)$). Następnie w każdym kolejnym kroku powinniśmy wpisywać odpowiednie
 	wartości z kolejnych kolumn na ostatnie miejsca w tablicy. W rezultacie w naszej tablicy otrzymamy tylko wartości ilorazów z pierwszego wiersza.\\
 	\clearpage
 	\noindent\textbf{Pseudokod algorytmu}\\
@@ -132,7 +132,7 @@
 			$n \gets \LEN{fx}$\;
 			$nt \gets fx[n]$\;
 			\For{$i \gets n-1$ \KwDownTo $1$} {
-				$nt \gets fx[i] + (t - x[i]) \times nt$\; 		
+				$nt \gets fx[i] + (t - x[i]) * nt$\; 		
 			}
 			\KwRet $nt$\;
 		}
@@ -186,7 +186,7 @@
 			$n \gets \LEN{fx}$-1\;
 			$a[n] \gets fx[n]$\;
 			\For{$i \gets n-1$ \KwDownTo $0$} {
-				$a[i] \gets fx[i] - a[i+1] \times x[i]$\; 
+				$a[i] \gets fx[i] - a[i+1] * x[i]$\; 
 				\For{$j \gets i+1$ \KwTo $n-1$} {
 					$a[j] \gets a[j] - a[j+1] * x[i]$\; 	
 				}	
