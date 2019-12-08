@@ -1,3 +1,5 @@
+# author: Kamil Król
+
 function ilorazyRoznicowe(x::AbstractVector{Float64}, f::AbstractVector{Float64})
     n = length(f) - 1
     fx = shiftIndexesBackwardsByOne(copy(f))

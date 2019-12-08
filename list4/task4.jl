@@ -16,7 +16,7 @@ function rysujNnfx(f::Function, a::Float64, b::Float64, n::Int; filename::String
     realValues = map(f, x2)
 
     gr()
-    plt = plot(x2,[realValues, interpolatedValues], lab=["f(x)" "p(x)"], lw=3.0)
+    plt = plot(x2,[realValues, interpolatedValues],lab=["f(x)" "p(x)"], lw=3.0)
     savefig(plt, string("plots/", filename))
 
 
