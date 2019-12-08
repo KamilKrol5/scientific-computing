@@ -1,6 +1,6 @@
 module interpolationLibrary
 
-export shiftIndexesBackwardsByOne, shiftIndexesForwardsByOne, ilorazyRoznicowe, naturalna, rysujNnfx
+export shiftIndexesBackwardsByOne, shiftIndexesForwardsByOne, ilorazyRoznicowe, naturalna, warNewton, rysujNnfx
 using OffsetArrays
 
 shiftIndexesBackwardsByOne(x) = OffsetArray(x, 0:length(x)-1)
