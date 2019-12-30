@@ -1,11 +1,12 @@
 # author: Kamil Król
 
 using SparseArrays
+using LinearAlgebra
 
 
 """
 Loads a sparse matrix from given file.
-Returns A - read matrix, n - matrix size, l - block size
+Returns A: read matrix, n: matrix size, l: block size
 """
 function load_matrix(file_path::String)
     open(file_path) do file
@@ -31,7 +32,7 @@ end
 
 """
 Loads a vector from given file.
-Returns b - read vector
+Returns b:  read vector
 """
 function load_vector(file_path::String)
     open(file_path) do file
