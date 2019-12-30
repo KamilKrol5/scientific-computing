@@ -20,8 +20,7 @@ function gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64,
         # The last element to be eliminated in current column
         last_to_eliminate = convert(Int64, min(l + l * floor((column+1) / l), n))
 
-        # Iteration over elements (rows) to be eliminated
-        for elem = column + 1:last_to_eliminate
+        for elem = column + 1:last_to_eliminate # Iteration over elements (rows) to be eliminated
 
             # multiplier = element to be eliminated / current element on diagonal (main element)
             multiplier = A[column, elem] / A[column, column]
@@ -33,12 +32,9 @@ function gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64,
                 A[column, elem] = Float64(0.0)
             end
 
-            # Iteration over columns (operating on 2 rows)
-            for j = column + 1:min(column + l, n)
+            for j = column + 1:min(column + l, n) # Iteration over columns (operating on 2 rows)
                 A[j, elem] -= multiplier * A[j, column] # performing subtraction of rows R_elem - mult * R_k 
             end
-
-
             # If it's LU, then transforming b vector is unnecessary
             if !write_matrix_L
                 b[elem] -= multiplier * b[column]
@@ -64,11 +60,9 @@ function solve_gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::
     # Vector being a solution to the equation
     x = Vector{Float64}(undef, n)
 
-    # Iteration over rows
-    for i = n:-1:1
+    for i = n:-1:1 # Iteration over rows
         sum_in_row = 0.0
-        # Iteration over columns
-        for j = i + 1:min(n, i + l)
+        for j = i + 1:min(n, i + l) # Iteration over columns
             sum_in_row += A2[j, i] * x[j] # sum which will be subtracted from b side
         end
         x[i] = (b2[i] - sum_in_row) / A2[i, i] # ax = b - sum
@@ -130,4 +124,32 @@ function gauss_with_choose_main_element(A::SparseMatrixCSC{Float64, Int64}, b::V
         end 
     end
     return A, permutation, b
+end
+
+
+"""
+Solves equation Ax=b using gaussian elimination method with choose of main element.
+A: matrix (SparseMatrixCSC{Float64, Int64})
+b: vector with values (Vector{Float64})
+n: size of matrix A (Int64)
+l: size of blocks in matrix A (Int64)
+Returns:
+x: vector with solutions (Vector{Float64})
+"""
+function solve_gauss_with_choose_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64)
+    x = Vector{Float64}(n)
+    res = gauss_with_choose_main_element(A, b, n, l, false)
+    A2 = res[1]
+    permutation = res[2]
+    b2 = res[3]
+
+    for i = n:-1:1 # Iteration over rows
+        sum_in_row = 0.0
+
+        for j = i + 1:min(i + 2 * l + 1, n)  #Iteration over columns
+            sum_in_row += A2[j, permutation[i]] * x[j]
+        end
+        x[i] = (b2[permutation[i]] - sum_in_row) / A2[i, permutation[i]]
+    end
+    return x
 end
