@@ -102,48 +102,26 @@
 	\href{https://docs.julialang.org/en/v1/stdlib/SparseArrays/}{julialang - SparseArrays}.
 	\section*{Zadanie 1}
 	
-	Celem tego zadania było napisanie funkcji obliczającej wartość wielomianu interpolacyjnego stopnia $n$ w postaci Newtona $N_{n}(x)$ w punkcie $x = t$ za pomocą uogólnionego algorytmu Hornera, która działa w czasie liniowym ($O(n)$). \\
-	\textbf{Dane:}
-	\begin{enumerate}[]
-		\item \texttt{x} -- wektor długości $n+1$ zawierający węzły $x_0, \ldots, x_n$,
-		\item \texttt{fx} -- wektor długości $n+1$ zawierający ilorazy różnicowe,
-		\item \texttt{t} -- punkt, w którym należy obliczyć wartość wielomianu.
+	Celem tego zadania było napisanie funkcji rozwiązującej układ $\mA\vx = \mB$ metodą eliminacji Gaussa uwzględniającej specyficzną postać macierzy $\mA$ dla dwóch wariantów:
+	\begin{enumerate}[a)]
+		\item bez wyboru elementu głównego,
+		\item z częściowym wyborem elementu głównego.
 	\end{enumerate}
-	\textbf{Oczekiwany wynik:}
-	\begin{enumerate}[]
-		\item \texttt{nt} -- wartość wielomianu w punkcie $t$
-	\end{enumerate}
-	\textbf{Opis:}\\
-	\noindent Wzór na wielomian interpolacyjny Newtona $N_n$ pokazuje w jaki sposób zależy on od funkcji $f$. Wzór ten można przedstawić używając ilorazów różnicowych:
-	$$N_n(x) = \sum_{i=0}^n f[x_0,x_{1}, \ldots, x_{i}] \prod_{j=0}^{i-1}(x-x_j).$$
-	Z numerycznego punktu widzenia takie przedstawienie wielomianu interpolacyjnego jest bardzo atrakcyjne. Zauważmy, że w sytuacji kiedy chcielibyśmy dodać nowe węzły $(x_i, y_i)$ możemy to zrobić korzystając ze wcześniej policzonych $d_k = f[x_0,x_1, \ldots, x_k]$. Kluczowa jest tu własność ilorazów różnicowych mówiąca, że wartość ilorazu nie zależy od kolejności węzłów. Kolejną zaletą takiego zapisu jest to, że wartość tego wielomianu możemy łatwo obliczyć korzystając z uogólnionego algorytmu Hornera. Sposób w jaki można to zrobić przedstawiono poniżej.
-	\begin{align*}
-	&w_n(x) := f[x_0, x_1, \ldots, x_n]& \nonumber \\
-	&w_k(x) := w_{k+1}(x-x_k)+ f[x_0, x_1, \ldots, x_k]	\quad(k=n-1, n-2, \ldots, 0)& \nonumber \\
-	&N_n(x) = w_0(x) \nonumber \\
-	\end{align*}
-	\clearpage
-	\noindent\textbf{Pseudokod algorytmu}\\
-	\begin{algorithm}[h]
-		\DontPrintSemicolon
-		\SetKw{KwDownTo}{downto}
-		\SetKwProg{Fun}{function}{}{}
-		\SetKwFunction{LEN}{length}
-		\SetKwFunction{F}{warNewton}
-		
-		\Fun{\F{$x$, $fx$, $t$}} {
-			$n \gets \LEN{fx}$\;
-			$nt \gets fx[n]$\;
-			\For{$i \gets n-1$ \KwDownTo $1$} {
-				$nt \gets fx[i] + (t - x[i]) * nt$\; 		
-			}
-			\KwRet $nt$\;
-		}
-		\caption{Obliczanie wartości wielomianu interpolacyjnego w punkcie $t$.}
-	\end{algorithm}			
-	
-	
 
+	\subsection*{Opis metody eliminacji Gaussa bez wyboru elementu głównego}
+	Ideą eliminajci Gaussa jest to aby początkowy układ równań sprowadzić do układu prostszego. Dokładniej chodzi o sprowadzenie macierzy A do postaci macierzy trójkątnej górnej. W celu doprowadzenia macierzy do takiej postaci algorytm posługuje się podstawowymi operacjami na macierzy tzn. dodawanie, odejmowanie wierszy oraz mnożenie wierszy przez pewnien niezerowy współczynnik. \\
+	Dokładniej, proces polega na eliminowaniu (zerowaniu) elementów znajdujących się w pod przekątną macierzy.
+	Zatem dla kolumny pierwszej będziemy chcieli wyzerować wszystkie elementy znajdujące się pod pierwszym elementem w tej kolumnie, dla kolumny drugiej -- wszystkie elementy pod drugim (patrząc od góry) elementem w danej kolumnie. Bardziej formalnie, naszym celem będzie wyeliminowanie niewiadomej $x_1$ ze wszystkich $n-1$ pozostałych równań (czyli wszystkich poza pierwszym). Dla $i = 2,\ldots,n$ będziemy odejmować odpowiednią wielokrotność równania pierwszego od $i$-tego równania zerując przy tym współczynnik przy $x_1$ w $i$-tym równaniu. \\
+	Ogólnie dla macierzy A i jej elementów $a_{ij}$, gdzie $i,j = 1,\ldots,n$ i dla jej $k$-tej kolumny, będziemy zerować wszystkie elementy poniżej elementu na przekątnej w tej kolumnie, czyli $a_{kk}$. Dla $i = k+1,\ldots,n$ będziemy odejmować odpowiednią wielokrotność równania $k$-tego od $i$-tego równania zerując przy tym współczynnik przy $x_k$ w $i$-tym równaniu. Inaczej aby wyzerować to $x_k$ będziemy musieli pomnożyć wiersz $k$ przez pewien współczynnik $\psi_{ik}$, króty dalej będziemy nazywać mnożnikiem, a następnie odjąć go od $i$-tego wiersza. Łatwo zauważyć, że mnożnik ten możemy obliczyć, ze wzoru $\psi_{ik}$ = $\frac{a_{ik}}{a_{kk}}$. Widać też, że w przypadku kiedy na diagonali pojawi się element równy zero nasz algorytm nie zadziała, ponieważ pojawi się konieczność dzielenia przez zero. \\
+	Zanim zobaczymy jak można rozwiązać ten problem musimy przytoczyć jedną z własności układu równań Ax=b. Mianowicie, wiersze macierzy A i odpowiadające im wartości w wektorze b możemy dowolnie ze sobą zamieniać. Nie zmianiamy w ten sposób układu równań.
+	Zwróćmy również uwagę na fakt, że aby istniało rozwiązanie tego równania macierz A musi być nieosobliwa. 
+	Teraz możemy przedstawić sposób na uniknięcie dzielenia przez 0. 
+	\subsection*{Opis metody eliminacji Gaussa częściowym wyborem elementu głównego}
+	Przedstawiona poniżej metoda nosi nazwę metody eliminacjii Gaussa z częściowym wyborem elementu głównego.
+	Czym jest element główny? Jest to element macierzy znajdujący się na diagonali. Dla $k$-tej kolumny, elementem głównym będzie element $a_{kk}$ macierzy A. Jest to również ten element przez który dzielimy chcąc obliczyć mnożnik $\psi_{ik}$ ($k$ oraz $i$ są opisane tak samo jak w poprzednim paragrafie). Częściowy wybór polega na wybraniu największego elementu co do wartości bezwzględnej z danej kolumny $k$ oraz zamianie wierszy tak aby ten element stał się elementem głównym -- elementem na diagonali. Możemy to zrobić, ponieważ macierz A jest nieosobliwa. \\
+	Zamiana wierszy macierzy jest kosztownym prcesem, który może być zastąpiony przez wektor permutacji wierszy $p$. Zapamiętujemy w nim, na którym miejscu aktualnie znajduje się dany wiersz. Zatem jedyna różnica w samym algorytmie będzie taka, że zamiast odwoływać się do danego wiersza bezpośrednio, będziemy się odwoływać do jego pozycji zapisanej w wektorze permutacji. Zwróćmy uwagę na to, że zmieniając wiersze w macierzy A musimy zmieniać też poszczególne współrzędne w wekotrze prawych stron -- b. Złożoność obu przedstawionych powyżej algorytmów wynosi $O(n^3)$.
+	
+	
 	\section*{Zadanie 3} 
 	
 	Celem tego zadania było napisanie funkcji obliczającej współczynniki $a_0,\ldots,a_n$ postaci naturalnej wielomianu interpolacyjnego dla zadanych współczynników $d_0 = f[x_0], d_1 = f[x_0,x_1], \ldots d_n = f[x_0, \ldots, x_n]$ tego wielomianu w postaci Newtona oraz węzłów $x_0, \ldots, x_n$. Ponadto funkcja miała działać w czasie $O(n^2)$.\\
