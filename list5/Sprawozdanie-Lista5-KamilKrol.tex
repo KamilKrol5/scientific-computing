@@ -100,13 +100,7 @@
 	\noindent Zaimplementowane przeze mnie algorytmy (napisane w języku Julia i opisane poniżej) działają na macierzy transponowanej, ze względu na optymalizację tzn. dostęp do elementów po kolumnach jest szybszy niż po wierszach. W dalszych rozważaniach pominiemy ten fakt gdyż transpozycja nie zmienia wewnętrznej struktury macierzy $\mA$ oraz nie zmienia ogólnej idei algorytmu.
 	Odnośnik do dokumentacji: 
 	\href{https://docs.julialang.org/en/v1/stdlib/SparseArrays/}{julialang - SparseArrays}.
-	\section*{Zadanie 1}
 	
-	Celem tego zadania było napisanie funkcji rozwiązującej układ $\mA\vx = \mB$ metodą eliminacji Gaussa uwzględniającej specyficzną postać macierzy $\mA$ dla dwóch wariantów:
-	\begin{enumerate}[a)]
-		\item bez wyboru elementu głównego,
-		\item z częściowym wyborem elementu głównego.
-	\end{enumerate}
 
 	\subsection*{Opis metody eliminacji Gaussa bez wyboru elementu głównego}
 	Ideą eliminajci Gaussa jest to aby początkowy układ równań sprowadzić do układu prostszego. Dokładniej chodzi o sprowadzenie macierzy A do postaci macierzy trójkątnej górnej. W celu doprowadzenia macierzy do takiej postaci algorytm posługuje się podstawowymi operacjami na macierzy tzn. dodawanie, odejmowanie wierszy oraz mnożenie wierszy przez pewnien niezerowy współczynnik. \\
@@ -121,6 +115,21 @@
 	Czym jest element główny? Jest to element macierzy znajdujący się na diagonali. Dla $k$-tej kolumny, elementem głównym będzie element $a_{kk}$ macierzy A. Jest to również ten element przez który dzielimy chcąc obliczyć mnożnik $\psi_{ik}$ ($k$ oraz $i$ są opisane tak samo jak w poprzednim paragrafie). Częściowy wybór polega na wybraniu największego elementu co do wartości bezwzględnej z danej kolumny $k$ oraz zamianie wierszy tak aby ten element stał się elementem głównym -- elementem na diagonali. Możemy to zrobić, ponieważ macierz A jest nieosobliwa. \\
 	Zamiana wierszy macierzy jest kosztownym prcesem, który może być zastąpiony przez wektor permutacji wierszy $p$. Zapamiętujemy w nim, na którym miejscu aktualnie znajduje się dany wiersz. Zatem jedyna różnica w samym algorytmie będzie taka, że zamiast odwoływać się do danego wiersza bezpośrednio, będziemy się odwoływać do jego pozycji zapisanej w wektorze permutacji. Zwróćmy uwagę na to, że zmieniając wiersze w macierzy A musimy zmieniać też poszczególne współrzędne w wekotrze prawych stron -- b. Złożoność obu przedstawionych powyżej algorytmów wynosi $O(n^3)$.
 	
+	Teraz kiedy znamy procedurę, która pozwala nam sprowadzić macierz A do macierzy trójkątnej górnej, pojawia się pytanie jak z tą wiedzą rozwiązać układ równań $Ax = b$. W tym celu zastosujemy algorytm podstawiania wstecz. Opiera się on o wzór poniżej.
+	$$x_i = \frac{b_i - \sum_{j = i+1}^n (a_{ij} \cdot x_j)}{a_{ii}}$$
+	\clearpage
+	Widać zatem, że idąc \textit{od końca} ($i=n,\ldots,1$) jesteśmy w stanie obliczyć wszystkie wartości $x$. Złożoność tego algorytmu wynosi $O(n^2)$, a cały proces prowadzący do rozwiązania równania ma złożoność $O(n^3)$ (bo eliminacja Gaussa ma złożoność $O(n^3)$). \\
+	Widać tu, że najkosztowniejszym fragmentem opisanego wyżej algorytmu rozwiązywania układu równań jest eliminacja Gaussa. Przedstawiony poniżej rozkład LU będzie umożliwiał rozwiązywanie układu równań dla różnych wektorów prawych stron przy tylko jednym wywołaniu metody eliminacji Gaussa zajmującej $O(n^3)$. Rozwiązywanie kolejnych układów równań z tą samą macierzą A będzie robione w czasie $O(n^2)$.
+	
+	\section*{Zadanie 1}
+	
+	Celem tego zadania było napisanie funkcji rozwiązującej układ $\mA\vx = \mB$ metodą eliminacji Gaussa uwzględniającej specyficzną postać macierzy $\mA$ dla dwóch wariantów:
+	\begin{enumerate}[a)]
+		\item bez wyboru elementu głównego,
+		\item z częściowym wyborem elementu głównego.
+	\end{enumerate}
+
+	Znając wyżej opisane algorytmy należało zmodyfikować je pod opisaną w treści listy zadań strukturę. Wiemy, że rozwiązanie naszego równania z użyciem niezmodyfikowanych algorytmów ma złożoność $O(n^3)$. Celem jest zrobienie tego samego w czasie $O(n)$. Zakładamy tu, że rozmiar bloku $\ell$ jest stałą. Inne założenie opisane wyżej to założenie, że dostęp do elementu macierzy (Sparse Arrays) jest w czasie stałym.
 	
 	\section*{Zadanie 3} 
 	
