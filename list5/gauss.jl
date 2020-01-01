@@ -71,7 +71,7 @@ function solve_gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::
 end
 
 """
-Performs gaussian elimination  with partial choose of main element on given matrix A (A has the form which is specified in the task description). 
+Performs gaussian elimination  with partial choice of main element on given matrix A (A has the form which is specified in the task description). 
 If write_matrix_L is set to true, function performs LU decompsition using gaussian elimiantion.
 A: matrix which is SparseMatrixCSC{Float64, Int64}
 b: vector with values which is Vector{Float64}
@@ -128,7 +128,7 @@ end
 
 
 """
-Solves equation Ax=b using gaussian elimination method with choose of main element.
+Solves equation Ax=b using gaussian elimination method with partial choice of main element.
 A: matrix (SparseMatrixCSC{Float64, Int64})
 b: vector with values (Vector{Float64})
 n: size of matrix A (Int64)
@@ -137,7 +137,7 @@ Returns:
 x: vector with solutions (Vector{Float64})
 """
 function solve_gauss_with_choose_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64)
-    x = Vector{Float64}(n)
+    x = Vector{Float64}(undef, n)
     res = gauss_with_choose_main_element(A, b, n, l, false)
     A2 = res[1]
     permutation = res[2]
