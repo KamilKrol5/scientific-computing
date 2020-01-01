@@ -180,7 +180,7 @@ $$
 	\SetKwData{J}{j}
 	\SetKwData{K}{k}
 	\SetKwData{Sum}{suma}
-	\SetKwData{Col}{$ ostatnia_{kolumna}$}
+	\SetKwData{Col}{$ostatnia_{kolumna}$}
 	\SetKwData{Row}{$ostatni_{wiersz}$}
 	\SetKwFunction{ge}{eliminacja\_gaussa}
 	\SetKwFunction{Min}{$\min$}
@@ -226,62 +226,95 @@ $$
 \end{algorithm} 
 
 	Pozostało jeszcze określenie złożoności powyższego algorytmu. Widać, że pierwsza pętla wykona się $n-1$ ($O(n)$) razy, a pierwsza wewnątrz niej maksymalnie $2\ell$ razy. Kolejna pętla wykonująca odejmowanie wierszy wykona się maksymalnie $\ell$ razy. $\ell$ jest stałą, zatem sama eliminacja Gausa wykonuje się w czasie $O(n)$. Teraz przyjrzyjmy się algorytmowi podstawiana wstecz. Zewnętrzna pętla wykona się $O(n)$ razy, a wewnętrzna co najwyżej $\ell$, co daje łącznie $O(n)$. Zatem złożoność całego przedstawionego wyżej algorytmu rozwiązującego układ równań $\mA\vx=\vb$ wynosi $O(n)$.
-	\section*{Zadanie 3} 
 	
-	Celem tego zadania było napisanie funkcji obliczającej współczynniki $a_0,\ldots,a_n$ postaci naturalnej wielomianu interpolacyjnego dla zadanych współczynników $d_0 = f[x_0], d_1 = f[x_0,x_1], \ldots d_n = f[x_0, \ldots, x_n]$ tego wielomianu w postaci Newtona oraz węzłów $x_0, \ldots, x_n$. Ponadto funkcja miała działać w czasie $O(n^2)$.\\
-	\textbf{Dane:}
-	\begin{enumerate}[]
-		\item \texttt{x} -- wektor długości $n+1$ zawierający węzły $x_0, \ldots, x_n$,
-		\item \texttt{fx} -- wektor długości $n+1$ zawierający ilorazy różnicowe.
-	\end{enumerate}
-	\textbf{Oczekiwany wynik:}
-	\begin{enumerate}[]
-		\item \texttt{a} -- wektor długości $n+1$ zawierający obliczone współczynniki postaci naturalnej.
-	\end{enumerate}
-	\textbf{Opis:}\\
-	Przypomnijmy, że wartości $d_0, d_1, \ldots, d_n$ są współczynnikami wielomianu interpolacyjnego w postaci Newtona. Punktem wyjściowym to wyprowadzenia algorytmu będzie uogólniony algorytm Hornera. Najpierw jednak zapiszmy wielomian interpolacyjny w postaci Newtona: 
-	$$ p(x) = \underbrace{d_0 + (x-x_0)(\underbrace{d_1 + (x-x_1)
-	(d_2 + \ldots + (x-x_{n-2})(\overbrace{d_{n-1}+(x-x_{n-1})\underbrace{d_n}_{W_n}}^{W_{n-1}}))}_{W_1}}_{W_0}\ldots)$$
-
-	\noindent Idea jest bardzo podobna do wyprowadzania uogólnionego algorytmu Hornera w poprzednim zadaniu. Teraz przyjrzyjmy się zaznaczonym wielomianom $W_k$. Zauważmy też, że ich stopnie rosną (patrząc od góry do dołu).
-	\begin{align*}
-	W_n(x) & = d_n\nonumber \\
-	W_{n-1}(x) &= d_{n-1} + (x-x_{n-1})W_n \nonumber \\
-	\ldots & = \ldots \\
-	W_k(x) &= d_{k} + (x - x_{k})W_{k+1} \text{ dla } 0\le k<n \nonumber \\
-	\ldots & = \ldots \\
-	W_0(x) &= p_0(x) \nonumber \\
-	\end{align*}
-	\clearpage
-	Dodatkowo mamy też, że $deg(W_k) = deg(W_{k+1}) + 1$. Obie te obserwacje są kluczowe dla wyprowadzenia algorytmu. Przypomnijmy, że wartości $d_0, d_1, \ldots, d_n$ oraz $x_0, \ldots, x_n$ są danymi, a więc są znane.
-	Zastanówmy się jak obliczyć współczynniki wielomianu $W_{n-1}$ w postaci naturalnej. Mamy $deg(W_{n-1}) = deg(W_n) + 1 = 0 + 1 = 1$, a zatem $W_{n-1}$ możemy ogólnie zapisać jako $W_{n-1}(x) = a_{0}x^0 + a_{1}x^1$. Z drugiej strony patrząc na tabelę wyżej możemy go zapisać jako $$W_{n-1}(x) = d_{n-1} + (x - x_{n-1})W_n = d_{n-1} + (x - x_{n-1})d_n = d_{n-1} + xd_n - x_{n-1}d_n = 
-	(d_{n-1} - d_nx_{n-1})x^0 + (d_{n})x^1 $$
-	Otrzymaliśmy współczynniki naturalne wielomianu $W_{n-1}$. Konkretniej mamy, że $a_0=d_{n-1} - d_nx_{n-1}$ i $a_1=d_{n}$. Zróbmy to samo dla $W_{n-2}$. $$W_{n-2}(x)=d_{n-2}+(x-x_{n-2})W_{n-1} =d_{n-2}+(x-x_{n-2})(a_{0}x^0 + a_{1}x^1) = $$
-	$$(d_{n-2} - x_{n-2}a_0)x^0 + (a_0-a_1x_{n-2})x^1 + a_1x^2$$
-	Obliczyliśmy współczynniki $W_{n-2}$ w postaci naturalnej. Jeśli ten wielomian zapiszemy jako $W_{n-2} = b_0x^0+b_1x^1+b_2x^2$ to współczynniki będą następujące: $b_0 = d_{n-2} - x_{n-2}a_0$, $b_1=a_0-a_1x_{n-2}$, $b_2=a_1$.
-	Widzimy zatem, że współczynniki przy najwyższej potędze wielomianów $W_{n-1}$ i $W_{n-2}$ są sobie równe. Ogólnie mamy, że współczynniki przy najwyższej potędze dla wielomianów $W_{k}$ i $W_{k-1}$ są sobie równe. Inna kluczowa obserwacja to fakt, że licząc współczynniki naturalne wielomianu $W_{n-2}$ korzystaliśmy tylko z danych i ze współczynników naturalnych wielomianu $W_{n-1}$. Podobnie obliczając współczynniki wielomianu $W_{n-1}$ korzystaliśmy tylko z danych i współczynników wielomianu $W_{n}$. Widzimy zatem, że współczynniki naturalne wielomianu $W_k$ jesteśmy w stanie obliczyć znając współczynniki wielomianu $W_{k+1}$. Oznacza to, że możemy to zrobić używając jednej tablicy. Ponadto jesteśmy w stanie zrobić to w czasie $O(n)$. W szczególności możemy obliczyć współczynniki wielomianu $W_0=p_0$ w postaci naturalnej licząc kolejno współczynniki wielomianów $W_n$, $W_{n-1}$, $\ldots$, $W_1$, $W_0$ każdy w czasie $O(n)$ co daje łączny czas $O(n^2)$. Teraz dla podsumowania pseudokod.\\
-	\noindent\textbf{Pseudokod algorytmu}\\
+	Przedstawiony wyżej algorytm jest modyfikacją metody eliminacji Gaussa bez wyboru elementu głównego. Teraz przedstawimy modyfikację tej metody z częściowym wyborem elementu głównego. Zasadę działania tej metody omówiliśmy wyżej w sekcji \textit{Metoda eliminacji Gaussa z częsciowym wyborem elementu głównego}. Znajduje się tam opis jak efektywnie zamieniać wiersze i jak przechowywać informację o permutacji wierszy. Algorytm będzie zatem analogiczny. Wprowadzone zostanie wybieranie elementu głównego oraz zamiana wierszy za pomocą wektora permutacji. \\
+	Modyfikacje zastosowane w Algorytmie 1 wymagają jednak zweryfikowania. Podczas pracy naszego nowego algorytmu dochodzi do zamiany wierszy, więc w momencie odejmowania wierszy istnieje możliwość pojawienia się nowych elementów niezerowych będących dalej niż $ostatnia_{kolumna}$. Widać zatem, że nasze ograniczenie $ostatnia_{kolumna}$ wymaga zdefiniowania na nowo. Ograniczenie to dotyczy również modyfikacji algorytmu podstawiania wstecz. Przyjrzyjmy się teraz postaci macierzy $\mA$ i zobaczmy jaki jest najdalszy możliwy indeks kolumny, dla którego możemy wygenerować niezerowy element w zadanym wierszu. Zauważmy, że w momencie eliminowania współczynników z $\ell -2$ pierwszych kolumn, najdalszy niezerowy współczynnik może zostać wygenerowany na $2\ell$-tej pozycji. (kolumnie o indeksie  $2\ell$).
+	Współczynnik ten zostaje wygenerowany poprzez odjęcie wielokrotności wiersza głównego od wiersza $\ell$-tego. Podczas eliminowania elementów z kolejnych $\ell$ kolumn, niezerowy element może zostać wygenerowany najdalej w kolumnie o indeksie $3\ell$, poprzez odejmowanie wiersza głównego od wiersza $2\ell$-tego. Zatem widzimy, że \textit{zasięg}, w którym mogą się pojawić elementy niezerowe zwiększył się o $\ell$. Zatem mamy nowy wzór:
+	
+	$$ ostatnia_{kolumna}(w) = min\lbrace 2\ell + w , n \rbrace, w - \text{indeks wiersza} $$
+	
+	\noindent Oszacowanie na $ostatni_{wiersz}$ pozostaje takie same. Pozostaje oszacowanie złożoności tego algorytmu. Pojawiła się nowa pętla wyliczająca element główny, ale jej złożoność zależy tylko od $\ell$, a zatem $O(1)$. Jedna z pętli w algorytmie podstawiania wstecz zwiększyła swoją maksymalną liczbę iteracji o $\ell$, ale nie zmienia to złożoności całego algorytmu. Zatem łączna złożoność przedstawionego algorytmu 2 wynosi $O(n)$.
+	
 	\begin{algorithm}[h]
-		\DontPrintSemicolon
+		\SetKwInOut{Input}{Dane wejściowe}
+		\SetKwInOut{Output}{Dane wyjściowe}
+		\SetKwProg{Fn}{function}{}{}
 		\SetKw{KwDownTo}{downto}
-		\SetKwProg{Fun}{function}{}{}
-		\SetKwFunction{LEN}{length}
-		\SetKwFunction{F}{naturalna}
-		\Fun{\F{$x$, $fx$}} {
-			$n \gets \LEN{fx}$-1\;
-			$a[n] \gets fx[n]$\;
-			\For{$i \gets n-1$ \KwDownTo $0$} {
-				$a[i] \gets fx[i] - a[i+1] * x[i]$\; 
-				\For{$j \gets i+1$ \KwTo $n-1$} {
-					$a[j] \gets a[j] - a[j+1] * x[i]$\; 	
-				}	
-			}
-			\KwRet $a$\;
-		}
+		\SetKw{Err}{error}
+		\DontPrintSemicolon
+		\SetKwData{L}{$\ell$} 			
+		\SetKwData{N}{$n$}    				
+		\SetKwData{B}{$\vb$}    		
+		\SetKwData{A}{$\mA$}    			
+		\SetKwData{X}{$\vx$}
+		\SetKwData{F}{f}
+		\SetKwData{Z}{$\psi$}
+		\SetKwData{I}{i}
+		\SetKwData{J}{j}
+		\SetKwData{K}{k}
+		\SetKwData{Mm}{m}
+		\SetKwData{P}{$\pi$}
+		\SetKwData{Q}{q}
+		\SetKwData{Sum}{suma}
+		\SetKwData{Idx}{$r_{\max}$}
+		\SetKwData{Val}{$v_{\max}$}
+		\SetKwData{Col}{$ostatnia_{kolumna}$}
+		\SetKwData{Row}{$ostatni_{wiersz}$}
+		\SetKwFunction{ge}{eliminacja\_gaussa\_z\_elementem\_głównym}
+		\SetKwFunction{Min}{$\min$}
+		\SetKwFunction{Swap}{swap}
 		
-		\caption{Obliczanie współczynników naturalnych wielomianu interpolacyjnego.}
-	\end{algorithm}	
+		\Input{\\
+			\begin{tabularx}{0.85\linewidth}{rcX}
+				{\A} & -- & macierz z zadania o opisanej w zadaniu strukturze,\\
+				{\B} & -- & wektor prawych stron, \\
+				{\N} & -- & rozmiar macierzy \A, \\
+				{\L} & -- & rozmiar bloku macierzy \A.  		
+			\end{tabularx}
+		}
+		\Output{\\
+			\begin{tabularx}{0.85\linewidth}{rcX}
+				{\X}& ---& wektor zawierający rozwiązania układu $\A\X=\B$.
+			\end{tabularx}		    			
+		}
+		\Fn{\ge{\A,~\B,~\N,~\L}}{
+			$\P \gets \{\I : \I \in \{1, \ldots, n \} \}$\;
+			\For{$\K \gets 1$ \KwTo $\N-1$} {
+				$\Row\gets\Min\lbrace\L + \L \cdot \left \lfloor\frac{\K + 1}{\ell}\right \rfloor\!, n\rbrace$\;
+				$\Col\gets \Min\left(2\L + k, \N\right)$\;
+				\For{$\I \gets \K+1$ \KwTo \Row}{
+					$\Idx \gets \Mm$ takie, że: $\A[\P[\Mm],\K] = \max(|\A[\P[\Q],\K]| : \Q \in \{\I, \ldots,\Row\} )$\;
+					
+					\If{$\P[\Idx] = 0$}{\Err macierz osobliwa}
+					\Swap($\P[\K], \P[\Idx]$)\;
+					$\Z \gets \frac{\A[\P[\I],\K]}{\A[\P[\K],\K]}$\;
+					$\A[\P[\I],\K] \gets 0 $ \;
+					\For{$\J \gets \K+1$ \KwTo \Col}{
+						$\A[\P[\I],\J] \gets \A[\P[\I],\J] - \Z \cdot \A[\P[\K],\J]$\;
+					}
+					$\B[\P[\I]] \gets \B[\P[\I]] - \Z \cdot \B[\P[\K]]$\;
+				}
+			}
+			\For{$\I \gets \N$ \KwDownTo $1$}{
+				$\Col\gets \Min\lbrace(2\L + \P[\I], \N\rbrace$\;
+				\For{$\J \gets \K+1$ \KwTo $\Col$}{
+					$\Sum \gets \Sum + \X[\J] \cdot \A[\P[\I],\J]$\;
+				}
+				$\X[\I] \gets (\B[\P[\I]] - \Sum) / \A[\P[\I],\I]$\;
+			}
+			
+			\KwRet \X\;
+		}
+		\caption{Zmodyfikowana metoda eliminacjii Gaussa z częściowym wyborem elementu głównego}\label{alg:pivotgauss}
+	\end{algorithm} 
 	
+	
+	\clearpage
+	
+	
+	\section*{Zadanie 2} 
+	
+	Celem tego zadania było napisanie funkcji 
 	
 	\clearpage
 	
@@ -319,8 +352,6 @@ $$
 
 \begin{figure}[!htbp]
 	\centering
-%	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_5.png}} \hfill
-%	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_10.png}} \hfill
 %	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_15.png}} \hfill
 	\caption*{Wykres funkcji $x^2\sin{x}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
 \end{figure}	
