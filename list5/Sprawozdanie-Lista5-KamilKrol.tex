@@ -10,6 +10,7 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{enumerate}
+\usepackage{tabularx}
 \usepackage[font=small]{caption}
 \usepackage[ruled,noend]{algorithm2e}
 \usepackage{bm}
@@ -129,8 +130,102 @@
 		\item z częściowym wyborem elementu głównego.
 	\end{enumerate}
 
-	Znając wyżej opisane algorytmy należało zmodyfikować je pod opisaną w treści listy zadań strukturę. Wiemy, że rozwiązanie naszego równania z użyciem niezmodyfikowanych algorytmów ma złożoność $O(n^3)$. Celem jest zrobienie tego samego w czasie $O(n)$. Zakładamy tu, że rozmiar bloku $\ell$ jest stałą. Inne założenie opisane wyżej to założenie, że dostęp do elementu macierzy (Sparse Arrays) jest w czasie stałym.
+	Znając wyżej opisane algorytmy należało zmodyfikować je pod opisaną w treści listy zadań strukturę. Wiemy, że rozwiązanie naszego równania z użyciem niezmodyfikowanych algorytmów ma złożoność $O(n^3)$. Celem jest zrobienie tego samego w czasie $O(n)$. Zakładamy tu, że rozmiar bloku $\ell$ jest stałą. Inne założenie opisane wyżej to założenie, że dostęp do elementu macierzy (Sparse Arrays) jest w czasie stałym.\\
+	\textbf{Zastosowane modyfikacje}\\
+	Macierz $\mA$ jest macierzą rzadką o specyficznej blokowo-trójdiagonalnej strukturze. Oznacza to, że większość elementów w danej kolumnie nie będzie wymagało zerowania. Znana i uporządkowana struktura pozwala nam na ograniczenie ilości wykonywanych operacji, gdyż są one wymagane tylko dla pewnego ograniczonego obszaru macierzy $\mA$. Wyznaczymy teraz te ograniczenia. W celu przedstawienia metody rozważmy macierz $\mA$ dla $\ell = 4$ i jakiegoś $n$.
+$$
+	\mA =
+	\left(\begin{array}{cccccccccccccc}
+	a^1_{11} & a^1_{12} & a^1_{13}  & a^1_{14} & c^1_{11} & 0  & 0  & 0 & 0  & 0  & 0  & 0  & \cdots  \\
+	a^1_{21} & a^1_{22} & a^1_{23}  & a^1_{24} & 0 & c^1_{22} & 0  & 0  & 0  & 0  & 0  & 0  & \cdots  \\
+	a^1_{31} & a^1_{32} & a^1_{33}  & a^1_{34} & 0  & 0  &  c^1_{33} & 0 & 0  & 0  & 0  & 0  & \cdots  \\
+	a^1_{41} & a^1_{42} & a^1_{43}  & a^1_{44} & 0  & 0  & 0 & c^1_{44} & 0  & 0  & 0  & 0  & \cdots   \\
+	0 & 0 & b^2_{13}  & b^2_{14} & a^2_{11} & a^2_{12} & a^2_{13}  & a^2_{14} & c^2_{11} & 0  & 0  & 0 &\cdots& \\
+	0 & 0 & b^2_{23}  & b^2_{24} & a^2_{21} & a^2_{22} & a^2_{23}  & a^2_{24} & 0 & c^2_{22} & 0  & 0  &\cdots &\\
+	0 & 0 & b^2_{33}  & b^2_{34} & a^2_{31} & a^2_{32} & a^2_{33}  & a^2_{34} & 0  & 0  &  c^2_{33} & 0&\cdots &\\
+	0 & 0 & b^2_{43}  & b^2_{44} & a^2_{41} & a^2_{42} & a^2_{43}  & a^2_{44} & 0  & 0  & 0 & c^2_{44} &\cdots &\\
+	0&0&0&0&0&0& b^3_{13}  & b^3_{14} & a^3_{11} & a^3_{12} & a^3_{13}  & a^3_{14} &\cdots \\
+	0&0&0&0&0&0& b^3_{23}  & b^3_{24} & a^3_{21} & a^3_{22} & a^3_{23}  & a^3_{24} &\cdots \\
+	0&0&0&0&0&0& b^3_{33}  & b^3_{34} & a^3_{31} & a^3_{32} & a^3_{33}  & a^3_{34} &\cdots \\
+	0&0&0&0&0&0& b^3_{43}  & b^3_{44} & a^3_{41} & a^3_{42} & a^3_{43}  & a^3_{44} &\cdots \\
+	\vdots & \vdots &\vdots &\vdots &\vdots &\vdots &\vdots &\vdots &\vdots &\vdots &\vdots &\vdots & \ddots \\
+	\end{array}\right)
+$$
+
+	Kiedy przyjrzymy się czterem ($\ell$) pierwszym kolumnom, widzimy, że musimy w nich wyzerować kolejno 3, 2, 1+4, 0+4 elementów. Zatem pętla która \textit{idzie} po wierszach danej kolumny będzie mogła zakończyć pracę wcześniej. W naszym przypadku na rysunku, w przypadku kolumny pierwszej, pętla będzie mogła zakończyć pracę już po 3 iteracjach, ponieważ wszystkie elementy poniżej $a^1_{41}$ są już zerami.
+	Ogólnie jeśli przyjrzymy się $\ell -2$ pierwszym kolumnom to możemy zauważyć, że jedyne elementy niezerowe występują w bloku $\mA_1$, a więc tylko w $\ell$ pierwszych wierszach. Rozpatrując kolejne $\ell$ kolumn widać, że niezerowe elementy będą się znajdować w bloku $\mB_2$ lub $\mC_1$, lub w bloku $\mA_2$, a więc poniżej tych bloków, czyli poniżej wiersza o numerze $2\ell$, nie pojawią się żadne elementy niezerowe. Biorąc kolejne $\ell$ kolumn sytuacja jest podobna -- elementy niezerowe wystąpią \textbf{najniżej} w bloku $\mB_3$ lub $\mA_3$, a więc nie niżej niż wiersz o numerze $3\ell$ licząc od góry ($3\ell$ pierwszych wierszy). Patrząc na przedstawioną wyżej zależność możemy wywnioskować wzór na ostatni element niezerowy w danej kolumnie $k$. 
+	$$ ostatni_{wiersz}(k) = min\lbrace \ell + \ell \times \lfloor \frac{k+1}{\ell}\rfloor , n \rbrace, k - \text{indeks kolumny} $$
+	Kolejna obserwacja to fakt, że podczas odejmowania wiersza z elementem głównym od innego wiersza nie musimy obliczać tych elementów dla których wiersz główny ma zera. Niech wiersz $k$ będzie naszym wierszem głównym (czyli tym zawierającym element główny), a obecnie eliminowany element będzie w wierszu $i$-tym. Oznacza to, że wykonujemy działanie na wierszach $ R_i \leftarrow R_i -\psi_{ik} \cdot R_k$, gdzie $R_i$ i $R_k$ to odpowiednio $i$-ty i $k$-ty wiersz, a $\psi_{ik}$ to mnożnik (przedstawiony w opisie podstawowej metody eliminacji Gaussa). Teraz widać, że dla $j$-tego elementu wiersza $R_k$ będącego zerem, nazwijmy go $r^k_j = 0$, wykonanie powyższego działania nie zmieni odpowiedniej wartości $j$-tego elementu wiersza $R_i$. Wynika z tego, że pętla która wykonuje to działanie na wierszach może skończyć wcześniej pracę. Teraz wyprowadzimy wzór na ostatnią kolumnę, która może zawierać niezerowy element.\\
+	Zauważmy, że ostatnie elementy w wierszach to te leżące na diagonali bloków $\mC$. Są one odległe od diagonali macierzy $\mA$ o dokładnie $\ell$. Zatem ostatni element niezerowy w wierszu $w$ będzie się znajdował w kolumnie o indeksie $min\lbrace \ell + w , n \rbrace $. Podsumowując:
+	$$ ostatnia_{kolumna}(w) = min\lbrace \ell + w , n \rbrace, w - \text{indeks wiersza} $$
+	Udało się zatem określić ograniczenia pętli w metodzie eliminacji Gaussa, które znacznie zredukują liczbę wykonywanych operacji. Kolejny etap rozwiązywania układu równań to algorytm podstawiania wstecz, który również może zostać zmodyfikowany w celu redukcji wykonywanych operacji.\\
+	W algorytmnie tym sumujemy elementy w danym wierszu pomnożone przez pewne liczby. My jednak wiemy, że znaczna część z tych elementów jest zerami, a więc wyniki iloczynów które otrzymamy też będą zerami nie zmianiając tym wartości sumy. Ponadto wiemy na jakiej pozycji występuje ostatni element niezerowy. Jest to zależność wyprowadzona powyżej tzn. wzór na $ostatnia_{kolumna}$. Możemy zatem zakończyć pętlę wcześniej redukując tym liczbę operacji.\\
+	Poniżej znajduje się pseudokod omówionego algorytmu w celu podsumowania naszych rozważań.
+\begin{algorithm}[h]
+	\DontPrintSemicolon
+	\SetKwInOut{Input}{Dane wejściowe}
+	\SetKwInOut{Output}{Dane wyjściowe}
+	\SetKwProg{Fn}{function}{}{}
+	\SetKw{KwDownTo}{downto}
+	\SetKw{Err}{error}
 	
+	\SetKwData{L}{$\ell$} 			
+	\SetKwData{N}{$n$}    				
+	\SetKwData{B}{$\vb$}    		
+	\SetKwData{A}{$\mA$}    			
+	\SetKwData{X}{$\vx$}
+	\SetKwData{F}{f}
+	\SetKwData{Z}{$\psi$}
+	\SetKwData{I}{i}
+	\SetKwData{J}{j}
+	\SetKwData{K}{k}
+	\SetKwData{Sum}{suma}
+	\SetKwData{Col}{$ ostatnia_{kolumna}$}
+	\SetKwData{Row}{$ostatni_{wiersz}$}
+	\SetKwFunction{ge}{eliminacja\_gaussa}
+	\SetKwFunction{Min}{$\min$}
+	
+	\Input{\\
+		\begin{tabularx}{0.85\linewidth}{rcX}
+			{\A} & -- & macierz z zadania o opisanej w zadaniu strukturze,\\
+			{\B} & -- & wektor prawych stron, \\
+			{\N} & -- & rozmiar macierzy \A, \\
+			{\L} & -- & rozmiar bloku macierzy \A.  		
+		\end{tabularx}
+	}
+	\Output{\\
+		\begin{tabularx}{0.85\linewidth}{rcX}
+			{\X}& -- & wektor zawierający rozwiązania układu $\A\X=\B$.
+		\end{tabularx}					    			
+	}
+	\Fn{\ge{\A,~\B,~\N,~\L}}{
+		\For{$\K \gets 1$ \KwTo $\N-1$} {
+			$\Row\gets\Min\lbrace \L + \L \cdot \left \lfloor\frac{\K + 1}{\ell}\right \rfloor, n \rbrace$\;
+			$\Col\gets \Min(\K + \L, \N)$\;
+			\For{$\I \gets \K+1$ \KwTo \Row}{
+				\If{$\A[\K,\K] = 0$}{\Err współczynnik na przekątnej równy zeru}
+				$\Z \gets \frac{\A[\I,\K]}{ \A[\K,\K]} $\;
+				$\A[\I,\K] \gets 0 $ \;
+				\For{$\J \gets \K+1$ \KwTo \Col}{
+					$\A[\I,\J] \gets \A[\I,\J] - \Z \cdot \A[\K,\J]$\;
+				}
+				$\B[\I] \gets \B[\I] - \Z \cdot \B[\K]$\;
+			}
+		}
+		\For{$\I \gets \N$ \KwDownTo $1$}{
+			$\Col\gets \Min(\I+ \L, \N)$\;
+			\For{$\J \gets \K+1$ \KwTo $\Col$}{
+				$\Sum \gets \Sum + \X[\I] \cdot \A[\I,\J]$\;
+			}
+			$\X[\I] \gets \frac{\B[\I] - \Sum}{\A[\I,\I]}$\;
+		}
+		
+		\KwRet \X\;
+	}
+	\caption{Zmodyfikowana metoda eliminacjii Gaussa}
+\end{algorithm} 
+
+	Pozostało jeszcze określenie złożoności powyższego algorytmu. Widać, że pierwsza pętla wykona się $n-1$ ($O(n)$) razy, a pierwsza wewnątrz niej maksymalnie $2\ell$ razy. Kolejna pętla wykonująca odejmowanie wierszy wykona się maksymalnie $\ell$ razy. $\ell$ jest stałą, zatem sama eliminacja Gausa wykonuje się w czasie $O(n)$. Teraz przyjrzyjmy się algorytmowi podstawiana wstecz. Zewnętrzna pętla wykona się $O(n)$ razy, a wewnętrzna co najwyżej $\ell$, co daje łącznie $O(n)$. Zatem złożoność całego przedstawionego wyżej algorytmu rozwiązującego układ równań $\mA\vx=\vb$ wynosi $O(n)$.
 	\section*{Zadanie 3} 
 	
 	Celem tego zadania było napisanie funkcji obliczającej współczynniki $a_0,\ldots,a_n$ postaci naturalnej wielomianu interpolacyjnego dla zadanych współczynników $d_0 = f[x_0], d_1 = f[x_0,x_1], \ldots d_n = f[x_0, \ldots, x_n]$ tego wielomianu w postaci Newtona oraz węzłów $x_0, \ldots, x_n$. Ponadto funkcja miała działać w czasie $O(n^2)$.\\
@@ -218,9 +313,7 @@
 	
 		\begin{figure}[!htbp]
 	\centering
-%	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf1_5.png}} \hfill
-%	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf1_10.png}} \hfill
-%	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf1_15.png}} \hfill
+
 	\caption*{Wykres funkcji $e^{x}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
 \end{figure}		
 
