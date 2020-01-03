@@ -342,9 +342,83 @@ $$
 	
 	\section*{Zadanie 3}
 
-	Celem zadania było napisanie 
+	Celem zadania było napisanie funkcji rozwiązującej układ równań $\mA\vx=\vb$ (uwzględniającą specyficzną postać macierzy $\mA$) jeśli wcześniej został już wyznaczony rozkład LU przez funkcje z poprzedniego zadania.\\
+	Algorytm będzie się składał z rozwiązania dwóch układów równań.
+	 $$\left\{
+	\begin{array}{ll}
+	\mL \bm{z}= \vb\\
+	\mU \vx= \bm{z} \\
+	\end{array}
+	\right.$$
+	Rozwiązanie pierwszego z nich tzn. $\mL \bm{z}= \vb$ wykonamy algorytmem analogicznym do algorytmu podstawiania wstecz -- nazwijmy go algorytmem podstawiania wprzód. Algorytm ten zaczyna się od pierwszego wiersza i w każdej iteracji oblicza kolejne wartości współrzędnych wektora $\bm{z}$ korzystając z coraz dłuższych wierszy. Intuicyjnie jest to przejście przez macierz trójkątną dolną zaczynające się od pierwszego elementu wiersza, a kończące się na ostatnim elemencie ostatnigo wiersza. Ilość iteracji możemy tu ograniczyć wyznaczając ograniczenia w podobny sposób jak zrobiliśmy to dla algorytmu podstawiania wstecz. Zauważmy, że elemety zerowe w macierzy L występują na tych samych pozycjach co elementy zerowe w początkowej macierzy $\mA$. Zatem sumowanie wszystkich kolumn poniżej diagonali w danym wierszu $w$ nie jest konieczne, ponieważ część z nich jest zerami. Możemy zacząć od kolumny, która może zawierać jakiś element niezerowy. Wyznaczymy teraz ograniczenie na najmniejszy indeks kolumny, który może zawierać elementy niezerowe w zadanym wierszu $w$. 
+	Przeprowadzając rozumowanie analogiczne do tego przy wyznaczaniu $ostatni_{wiersz}$ dla algorytmu podstawiania wstecz możemy wyprowadzić wzór na $poczatkowa_{kolumna}$:
+	$$poczatkowa_{kolumna}(w) = max\lbrace \ell \times \lfloor \frac{w-1}{\ell}\rfloor , 1 \rbrace, w - \text{indeks wiersza}$$
+	Rozwiązanie drugiego równania wykonamy znanym nam już algorytmem podstawiania wstecz.\\
+	Algorytm rozwiązujący układ równań z podanego rozkładu LU wykonanego metodą eliminacji Gaussa bez wyboru elementu głównego znajduje się poniżej.
 	
-	\section*{Zadanie 6}
+	\begin{algorithm}[h]
+		\SetKwInOut{Input}{Dane wejściowe}
+		\SetKwInOut{Output}{Dane wyjściowe}
+		\SetKwProg{Fn}{function}{}{}
+		\SetKw{KwDownTo}{downto}
+		\SetKw{Err}{error}
+		\DontPrintSemicolon
+		\SetKwData{L}{$\ell$} 			
+		\SetKwData{N}{$n$}    				
+		\SetKwData{B}{$\vb$}    		
+		\SetKwData{A}{$\mA$}    			
+		\SetKwData{X}{$\vx$}
+		\SetKwData{F}{f}
+		\SetKwData{Z}{z}
+		\SetKwData{I}{i}
+		\SetKwData{J}{j}
+		\SetKwData{K}{k}
+		\SetKwData{Sum}{suma}
+		\SetKwData{Col}{$ostatnia_{kolumna}$}
+		\SetKwData{Colmin}{$poczatkowa_{kolumna}$}
+		\SetKwFunction{ge}{rozwiąż\_z\_LU}
+		\SetKwFunction{Min}{$\min$}
+		
+		\Input{\\
+			\begin{tabularx}{0.85\linewidth}{rcX}
+				{\A} & -- & macierz z zadania o opisanej w zadaniu strukturze, po przekształceniu do postaci, w której pod diagonalą znajdują się elementy macierzy L, a nad diagonalą elementy macierzy U,\\
+				{\B} & -- & wektor prawych stron, \\
+				{\N} & -- & rozmiar macierzy \A, \\
+				{\L} & -- & rozmiar bloku macierzy \A.  		
+			\end{tabularx}
+		}
+		\Output{\\
+			\begin{tabularx}{0.85\linewidth}{rcX}
+				{\X}& ---& wektor zawierający rozwiązania układu $\A\X=\B$.
+			\end{tabularx}		    			
+		}
+		\Fn{\ge{\A,~\B,~\N,~\L}}{
+			\For{$\I \gets 1$ \KwTo $\N$} {
+				$\Sum \gets 0$\;
+				$\Colmin\gets \max\lbrace\L \cdot \left \lfloor\frac{\I - 1}{\ell}\right \rfloor, 1\rbrace$\;
+				\For{$\J \gets \Colmin\;$\KwTo $\I - 1$}{
+					$\Sum \gets \Sum + \Z[\J] \cdot \A[\I,\J]$\;
+				}
+				$\Z[\I] = \B[\I] - \Sum$\; 
+			}
+			\For{$\I \gets \N$ \KwDownTo $1$}{
+				$\Sum \gets 0$\;
+				$\Col\gets \Min\lbrace\I+ \L, \N\rbrace$\;
+				\For{$\J \gets \I+1$ \KwTo $\Col$}{
+					$\Sum \gets \Sum + \X[\J] \cdot \A[\I,\J]$\;
+				}
+				$\X[\I] \gets (\Z[\I] - \Sum) / \A[\I,\I]$\;
+			}
+			
+			\KwRet \X\;
+		}
+		\caption{Algorytm rozwiązujący układ równań przy użyciu rozkładu LU (bez wyboru elementu głównego)}
+	\end{algorithm} 
+	Algorytm ten wykona się w czasie $O(n)$, ponieważ pierwsza pętla (algorytm podstawiania wprzód) wykona się co najwyżej $n$ razy, a pętla wewnątrz niej w czasie $O(1)$, oczywiście jeśli zakładamy, że $\ell$ jest stałą! Druga pętla to znany nam zmodyfikowany na potrzeby zadania algorytm podstawiania wstecz, dla którego udowodniliśmy już złożoność liniową.\\
+	
+	Pozostała jeszcze kwestia analogicznego algorytmu dla rozkładu LU wykonanego metodą eliminacji Gaussa z częściowym wyborem elementu głównego. Będzie to algorytm identyczny z tą różnicą, że zamiast odwoływać się bezpośrednio do indeksów wierszy macierzy L i U oraz indeksów wektora $\vb$, będziemy odwoływać się do ich indeksów zapamiętanych w wektorze permutacji. Złożoność tego algorytmu będzie oczywiście taka sama -- $O(n)$.
+	
+	\section*{Wyniki i wnioski}
 	
 	Celem zadania było przetestowanie funkcji \texttt{rysujNnfx(f,a,b,n)} (z zadania 4) na następujących przykładach:
 	\begin{enumerate}[(a)]
@@ -384,15 +458,6 @@ Pojawia się pytanie czy można poprawić dokładność wielomianów interpolacy
 %	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_15.png}} \hfill
 %	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_20.png}} \hfill
 	\caption*{Wykres funkcji $|x|$ i jej wielomianu interpolacyjnego skonstruowanego przy pomocy węzłów Czebyszewa}
-	\label{fig:4}
-\end{figure}
-\begin{figure}[h]
-	\centering
-%	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_5.png}} \hfill
-%	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_10.png}} \hfill
-%	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_15.png}} \hfill
-%	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf2_20.png}} \hfill
-	\caption*{Wykres funkcji $\frac{1}{1+x^2}$ i jej wielomianu interpolacyjnego stworzonego przy pomocy węzłów Czebyszewa}
 	\label{fig:4}
 \end{figure}
 
