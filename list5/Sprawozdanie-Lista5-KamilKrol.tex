@@ -11,6 +11,7 @@
 \usepackage{hyperref}
 \usepackage{enumerate}
 \usepackage{tabularx}
+\usepackage{multirow,bigdelim}
 \usepackage[font=small]{caption}
 \usepackage[ruled,noend]{algorithm2e}
 \usepackage{bm}
@@ -53,7 +54,7 @@
 	i wektora prawych stron $\vb \in \R^n$, gdzie $n \geq 4$. \\
 	
 	\noindent Zgodnie z treścią listy macierz $\mA$ jest rzadką macierzą (tj. mającą dużo elementów zerowych) blokową o następującej strukturze:
-	\begin{equation}
+	$$
 	\mA =
 	\left(\begin{array}{ccccccc}
 	\mA_1 & \mC_1 & \mZ & \mZ & \mZ & \cdots & \mZ \\
@@ -64,14 +65,14 @@
 	\mZ  & \cdots & \mZ  &  \mZ &\mB_{v-1} & \mA_{v-1} & \mC_{v-1}  \\
 	\mZ  & \cdots & \mZ & \mZ & \mZ& \mB_{v} & \mA_{v}  \\
 	\end{array}\right),
-	\end{equation} 
+	$$
 	$v = n/\ell$, zakładając że $n$ jest podzielne przez $\ell$, gdzie $\ell \geq 2$ jest rozmiarem wszystkich kwadratowych macierzy wewnętrznych (bloków) $\mA_i$, $\mB_i$, $\mC_i$, $\mZ$. \\
 	
 	\noindent Macierze oznaczone przez $\mZ$ są macierzami zerowymi tzn. $\mZ \in \R^{\ell\times \ell}$. Macierze $\mA_i$, $\mB_i$, $\mC_i$, są następującej postaci:
 	\begin{enumerate}[(i)]
 		\item $\mA_i \in \R^{\ell\times \ell}$,   $i = 1, \ldots,v$ -- macierze gęste,
 		\item $\mB_i \in \R^{\ell\times \ell}$,   $i = 2, \ldots,v$ -- macierze mające tylko dwie ostatnie kolumny niezerowe:
-		\begin{equation}
+		$$
 		\mB_i =
 		\left(\begin{array}{ccccc}
 		0 & \cdots & 0 & b_{1\,\ell-1}^i & b_{1\,\ell}^i \\
@@ -79,9 +80,9 @@
 		\vdots & & \vdots & \vdots & \vdots \\
 		0 & \cdots & 0 & b_{\ell\,\ell-1}^i & b_{\ell\,\ell}^i \\
 		\end{array}\right),
-		\end{equation} 
+		$$
 		\item $\mC_i \in \R^{\ell\times \ell}$,   $i = 1, \ldots,v\!-\!1$ -- macierze diagonalne:
-		\begin{equation}
+		$$
 		\mC_i =
 		\left(\begin{array}{ccccc}
 		c_{1}^i & 0 & 0 & \cdots & 0  \\
@@ -90,7 +91,7 @@
 		0 & \cdots & 0 &  c_{\ell-1}^i & 0 \\
 		0 & \cdots & 0 &  0 & c_{\ell}^i \\
 		\end{array}\right).
-		\end{equation} 
+		$$
 	\end{enumerate}
 
 	Dodatkową informacją o danych jest ich duży rozmiar. W konsekwencji wyklucza to pamiętanie macierzy $\mA$ jako tablicę o wymiarach $n \times n$ oraz użycie standardowych (bibliotecznych) algorytmów dla macierzy gęstych tj. takich, gdzie
@@ -103,7 +104,7 @@
 	\href{https://docs.julialang.org/en/v1/stdlib/SparseArrays/}{julialang - SparseArrays}.
 	
 
-	\subsection*{Opis metody eliminacji Gaussa bez wyboru elementu głównego}
+	\section*{Opis metody eliminacji Gaussa bez wyboru elementu głównego}
 	Ideą eliminajci Gaussa jest to aby początkowy układ równań sprowadzić do układu prostszego. Dokładniej chodzi o sprowadzenie macierzy A do postaci macierzy trójkątnej górnej. W celu doprowadzenia macierzy do takiej postaci algorytm posługuje się podstawowymi operacjami na macierzy tzn. dodawanie, odejmowanie wierszy oraz mnożenie wierszy przez pewnien niezerowy współczynnik. \\
 	Dokładniej, proces polega na eliminowaniu (zerowaniu) elementów znajdujących się w pod przekątną macierzy.
 	Zatem dla kolumny pierwszej będziemy chcieli wyzerować wszystkie elementy znajdujące się pod pierwszym elementem w tej kolumnie, dla kolumny drugiej -- wszystkie elementy pod drugim (patrząc od góry) elementem w danej kolumnie. Bardziej formalnie, naszym celem będzie wyeliminowanie niewiadomej $x_1$ ze wszystkich $n-1$ pozostałych równań (czyli wszystkich poza pierwszym). Dla $i = 2,\ldots,n$ będziemy odejmować odpowiednią wielokrotność równania pierwszego od $i$-tego równania zerując przy tym współczynnik przy $x_1$ w $i$-tym równaniu. \\
@@ -111,7 +112,7 @@
 	Zanim zobaczymy jak można rozwiązać ten problem musimy przytoczyć jedną z własności układu równań Ax=b. Mianowicie, wiersze macierzy A i odpowiadające im wartości w wektorze b możemy dowolnie ze sobą zamieniać. Nie zmianiamy w ten sposób układu równań.
 	Zwróćmy również uwagę na fakt, że aby istniało rozwiązanie tego równania macierz A musi być nieosobliwa. 
 	Teraz możemy przedstawić sposób na uniknięcie dzielenia przez 0. 
-	\subsection*{Opis metody eliminacji Gaussa częściowym wyborem elementu głównego}
+	\section*{Opis metody eliminacji Gaussa z częściowym wyborem elementu głównego}
 	Przedstawiona poniżej metoda nosi nazwę metody eliminacjii Gaussa z częściowym wyborem elementu głównego.
 	Czym jest element główny? Jest to element macierzy znajdujący się na diagonali. Dla $k$-tej kolumny, elementem głównym będzie element $a_{kk}$ macierzy A. Jest to również ten element przez który dzielimy chcąc obliczyć mnożnik $\psi_{ik}$ ($k$ oraz $i$ są opisane tak samo jak w poprzednim paragrafie). Częściowy wybór polega na wybraniu największego elementu co do wartości bezwzględnej z danej kolumny $k$ oraz zamianie wierszy tak aby ten element stał się elementem głównym -- elementem na diagonali. Możemy to zrobić, ponieważ macierz A jest nieosobliwa. \\
 	Zamiana wierszy macierzy jest kosztownym prcesem, który może być zastąpiony przez wektor permutacji wierszy $p$. Zapamiętujemy w nim, na którym miejscu aktualnie znajduje się dany wiersz. Zatem jedyna różnica w samym algorytmie będzie taka, że zamiast odwoływać się do danego wiersza bezpośrednio, będziemy się odwoływać do jego pozycji zapisanej w wektorze permutacji. Zwróćmy uwagę na to, że zmieniając wiersze w macierzy A musimy zmieniać też poszczególne współrzędne w wekotrze prawych stron -- b. Złożoność obu przedstawionych powyżej algorytmów wynosi $O(n^3)$.
@@ -203,7 +204,7 @@ $$
 			$\Row\gets\Min\lbrace \L + \L \cdot \left \lfloor\frac{\K + 1}{\ell}\right \rfloor, n \rbrace$\;
 			$\Col\gets \Min(\K + \L, \N)$\;
 			\For{$\I \gets \K+1$ \KwTo \Row}{
-				\If{$\A[\K,\K] = 0$}{\Err współczynnik na przekątnej równy zeru}
+				\If{$\A[\K,\K] = 0$}{\Err współczynnik na przekątnej równy zero}
 				$\Z \gets \frac{\A[\I,\K]}{ \A[\K,\K]} $\;
 				$\A[\I,\K] \gets 0 $ \;
 				\For{$\J \gets \K+1$ \KwTo \Col}{
@@ -260,7 +261,7 @@ $$
 		\SetKwData{Val}{$v_{\max}$}
 		\SetKwData{Col}{$ostatnia_{kolumna}$}
 		\SetKwData{Row}{$ostatni_{wiersz}$}
-		\SetKwFunction{ge}{eliminacja\_gaussa\_z\_elementem\_głównym}
+		\SetKwFunction{ge}{eliminacja\_gaussa\_częściowy\_wybór}
 		\SetKwFunction{Min}{$\min$}
 		\SetKwFunction{Swap}{swap}
 		
@@ -285,7 +286,7 @@ $$
 				\For{$\I \gets \K+1$ \KwTo \Row}{
 					$\Idx \gets \Mm$ takie, że: $\A[\P[\Mm],\K] = \max(|\A[\P[\Q],\K]| : \Q \in \{\I, \ldots,\Row\} )$\;
 					
-					\If{$\P[\Idx] = 0$}{\Err macierz osobliwa}
+					\If{$\P[\Idx] = 0$}{\Err podana macierz jest osobliwa}
 					\Swap($\P[\K], \P[\Idx]$)\;
 					$\Z \gets \frac{\A[\P[\I],\K]}{\A[\P[\K],\K]}$\;
 					$\A[\P[\I],\K] \gets 0 $ \;
@@ -305,62 +306,43 @@ $$
 			
 			\KwRet \X\;
 		}
-		\caption{Zmodyfikowana metoda eliminacjii Gaussa z częściowym wyborem elementu głównego}\label{alg:pivotgauss}
+		\caption{Zmodyfikowana metoda eliminacjii Gaussa z częściowym wyborem elementu głównego}
 	\end{algorithm} 
 	
 	
 	\clearpage
+	\section*{Opis rozkładu LU}
 	
+	Ideą eliminacji Gaussa było sprowadzenie macierzy $\mA$ (z równania $\mA\vx=\vb$) do macierzy trójkątnej górnej, ponieważ taki układ jesteśmy w stanie rozwiązać stosunkowo prosto. Idea rozkładu LU jest taka sama i jest ściśle powiązana z metodą eliminacji Gaussa. Jest to metoda służąca do rozwiązywania równania $\mA\vx=\vb$. Metoda polega na przedstawieniu macierzy $\mA$ w postaci iloczynu dwóch macierzy trójkątnych: macierzy $\mL$ (lower) oraz macierzy $\mU$ (upper). Macierz $\mL$ jest macierzą trójkątną dolną, a macierz $\mU$ macierzą trójkątną górną. Mając taki rozkład jesteśmy w stanie zapisać nasz układ równań w postaci $\mL\mU\vx=\vb$. Rozwiązanie tego ukłądu sprowadza się do rozwiązania dwóch równań z macierzami trójkatnymi (górną i dolną):
+	$$\left\{
+	\begin{array}{ll}
+		\mL \bm{z}= \vb\\
+		\mU \vx= \bm{z} \\
+	\end{array}
+	\right.$$
+	Ważnym założeniem jest to, że jedna z macierzy (L lub U) ma na diagonali same jedynki. Zapewnia to jednoznaczność rozkładu. Rozkład LU jest szczególnie użyteczny w przypadku rozwiązywania wielu układów równań z tą samą macierzą $\mA$ i ze zmieniającym się wektorem prawych stron. Mając raz zrobiony rozkład LU (koszt $O(n^3)$) możemy kolejne równania rozwiązywać z kosztem $O(n^2)$.
+	Inną zaletą rozkładu LU jest to, że całość procesu można wykonać tylko na macierzy $\mA$ -- nie potrzebna jest dodatkowa pamięć, gdyż zarówno macierz L jak i U są zapamiętywane na jednej macierzy.\\
+	W celu otrzymania macierzy  $\mL$ i $\mU$ wystarczy wykonać eliminacje Gaussa na macierzy $\mA$. Macierz trójkątna powstała w wyniku eliminacji Gaussa staje się macierzą $\mU$. Macierz  $\mL$ powstaje w wyniku zapamiętania mnożników użytych w algorytmie eliminacji Gaussa. Stąd widać, że złożoność wykonania rozkładu LU to $O(n^3)$. Daje to jednak możliwość rozwiązywania kolejnych układów równań (takich w którzych macierz $\mA$ pozostaje taka sama) z kosztem $O(n^2)$.
 	
 	\section*{Zadanie 2} 
 	
-	Celem tego zadania było napisanie funkcji 
+	Celem tego zadania było napisanie funkcji wyznaczającej rozkład LU macierzy $\mA$ metodą eliminacji Gaussa uwzględniającą
+	specyficzną postać macierzy $\mA$ dla dwóch wariantów:
+	\begin{enumerate}[a)]
+		\item bez wyboru elementu głównego,
+		\item z częściowym wyborem elementu głównego.
+	\end{enumerate}
+	\textbf{Zastosowane modyfikacje}\\
+	Funkcja wyznaczająca rozkład LU będzie drobną modyfikacją \textbf{algorytmu 1} (dla wariantu a) oraz \textbf{algorytmu 2} (dla wariantu b). Żadne ograniczenia nie zmieniają się. Pierwsza różnica polega na tym, że zamiast przypisywać zera w obszar, w którym znajdowały się wyeliminowane współczynniki, algorytm będzie przypisywał mnożnik. 
+	Zatem linia algorytmu 1 zamiast ,,$\mA[i,k] \gets 0 $" będzie miała postać: ,,$\mA[i,k] \gets \psi $". Linia ,,$\mA[\pi[i],k] \gets 0 $" w algorytmie 2 zamieni się na: ,,$\mA[\pi[i],k] \gets \psi $".
+	Druga różnica to usunięcie z obu algorytmów linii, która dokonuje modyfikacji wektora prawych stron -- $\vb$, ponieważ tej modyfkacji będzie dokonywał algorytm rozwiązujący równanie na podstawie rozkładu LU. Wyliczanie wartości x również zostanie zrobione w oddzielnym algorytmie.\\
+	Pozostało określić złożoność przedstawionych wyżej algorytmów. Algorytm 1 oraz algorytm 2 miały złożoność $O(n)$ (przy założeniu, że $\ell$ jest stałą). Dwa wyżej opisane algorytmy będą miały taką samą złożoność, ponieważ są to w istocie takie same algorytmy różniące się jedynie kilkoma linijkami, modyfikacje zastosowane do zmienionych linii kodu nie zmieniają złożoności całości algorytmu.
 	
 	\clearpage
 	
-	\section*{Zadanie 4}
+	\section*{Zadanie 3}
 
-	Celem zadania było napisanie funkcji interpolującej zadaną funkcję $f(x)$ w przedziale $[a, b]$ za pomocą wielomianu interpolacyjnego stopnia $n$ w postaci Newtona, a także rysującej wykresy funkcji $f$ oraz otrzymanego wielomianu interpolacyjnego. W interpolacji funkcji należało użyć węzłów równoodległych.\\
-	\textbf{Dane:}
-	\begin{enumerate}[]
-		\item \texttt{f} -- zadana funkcja,
-		\item \texttt{a, b} --  przedział interpolacji,
-		\item \texttt{n} --  stopień wielomianu interpolacyjnego.
-	\end{enumerate}
-	\textbf{Oczekiwany wynik:}
-	\begin{enumerate}[]
-		\item -- wykres funkcji $f$ oraz wielomianu interpolacyjnego w przedziale $[a,b]$.
-	\end{enumerate}
-	\textbf{Opis:}\\
-	Na początku wyznaczyłem węzły interpolacyjne $x_1, \ldots, x_{n+1}$ w taki sposób aby odległość między nimi wynosiła $\frac{b-a}{n}$. Następnie obliczyłem wartości funkcji w tych punktach tj. $f(x_1), \ldots, f(x_{n+1})$.
-	W celu obliczenia ilorazów różnicowych posłużyłem się funkcją z zadania pierwszego -- \texttt{ilorazyRoznicowe}. Następnie użyłem funkcji z zadania drugiego tj. \texttt{warNewton} do obliczenia wartości wielomianu interpolacyjnego w potrzebnych punktach. W celu uzyskania dokładniejszego wykresu, punkty dla których rysowałem wykres musiałem zagęścić. Zrobiłem to mnożąc dane $n$ razy obrany przeze mnie parametr gęstości równy 40. Dzięki temu uzyskałem dokładniejsze wykresy.
-	
-	
-	\section*{Zadanie 5}
-	Celem zadania było przetestowanie funkcji \texttt{rysujNnfx(f,a,b,n)} (z zadania 4) na następujących przykładach:
-	\begin{enumerate}[(a)]
-		\item $f(x) = e^x$, $[a, b] = [0,1]$, $n \in \{5,10,15\}$,
-		\item $f(x) = x^2\sin{x}$, $[a, b] = [-1,1]$, $n \in \{5,10,15\}$.
-	\end{enumerate}
-	Poniżej narysowane wykresy dla obu funkcji. Na przykładach tych funkcji widać, że wybranie równoodległych węzłów dało bardzo dokładne przybliżenia funkcji. Dla żadnego z wykresów nie zaobserwowano rozbieżności. Kolejna rzecz warta zaobserwowania to fakt, że dla wszystkich wartości n funkcje były bardzo dobrze przybliżone.
-	
-		\begin{figure}[!htbp]
-	\centering
-
-	\caption*{Wykres funkcji $e^{x}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
-\end{figure}		
-
-\begin{figure}[!htbp]
-	\centering
-%	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task5plotf2_15.png}} \hfill
-	\caption*{Wykres funkcji $x^2\sin{x}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
-\end{figure}	
-
-
-
-
-
-	\clearpage
+	Celem zadania było napisanie 
 	
 	\section*{Zadanie 6}
 	
