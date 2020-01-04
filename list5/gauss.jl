@@ -84,7 +84,7 @@ A: given matrix after elimination (SparseMatrixCSC{Float64, Int64}),
 permutation: vector of permutation (Vector{Float64})
 b: given vector of right sides after elimination (Vector{Float64}).
 """
-function gauss_with_choose_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64, write_matrix_L::Bool)
+function gauss_with_choice_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64, write_matrix_L::Bool)
     permutation = Vector{Int64}(undef, n)
     for k = 1:n
         permutation[k] = k     # not permutated sequence
@@ -136,9 +136,9 @@ l: size of blocks in matrix A (Int64)
 Returns:
 x: vector with solutions (Vector{Float64})
 """
-function solve_gauss_with_choose_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64)
+function solve_gauss_with_choice_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64)
     x = Vector{Float64}(undef, n)
-    res = gauss_with_choose_main_element(A, b, n, l, false)
+    res = gauss_with_choice_main_element(A, b, n, l, false)
     A2 = res[1]
     permutation = res[2]
     b2 = res[3]

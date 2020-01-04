@@ -1,4 +1,3 @@
-include("./gauss.jl")
 include("./matrixgen.jl")
 include("./blocksys.jl")
 
