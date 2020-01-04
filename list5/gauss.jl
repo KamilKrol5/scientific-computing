@@ -18,7 +18,7 @@ function gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64,
     # Iteration over columns
     for column = 1:n - 1
         # The last element to be eliminated in current column
-        last_to_eliminate = convert(Int64, min(l + l * floor((column+1) / l), n))
+        last_to_eliminate = Int64(min(l + l * floor((column+1) / l), n))
 
         for elem = column + 1:last_to_eliminate # Iteration over elements (rows) to be eliminated
 

@@ -5,7 +5,8 @@ using .blocksys
 using SparseArrays
 using Test
 
-
+# (A,n,l) = load_matrix("data16/A.txt")
+# display(@view A[:,:])
 # (A,n,l) = load_matrix("data50000/A.txt")
 # b = load_vector("data50000/b.txt")
 # # display(@view A[:,:])
@@ -17,7 +18,7 @@ using Test
 @testset "gauss with partial choice 50000" begin
     (A,n,l) = load_matrix("data50000/A.txt")
     b = load_vector("data50000/b.txt")
-    b3 = solve_gauss_with_choose_main_element(A, b, n, l)
+    b3 = solve_gauss_with_choice_main_element(A, b, n, l)
     @testset for x in @view b3[:,:]
         @test x ≈ 1.0
     end
@@ -26,7 +27,7 @@ end
 @testset "gauss with partial choice 10000" begin
     (A,n,l) = load_matrix("data10000/A.txt")
     b = load_vector("data10000/b.txt")
-    b3 = solve_gauss_with_choose_main_element(A, b, n, l)
+    b3 = solve_gauss_with_choice_main_element(A, b, n, l)
     @testset for x in @view b3[:,:]
         @test x ≈ 1.0
     end
