@@ -92,7 +92,6 @@ function solve_using_lu_with_main_element(A::SparseMatrixCSC{Float64, Int64}, pe
     x = Vector{Float64}(undef, n)
     for i = n:-1:1
         row_sum = 0.0
-
         for column = i + 1:min(i + 2 * l, n)
             row_sum += A[column, permutation[i]] * x[column]
         end
