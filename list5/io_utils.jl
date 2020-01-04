@@ -25,6 +25,15 @@ function load_matrix(file_path::String)
             V[it] = parse(Float64, ln[3])
             it += 1
         end
+        for w=1:n
+            for k = 1+Int64(l+l*floor((w-1)/l)): min(Int64(2*l+l * floor((w-1)/l)), n)
+                if (k != w+l)
+                    append!(J, w)
+                    append!(I, k)
+                    append!(V, 0.0)
+                end
+            end
+        end
         A = sparse(I, J, V) #transposed
         return (A, n, l)
     end
