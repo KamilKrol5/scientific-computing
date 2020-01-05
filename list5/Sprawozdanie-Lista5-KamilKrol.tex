@@ -96,6 +96,7 @@
 
 	Dodatkową informacją o danych jest ich duży rozmiar. W konsekwencji wyklucza to pamiętanie macierzy $\mA$ jako tablicę o wymiarach $n \times n$ oraz użycie standardowych (bibliotecznych) algorytmów dla macierzy gęstych tj. takich, gdzie
 	nie zakłada się dużej liczby elementów zerowych. Zatem dodatkowym wymaganiem co do zadania jest specjalna struktura pamiętająca efektywnie macierz $\mA$. Taka która pamięta tylko elementy niezerowe macierzy $\mA$. W tym celu w moich programach użyłem biblioteki \textit{SparseArrays}, która pamięta tylko elementy niezerowe. W naszych rozważaniach założymy, że możemy uzyskać dostęp do elementów macierzy w czasie stałym -- $O(1)$. W rzeczywistości tak nie jest. \\
+	Samo użycie tej biblioteki jednak nie gwarantuje nam szybkiego algorytmu. Pojawia się bowiem problem w momencie nadpisywania elementów macierzy, które są zerami. W momencie takiego przypisania konieczna jest alokacja dodatkowej pamięci aby przechować nowy niezerowy element. Jedną z kluczowych optymalizacji, którą zastosujemy będzie sztuczne przypisanie zer do \textit{pól} macierzy $\mA$ w obszarach gdzie zera faktycznie występują, ale zostaną one w przyszłości nadpisane. Takie obszary to obszary macierzy $\mC$ poza elementami na diagonali. Zastosowanie tej optymalizacji pozwoliło aby wykresy przedstawiające czas wykonywania algorytmów od wielkości macierzy, które są przedstawione na końcu sprawozdania, faktycznie przypominały liniowe.\\
 	Ponadto konieczna jest modyfikacja standardowych algorytmów tak, aby uwzględniały one specyficzną postać macierzy $\mA$, tj.
 	jej rzadkość, regularność występowania elementów zerowych i niezerowych.\\
 	
@@ -112,6 +113,7 @@
 	Zanim zobaczymy jak można rozwiązać ten problem musimy przytoczyć jedną z własności układu równań Ax=b. Mianowicie, wiersze macierzy A i odpowiadające im wartości w wektorze b możemy dowolnie ze sobą zamieniać. Nie zmianiamy w ten sposób układu równań.
 	Zwróćmy również uwagę na fakt, że aby istniało rozwiązanie tego równania macierz A musi być nieosobliwa. 
 	Teraz możemy przedstawić sposób na uniknięcie dzielenia przez 0. 
+	\clearpage
 	\section*{Opis metody eliminacji Gaussa z częściowym wyborem elementu głównego}
 	Przedstawiona poniżej metoda nosi nazwę metody eliminacjii Gaussa z częściowym wyborem elementu głównego.
 	Czym jest element główny? Jest to element macierzy znajdujący się na diagonali. Dla $k$-tej kolumny, elementem głównym będzie element $a_{kk}$ macierzy A. Jest to również ten element przez który dzielimy chcąc obliczyć mnożnik $\psi_{ik}$ ($k$ oraz $i$ są opisane tak samo jak w poprzednim paragrafie). Częściowy wybór polega na wybraniu największego elementu co do wartości bezwzględnej z danej kolumny $k$ oraz zamianie wierszy tak aby ten element stał się elementem głównym -- elementem na diagonali. Możemy to zrobić, ponieważ macierz A jest nieosobliwa. \\
@@ -119,10 +121,10 @@
 	
 	Teraz kiedy znamy procedurę, która pozwala nam sprowadzić macierz A do macierzy trójkątnej górnej, pojawia się pytanie jak z tą wiedzą rozwiązać układ równań $Ax = b$. W tym celu zastosujemy algorytm podstawiania wstecz. Opiera się on o wzór poniżej.
 	$$x_i = \frac{b_i - \sum_{j = i+1}^n (a_{ij} \cdot x_j)}{a_{ii}}$$
-	\clearpage
+	
 	Widać zatem, że idąc \textit{od końca} ($i=n,\ldots,1$) jesteśmy w stanie obliczyć wszystkie wartości $x$. Złożoność tego algorytmu wynosi $O(n^2)$, a cały proces prowadzący do rozwiązania równania ma złożoność $O(n^3)$ (bo eliminacja Gaussa ma złożoność $O(n^3)$). \\
 	Widać tu, że najkosztowniejszym fragmentem opisanego wyżej algorytmu rozwiązywania układu równań jest eliminacja Gaussa. Przedstawiony poniżej rozkład LU będzie umożliwiał rozwiązywanie układu równań dla różnych wektorów prawych stron przy tylko jednym wywołaniu metody eliminacji Gaussa zajmującej $O(n^3)$. Rozwiązywanie kolejnych układów równań z tą samą macierzą A będzie robione w czasie $O(n^2)$.
-	
+	\clearpage
 	\section*{Zadanie 1}
 	
 	Celem tego zadania było napisanie funkcji rozwiązującej układ $\mA\vx = \mB$ metodą eliminacji Gaussa uwzględniającej specyficzną postać macierzy $\mA$ dla dwóch wariantów:
@@ -420,45 +422,23 @@ $$
 	
 	\section*{Wyniki i wnioski}
 	
-	Celem zadania było przetestowanie funkcji \texttt{rysujNnfx(f,a,b,n)} (z zadania 4) na następujących przykładach:
-	\begin{enumerate}[(a)]
-		\item $f(x) = |x|$, $[a, b] = [-1,1]$, $n \in \{5,10,15\}$,
-		\item $f(x) = \frac{1}{1+x^2}$, $[a, b] = [-5,5]$, $n \in \{5,10,15\}$.
-	\end{enumerate}
-Wykresy otrzymane za pomocą metody \texttt{rysujNnfx(f,a,b,n)} prezentują poniższe wykresy.
+	Programy testujące jakie napisałem znajdywały poprawne rozwiązanie dla przykładowych danych (dane od prowadzącego kurs) dla wszystkich algorytmów rozwiązywania układu równań $\mA\vx=\vb$. Wektory $\vx$ dla tych danych były wektorami jednostkowymi, stąd łatwo było sprawdzić poprawność algorytmów.\\
+	
+	Wykres zależności czasu działania poszczególnych algorytmów dla losowych macierzy blokowo - trójprzekątniowych (wskaźnik uwarunkowania wynosił 10) od wielkości tych macierzy znajduje się poniżej. Zauważmy, że dzięki efektywnemu przechowywaniu macierzy byliśmy w stanie przechować macierz rzędu $10^6$ (Komputer, na którym przeprowadzono eksperyment posiada 8GB pamięci RAM).
+
 \begin{figure}[h]
 	\centering
-%	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_5.png}} \hfill
-%	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_10.png}} \hfill
-%	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_15.png}} \hfill
-%	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf1_20.png}} \hfill
-	\caption*{Wykres funkcji $|x|$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
-	\label{fig:3}
+	\subfloat*{\includegraphics[width=0.90\textwidth]{plotwithlu.png}} \hfill
+	\caption*{Wykres zależności czasu działania poszczególnych algorytmów od wielkości macierzy}
 \end{figure}		
 
-\begin{figure}[h]
-	\centering
-%	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_5.png}} \hfill
-%	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_10.png}} \hfill
-%	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_15.png}} \hfill
-%	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6plotf2_20.png}} \hfill
-	\caption*{Wykres funkcji $\frac{1}{1+x^2}$ i jej wielomianu interpolacyjnego dla danego stopnia $n$}
-	\label{fig:4}
-\end{figure}
-
-Widać, że dla funkcji $|x|$ pojawiają się większe odchylenia niż dla funkcji z zadania poprzedniego. Widać też, że wraz ze zwiększaniem stopnia wielomianu odchylenia/błędy, w szczególności na końcach przedziału, znacznie wzrastają. Dla $n=20$ te odchylenia są już na tyle duże, że wykres traci na czytelności. Dla drugiej funkcji sytuacja wygląda tak samo -- wraz ze zwiększaniem stopnia wielomianu błąd rośnie, a błędy najbardziej rosną na końcach przedziału. Jest to sprzeczne z intuicją, ponieważ zwiększajac stopień wielomianu interpolacyjnego oczekujemy lepszego przybliżenia. Zaobserwowane zjawisko nosi nazwę zjawiska Rungego. (Sama funkcja $\frac{1}{1+x^2}$ nazywana jest funkcją Rungego). Polega ono na tym, że dla pewnych funkcji błąd wielomianu
-interpolacyjnego wyliczonego za pomocą równoodległych węzłów dąży do nieskończoności wraz ze
-wzrostem stopnia tego wielomianu interpolacyjnego.\\
-Pojawia się pytanie czy można poprawić dokładność wielomianów interpolacyjnych dla takich funkcji. Z pomocą przychodzą nam węzły Czebyszewa będące pierwiastkami wielomianów Czebyszewa pierwszego rodzaju. Ich użycie zwiększa liczbę węzłów w miejscach, które są trudniejsze do przybliżenia, czyli między innymi na końcach przedziału. Skutkuje to otrzymaniem dokładniejszego przybliżenia. Poniżej znajdują się wykresy z wielomianami interpolacyjnymi stworzonymi na podstawie węzłów Czebyszewa.
+Widać, że standardowa implementacja metody eliminacji Gaussa w języku Julia (niebieski wykres) wypada najsłabiej. Inna obserwacja to fakt, że algorytmy bez wyboru elementu głównego (zielony i smutny żółty) okazały się znacznie szybsze niż ich odpowiedniki, które wykonywały częściowy wybór elementu głównego (pomarańczowy i różowy). Widać też, ze rozkład Gaussa (dla obu wariantów) działał w bardzo podobnym czasie co rozkład LU. Można z tego wyciągnąć wniosek, że rozkład Gaussa powinniśmy robić tylko w sytuacji jeśli jesteśmy całkowicie pewni, że będziemy musieli rozwiązać tylko jeden układ równań z daną macierzą. W innym przypadku warto zrobić rozkład LU, gdyż kosztuje nas to tylko niewiele więcej, a w przypadku koniczności rozwiązania innego układu równań gdzie zmieni się tylko wektor prawych stron, jesteśmy w stanie zrobić to już znacznie mniejszym nakładem pracy. Wykres pokazujący czasy rozwiązywania układu równań za pomocą rozkładu LU w zależności od wielkości macierzy znajduje się poniżej.
+\clearpage
 
 \begin{figure}[h]
 	\centering
-%	\subfloat[1.][$n=5$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_5.png}} \hfill
-%	\subfloat[2.][$n=10$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_10.png}} \hfill
-%	\subfloat[3.][$n=15$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_15.png}} \hfill
-%	\subfloat[4.][$n=20$]{\includegraphics[width=0.5\textwidth]{plots/task6ChebyshevPlotf1_20.png}} \hfill
-	\caption*{Wykres funkcji $|x|$ i jej wielomianu interpolacyjnego skonstruowanego przy pomocy węzłów Czebyszewa}
-	\label{fig:4}
+	\subfloat*{\includegraphics[width=1.0\textwidth]{luplot.png}} \hfill
+	\caption*{Wykres zależności czasu rozwiązywanie układu równań za pomocą rozkładu LU od wielkości macierzy dla przypadku gdzie zrobiono to pierwszy raz oraz dla przypadku gdzie zrobiono to znając już rozkład LU danej macierzy.}
 \end{figure}
 
 
