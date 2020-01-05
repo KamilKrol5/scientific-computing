@@ -66,6 +66,7 @@ function write_vector(file_path::String, x::Array{Float64}, n::Int64, print_rela
         if (print_relative_error)
             relative_error = norm(ones(n) - x) / norm(x)
             println(file, relative_error)
+            return relative_error
         end
         for i in 1 : n
             println(file, x[i])
