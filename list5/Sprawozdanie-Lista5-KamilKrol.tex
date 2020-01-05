@@ -441,6 +441,37 @@ Widać, że standardowa implementacja metody eliminacji Gaussa w języku Julia (
 	\caption*{Wykres zależności czasu rozwiązywanie układu równań za pomocą rozkładu LU od wielkości macierzy dla przypadku gdzie zrobiono to pierwszy raz oraz dla przypadku gdzie zrobiono to znając już rozkład LU danej macierzy.}
 \end{figure}
 
+Widać, że drugie (w praktyce oczywiście też kolejne) wywołanie funkcji rozwiązującej układ równań liniowych ze zanym już rozkładem LU zajęło znacznie mniej czasu niż rozwiązanie pierwsze wymagające jeszcze dodatkowo obliczenia rozkłądu LU. Patrząc na wykresy można wyciągnąć wniosek, że to właśnie obliczanie rozkładu LU jest najbardziej kosztownym etapem algorytmu. NA tym wykresie widać również fakt zaobserwowany na poprzednim wykresie -- algorytmy, które nie wykonują wyboru elementu głównego są szybsze.
 
+Dla wszystkich algorytmów zostały również obliczone błędy względne w przypadku kiedy wektor prawych stron $\vb$ był wyliczany. Macierze dla jakich wykonano eksperymenty miały wskaźnik uwarunkowania równy $10.0$, a $\ell=4$. Wyniki znajdują się w poniższej tabeli.
+
+\begin{table}[!htbp]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		rozmiar macierzy & gauss & gauss w wyborem   \\ \hline
+		3000& $4.298823120065619\cdot 10^{-15}$ & $5.574749567941993\cdot 10^{-16}$   \\ \hline
+		4000& $3.941408230930561\cdot 10^{-15}$ & $5.558576358655353\cdot 10^{-16}$    \\ \hline
+		7000& $6.760775100733844\cdot 10^{-15}$ & $5.392236603514981\cdot 10^{-16}$  \\ \hline
+		10000& $6.265367149198456\cdot 10^{-15}$ & $5.370519558488765\cdot 10^{-16}$ \\ \hline
+	\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+	\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		rozmiar macierzy & lu & lu z wyborem  \\ \hline
+		3000& $2.292966452680386\cdot 10^{-14}$ & $4.63979368199035\cdot 10^{-16}$  \\ \hline
+		4000& $1.9944709360505984\cdot 10^{-14}$ & $ 4.576590595628056\cdot 10^{-16}$   \\ \hline
+		7000& $1.5751008487442212\cdot 10^{-14}$ &$4.667824409854897\cdot 10^{-16}$ \\ \hline
+		10000&$1.6235415592478852\cdot 10^{-14}$ & $4.582962454682111\cdot 10^{-16}$\\ \hline
+	\end{tabular}
+\end{table}
+
+Widać, że algorytmy wykonujące częściowy wybór zwróciły dokładniejsze wyniki. Błąd względny w ich przypadku był rzędu $10^{-16}$. Dla porównania algorytmy, które nie wykonywały wyboru elementu głównego miały błędy rzędu $10^{-15}$ dla metody eliminacji Gaussa oraz $10^{-14}$ dla rozkładu LU.
+\clearpage
+Pierwszym wnioskiem z całej listy jest to, że zaimplementowane algorytmy faktycznie miały złożoność liniową (potwierdzają to również wykresy). Kolejny wniosek to fakt, że algorytmy dokonujące częściowego wyboru elementu głównego okazały się mieć większą złożoność, ale też zwracały dokładniejsze wyniki w odróżnieniu od algorytmów nie wykonujących wyboru. Zwróćmy też uwagę na fakt, że metody bez wyboru elementu głównego nie zadziałają w momencie kiedy na diagonali pojawi się element zerowy, zatem nie zawsze będzie możliwe ich użycie. Kolejny wniosek dotyczy rozkładu LU. Okazał się on bowiem wydajniejszy w przypadku kiedy rozwiązujemy wiele układów równań w których zmianie ulega tylko wektor prawych stron.
+Kolejny wniosek to fakt, że dostosowanie reprezentacji danych pod konkretną ich strukturę może dać dużo większe możliwości. W tym przypadku była to możliwość przechowania macierzy rzędu nawet $10^6$ bez żadnego problemu. Standardowa reprezentacja macierzy nie dałaby takiej możliwości. Ponadto dzięki reprezentacji dobranej pod strukturę macierzy, ilość użytej pamięci była znacznie mniejsza. Ostatni wniosek to fakt, że dopasowanie algorytmów pod konkretną strukturę danych może znacznie zwiększyć optymalność algorytmu. W tym przypadku (również dzieki odpowiedniej reprezentacji macierzy w pamięci komputera) udało się \textit{zejść} ze złożoności $O(n^3)$ to złożoności liniowej, co jest znaczną poprawą.
 
 \end{document}
