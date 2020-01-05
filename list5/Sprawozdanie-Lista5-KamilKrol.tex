@@ -95,7 +95,7 @@
 	\end{enumerate}
 
 	Dodatkową informacją o danych jest ich duży rozmiar. W konsekwencji wyklucza to pamiętanie macierzy $\mA$ jako tablicę o wymiarach $n \times n$ oraz użycie standardowych (bibliotecznych) algorytmów dla macierzy gęstych tj. takich, gdzie
-	nie zakłada się dużej liczby elementów zerowych. Zatem dodatkowym wymaganiem co do zadania jest specjalna struktura pamiętająca efektywnie macierz $\mA$. Taka która pamięta tylko elementy niezerowe macierzy $\mA$. W tym celu w moich programach użyłem biblioteki \textit{SparseArrays}, która pamięta tylko elementy niezerowe. W naszych rozważaniach założymy, że możemy uzyskać dostęp do elementów macierzy w czasie stałym -- $O(1)$. W rzeczywistości tak nie jest. \\
+	nie zakłada się dużej liczby elementów zerowych. Zatem dodatkowym wymaganiem co do zadania jest specjalna struktura pamiętająca efektywnie macierz $\mA$. Taka, która pamięta tylko elementy niezerowe macierzy $\mA$. W tym celu w moich programach użyłem biblioteki \textit{SparseArrays}, która pamięta tylko elementy niezerowe. W naszych rozważaniach założymy, że możemy uzyskać dostęp do elementów macierzy w czasie stałym -- $O(1)$. W rzeczywistości tak nie jest. \\
 	Samo użycie tej biblioteki jednak nie gwarantuje nam szybkiego algorytmu. Pojawia się bowiem problem w momencie nadpisywania elementów macierzy, które są zerami. W momencie takiego przypisania konieczna jest alokacja dodatkowej pamięci aby przechować nowy niezerowy element. Jedną z kluczowych optymalizacji, którą zastosujemy będzie sztuczne przypisanie zer do \textit{pól} macierzy $\mA$ w obszarach gdzie zera faktycznie występują, ale zostaną one w przyszłości nadpisane. Takie obszary to obszary macierzy $\mC$ poza elementami na diagonali. Zastosowanie tej optymalizacji pozwoliło aby wykresy przedstawiające czas wykonywania algorytmów od wielkości macierzy, które są przedstawione na końcu sprawozdania, faktycznie przypominały liniowe.\\
 	Ponadto konieczna jest modyfikacja standardowych algorytmów tak, aby uwzględniały one specyficzną postać macierzy $\mA$, tj.
 	jej rzadkość, regularność występowania elementów zerowych i niezerowych.\\
@@ -106,7 +106,7 @@
 	
 
 	\section*{Opis metody eliminacji Gaussa bez wyboru elementu głównego}
-	Ideą eliminajci Gaussa jest to aby początkowy układ równań sprowadzić do układu prostszego. Dokładniej chodzi o sprowadzenie macierzy A do postaci macierzy trójkątnej górnej. W celu doprowadzenia macierzy do takiej postaci algorytm posługuje się podstawowymi operacjami na macierzy tzn. dodawanie, odejmowanie wierszy oraz mnożenie wierszy przez pewnien niezerowy współczynnik. \\
+	Ideą eliminajci Gaussa jest to aby początkowy układ równań sprowadzić do układu prostszego. Dokładniej chodzi o sprowadzenie macierzy A do postaci macierzy trójkątnej górnej. W celu doprowadzenia macierzy do takiej postaci, algorytm posługuje się podstawowymi operacjami na macierzy tzn. dodawanie, odejmowanie wierszy oraz mnożenie wierszy przez pewnien niezerowy współczynnik. \\
 	Dokładniej, proces polega na eliminowaniu (zerowaniu) elementów znajdujących się w pod przekątną macierzy.
 	Zatem dla kolumny pierwszej będziemy chcieli wyzerować wszystkie elementy znajdujące się pod pierwszym elementem w tej kolumnie, dla kolumny drugiej -- wszystkie elementy pod drugim (patrząc od góry) elementem w danej kolumnie. Bardziej formalnie, naszym celem będzie wyeliminowanie niewiadomej $x_1$ ze wszystkich $n-1$ pozostałych równań (czyli wszystkich poza pierwszym). Dla $i = 2,\ldots,n$ będziemy odejmować odpowiednią wielokrotność równania pierwszego od $i$-tego równania zerując przy tym współczynnik przy $x_1$ w $i$-tym równaniu. \\
 	Ogólnie dla macierzy A i jej elementów $a_{ij}$, gdzie $i,j = 1,\ldots,n$ i dla jej $k$-tej kolumny, będziemy zerować wszystkie elementy poniżej elementu na przekątnej w tej kolumnie, czyli $a_{kk}$. Dla $i = k+1,\ldots,n$ będziemy odejmować odpowiednią wielokrotność równania $k$-tego od $i$-tego równania zerując przy tym współczynnik przy $x_k$ w $i$-tym równaniu. Inaczej aby wyzerować to $x_k$ będziemy musieli pomnożyć wiersz $k$ przez pewien współczynnik $\psi_{ik}$, króty dalej będziemy nazywać mnożnikiem, a następnie odjąć go od $i$-tego wiersza. Łatwo zauważyć, że mnożnik ten możemy obliczyć, ze wzoru $\psi_{ik}$ = $\frac{a_{ik}}{a_{kk}}$. Widać też, że w przypadku kiedy na diagonali pojawi się element równy zero nasz algorytm nie zadziała, ponieważ pojawi się konieczność dzielenia przez zero. \\
@@ -117,7 +117,7 @@
 	\section*{Opis metody eliminacji Gaussa z częściowym wyborem elementu głównego}
 	Przedstawiona poniżej metoda nosi nazwę metody eliminacjii Gaussa z częściowym wyborem elementu głównego.
 	Czym jest element główny? Jest to element macierzy znajdujący się na diagonali. Dla $k$-tej kolumny, elementem głównym będzie element $a_{kk}$ macierzy A. Jest to również ten element przez który dzielimy chcąc obliczyć mnożnik $\psi_{ik}$ ($k$ oraz $i$ są opisane tak samo jak w poprzednim paragrafie). Częściowy wybór polega na wybraniu największego elementu co do wartości bezwzględnej z danej kolumny $k$ oraz zamianie wierszy tak aby ten element stał się elementem głównym -- elementem na diagonali. Możemy to zrobić, ponieważ macierz A jest nieosobliwa. \\
-	Zamiana wierszy macierzy jest kosztownym prcesem, który może być zastąpiony przez wektor permutacji wierszy $p$. Zapamiętujemy w nim, na którym miejscu aktualnie znajduje się dany wiersz. Zatem jedyna różnica w samym algorytmie będzie taka, że zamiast odwoływać się do danego wiersza bezpośrednio, będziemy się odwoływać do jego pozycji zapisanej w wektorze permutacji. Zwróćmy uwagę na to, że zmieniając wiersze w macierzy A musimy zmieniać też poszczególne współrzędne w wekotrze prawych stron -- b. Złożoność obu przedstawionych powyżej algorytmów wynosi $O(n^3)$.
+	Zamiana wierszy macierzy jest kosztownym procesem, który może być zastąpiony przez wektor permutacji wierszy $p$. Zapamiętujemy w nim, na którym miejscu aktualnie znajduje się dany wiersz. Zatem jedyna różnica w samym algorytmie będzie taka, że zamiast odwoływać się do danego wiersza bezpośrednio, będziemy się odwoływać do jego pozycji zapisanej w wektorze permutacji. Zwróćmy uwagę na to, że zmieniając wiersze w macierzy A musimy zmieniać też poszczególne współrzędne w wekotrze prawych stron -- b. Złożoność obu przedstawionych powyżej algorytmów wynosi $O(n^3)$.
 	
 	Teraz kiedy znamy procedurę, która pozwala nam sprowadzić macierz A do macierzy trójkątnej górnej, pojawia się pytanie jak z tą wiedzą rozwiązać układ równań $Ax = b$. W tym celu zastosujemy algorytm podstawiania wstecz. Opiera się on o wzór poniżej.
 	$$x_i = \frac{b_i - \sum_{j = i+1}^n (a_{ij} \cdot x_j)}{a_{ii}}$$
@@ -204,7 +204,7 @@ $$
 	\Fn{\ge{\A,~\B,~\N,~\L}}{
 		\For{$\K \gets 1$ \KwTo $\N-1$} {
 			$\Row\gets\Min\lbrace \L + \L \cdot \left \lfloor\frac{\K + 1}{\ell}\right \rfloor, n \rbrace$\;
-			$\Col\gets \Min(\K + \L, \N)$\;
+			$\Col\gets \Min\lbrace\K + \L, \N\rbrace$\;
 			\For{$\I \gets \K+1$ \KwTo \Row}{
 				\If{$\A[\K,\K] = 0$}{\Err współczynnik na przekątnej równy zero}
 				$\Z \gets \frac{\A[\I,\K]}{ \A[\K,\K]} $\;
@@ -216,7 +216,7 @@ $$
 			}
 		}
 		\For{$\I \gets \N$ \KwDownTo $1$}{
-			$\Col\gets \Min(\I+ \L, \N)$\;
+			$\Col\gets \Min\lbrace\I+ \L, \N\rbrace$\;
 			\For{$\J \gets \K+1$ \KwTo $\Col$}{
 				$\Sum \gets \Sum + \X[\I] \cdot \A[\I,\J]$\;
 			}
@@ -299,7 +299,7 @@ $$
 				}
 			}
 			\For{$\I \gets \N$ \KwDownTo $1$}{
-				$\Col\gets \Min\lbrace(2\L + \P[\I], \N\rbrace$\;
+				$\Col\gets \Min\lbrace2\L + \P[\I], \N\rbrace$\;
 				\For{$\J \gets \K+1$ \KwTo $\Col$}{
 					$\Sum \gets \Sum + \X[\J] \cdot \A[\P[\I],\J]$\;
 				}
@@ -315,7 +315,7 @@ $$
 	\clearpage
 	\section*{Opis rozkładu LU}
 	
-	Ideą eliminacji Gaussa było sprowadzenie macierzy $\mA$ (z równania $\mA\vx=\vb$) do macierzy trójkątnej górnej, ponieważ taki układ jesteśmy w stanie rozwiązać stosunkowo prosto. Idea rozkładu LU jest taka sama i jest ściśle powiązana z metodą eliminacji Gaussa. Jest to metoda służąca do rozwiązywania równania $\mA\vx=\vb$. Metoda polega na przedstawieniu macierzy $\mA$ w postaci iloczynu dwóch macierzy trójkątnych: macierzy $\mL$ (lower) oraz macierzy $\mU$ (upper). Macierz $\mL$ jest macierzą trójkątną dolną, a macierz $\mU$ macierzą trójkątną górną. Mając taki rozkład jesteśmy w stanie zapisać nasz układ równań w postaci $\mL\mU\vx=\vb$. Rozwiązanie tego ukłądu sprowadza się do rozwiązania dwóch równań z macierzami trójkatnymi (górną i dolną):
+	Ideą eliminacji Gaussa było sprowadzenie macierzy $\mA$ (z równania $\mA\vx=\vb$) do macierzy trójkątnej górnej, ponieważ taki układ jesteśmy w stanie rozwiązać stosunkowo prosto. Idea rozkładu LU jest taka sama i jest ściśle powiązana z metodą eliminacji Gaussa. Jest to metoda służąca do rozwiązywania równania $\mA\vx=\vb$. Metoda polega na przedstawieniu macierzy $\mA$ w postaci iloczynu dwóch macierzy trójkątnych: macierzy $\mL$ (lower) oraz macierzy $\mU$ (upper). Macierz $\mL$ jest macierzą trójkątną dolną, a macierz $\mU$ macierzą trójkątną górną. Mając taki rozkład jesteśmy w stanie zapisać nasz układ równań w postaci $\mL\mU\vx=\vb$. Rozwiązanie tego układu sprowadza się do rozwiązania dwóch równań z macierzami trójkątnymi (górną i dolną):
 	$$\left\{
 	\begin{array}{ll}
 		\mL \bm{z}= \vb\\
@@ -324,7 +324,7 @@ $$
 	\right.$$
 	Ważnym założeniem jest to, że jedna z macierzy (L lub U) ma na diagonali same jedynki. Zapewnia to jednoznaczność rozkładu. Rozkład LU jest szczególnie użyteczny w przypadku rozwiązywania wielu układów równań z tą samą macierzą $\mA$ i ze zmieniającym się wektorem prawych stron. Mając raz zrobiony rozkład LU (koszt $O(n^3)$) możemy kolejne równania rozwiązywać z kosztem $O(n^2)$.
 	Inną zaletą rozkładu LU jest to, że całość procesu można wykonać tylko na macierzy $\mA$ -- nie potrzebna jest dodatkowa pamięć, gdyż zarówno macierz L jak i U są zapamiętywane na jednej macierzy.\\
-	W celu otrzymania macierzy  $\mL$ i $\mU$ wystarczy wykonać eliminacje Gaussa na macierzy $\mA$. Macierz trójkątna powstała w wyniku eliminacji Gaussa staje się macierzą $\mU$. Macierz  $\mL$ powstaje w wyniku zapamiętania mnożników użytych w algorytmie eliminacji Gaussa. Stąd widać, że złożoność wykonania rozkładu LU to $O(n^3)$. Daje to jednak możliwość rozwiązywania kolejnych układów równań (takich w którzych macierz $\mA$ pozostaje taka sama) z kosztem $O(n^2)$.
+	W celu otrzymania macierzy  $\mL$ i $\mU$ wystarczy wykonać eliminację Gaussa na macierzy $\mA$. Macierz trójkątna powstała w wyniku eliminacji Gaussa staje się macierzą $\mU$. Macierz  $\mL$ powstaje w wyniku zapamiętania mnożników użytych w algorytmie eliminacji Gaussa. Stąd widać, że złożoność wykonania rozkładu LU to $O(n^3)$. Daje to jednak możliwość rozwiązywania kolejnych układów równań (takich w którzych macierz $\mA$ pozostaje taka sama) z kosztem $O(n^2)$.
 	
 	\section*{Zadanie 2} 
 	
@@ -336,7 +336,7 @@ $$
 	\end{enumerate}
 	\textbf{Zastosowane modyfikacje}\\
 	Funkcja wyznaczająca rozkład LU będzie drobną modyfikacją \textbf{algorytmu 1} (dla wariantu a) oraz \textbf{algorytmu 2} (dla wariantu b). Żadne ograniczenia nie zmieniają się. Pierwsza różnica polega na tym, że zamiast przypisywać zera w obszar, w którym znajdowały się wyeliminowane współczynniki, algorytm będzie przypisywał mnożnik. 
-	Zatem linia algorytmu 1 zamiast ,,$\mA[i,k] \gets 0 $" będzie miała postać: ,,$\mA[i,k] \gets \psi $". Linia ,,$\mA[\pi[i],k] \gets 0 $" w algorytmie 2 zamieni się na: ,,$\mA[\pi[i],k] \gets \psi $".
+	Zatem linia algorytmu 1 zamiast ,,$\mA[i,k] \gets 0 $" będzie miała postać: ,,$\mA[i,k] \gets \psi $". Linia ,,$\mA[i,k] \gets 0 $" w algorytmie 2 zamieni się na: ,,$\mA[\pi[i],k] \gets \psi $".
 	Druga różnica to usunięcie z obu algorytmów linii, która dokonuje modyfikacji wektora prawych stron -- $\vb$, ponieważ tej modyfkacji będzie dokonywał algorytm rozwiązujący równanie na podstawie rozkładu LU. Wyliczanie wartości x również zostanie zrobione w oddzielnym algorytmie.\\
 	Pozostało określić złożoność przedstawionych wyżej algorytmów. Algorytm 1 oraz algorytm 2 miały złożoność $O(n)$ (przy założeniu, że $\ell$ jest stałą). Dwa wyżej opisane algorytmy będą miały taką samą złożoność, ponieważ są to w istocie takie same algorytmy różniące się jedynie kilkoma linijkami, modyfikacje zastosowane do zmienionych linii kodu nie zmieniają złożoności całości algorytmu.
 	
@@ -422,26 +422,26 @@ $$
 	
 	\section*{Wyniki i wnioski}
 	
-	Programy testujące jakie napisałem znajdywały poprawne rozwiązanie dla przykładowych danych (dane od prowadzącego kurs) dla wszystkich algorytmów rozwiązywania układu równań $\mA\vx=\vb$. Wektory $\vx$ dla tych danych były wektorami jednostkowymi, stąd łatwo było sprawdzić poprawność algorytmów.\\
+	Programy testujące jakie napisałem znajdowały poprawne rozwiązanie dla przykładowych danych (dane od prowadzącego kurs) dla wszystkich algorytmów rozwiązywania układu równań $\mA\vx=\vb$. Wektory $\vx$ dla tych danych były wektorami jednostkowymi, stąd łatwo było sprawdzić poprawność algorytmów.\\
 	
-	Wykres zależności czasu działania poszczególnych algorytmów dla losowych macierzy blokowo - trójprzekątniowych (wskaźnik uwarunkowania wynosił 10) od wielkości tych macierzy znajduje się poniżej. Zauważmy, że dzięki efektywnemu przechowywaniu macierzy byliśmy w stanie przechować macierz rzędu $10^6$ (Komputer, na którym przeprowadzono eksperyment posiada 8GB pamięci RAM).
+	Wykres zależności czasu działania poszczególnych algorytmów dla losowych macierzy blokowo - trójprzekątniowych (wskaźnik uwarunkowania wynosił 10, $\ell=10$) od wielkości tych macierzy znajduje się poniżej. Zauważmy, że dzięki efektywnemu przechowywaniu macierzy byliśmy w stanie przechować macierz rzędu $10^6$ (komputer, na którym przeprowadzono eksperyment posiada 8GB pamięci RAM).
 
 \begin{figure}[h]
 	\centering
-	\subfloat*{\includegraphics[width=0.90\textwidth]{plotwithlu.png}} \hfill
+	\subfloat{\includegraphics[width=0.90\textwidth]{plotwithlu.png}} \hfill
 	\caption*{Wykres zależności czasu działania poszczególnych algorytmów od wielkości macierzy}
 \end{figure}		
 
-Widać, że standardowa implementacja metody eliminacji Gaussa w języku Julia (niebieski wykres) wypada najsłabiej. Inna obserwacja to fakt, że algorytmy bez wyboru elementu głównego (zielony i smutny żółty) okazały się znacznie szybsze niż ich odpowiedniki, które wykonywały częściowy wybór elementu głównego (pomarańczowy i różowy). Widać też, ze rozkład Gaussa (dla obu wariantów) działał w bardzo podobnym czasie co rozkład LU. Można z tego wyciągnąć wniosek, że rozkład Gaussa powinniśmy robić tylko w sytuacji jeśli jesteśmy całkowicie pewni, że będziemy musieli rozwiązać tylko jeden układ równań z daną macierzą. W innym przypadku warto zrobić rozkład LU, gdyż kosztuje nas to tylko niewiele więcej, a w przypadku koniczności rozwiązania innego układu równań gdzie zmieni się tylko wektor prawych stron, jesteśmy w stanie zrobić to już znacznie mniejszym nakładem pracy. Wykres pokazujący czasy rozwiązywania układu równań za pomocą rozkładu LU w zależności od wielkości macierzy znajduje się poniżej.
+Widać, że standardowa implementacja metody eliminacji Gaussa w języku Julia (niebieski wykres) wypada najsłabiej. Inna obserwacja to fakt, że algorytmy bez wyboru elementu głównego (pomarańczowy i różowy) okazały się znacznie szybsze niż ich odpowiedniki, które wykonywały częściowy wybór elementu głównego (zielony i smutny żółty). Widać też, ze rozkład Gaussa (dla obu wariantów) działał w bardzo podobnym czasie co rozkład LU. Można z tego wyciągnąć wniosek, że rozkład Gaussa powinniśmy robić tylko w sytuacji jeśli jesteśmy całkowicie pewni, że będziemy musieli rozwiązać tylko jeden układ równań z daną macierzą. W innym przypadku warto zrobić rozkład LU, gdyż kosztuje nas to tylko niewiele więcej, a w przypadku konieczności rozwiązania innego układu równań gdzie zmieni się tylko wektor prawych stron, jesteśmy w stanie zrobić to już znacznie mniejszym nakładem pracy. Wykres pokazujący czasy rozwiązywania układu równań za pomocą rozkładu LU w zależności od wielkości macierzy znajduje się poniżej.
 \clearpage
 
 \begin{figure}[h]
 	\centering
-	\subfloat*{\includegraphics[width=1.0\textwidth]{luplot.png}} \hfill
+	\subfloat{\includegraphics[width=1.0\textwidth]{luplot.png}} \hfill
 	\caption*{Wykres zależności czasu rozwiązywanie układu równań za pomocą rozkładu LU od wielkości macierzy dla przypadku gdzie zrobiono to pierwszy raz oraz dla przypadku gdzie zrobiono to znając już rozkład LU danej macierzy.}
 \end{figure}
 
-Widać, że drugie (w praktyce oczywiście też kolejne) wywołanie funkcji rozwiązującej układ równań liniowych ze zanym już rozkładem LU zajęło znacznie mniej czasu niż rozwiązanie pierwsze wymagające jeszcze dodatkowo obliczenia rozkłądu LU. Patrząc na wykresy można wyciągnąć wniosek, że to właśnie obliczanie rozkładu LU jest najbardziej kosztownym etapem algorytmu. NA tym wykresie widać również fakt zaobserwowany na poprzednim wykresie -- algorytmy, które nie wykonują wyboru elementu głównego są szybsze.
+Widać, że drugie (w praktyce oczywiście też kolejne) wywołanie funkcji rozwiązującej układ równań liniowych ze znanym już rozkładem LU zajęło znacznie mniej czasu niż rozwiązanie pierwsze wymagające jeszcze dodatkowo obliczenia rozkładu LU. Patrząc na wykresy można wyciągnąć wniosek, że to właśnie obliczanie rozkładu LU jest najbardziej kosztownym etapem algorytmu. Na tym wykresie widać również fakt zaobserwowany na poprzednim wykresie -- algorytmy, które nie wykonują wyboru elementu głównego są szybsze.
 
 Dla wszystkich algorytmów zostały również obliczone błędy względne w przypadku kiedy wektor prawych stron $\vb$ był wyliczany. Macierze dla jakich wykonano eksperymenty miały wskaźnik uwarunkowania równy $10.0$, a $\ell=4$. Wyniki znajdują się w poniższej tabeli.
 
@@ -472,6 +472,6 @@ Dla wszystkich algorytmów zostały również obliczone błędy względne w przy
 Widać, że algorytmy wykonujące częściowy wybór zwróciły dokładniejsze wyniki. Błąd względny w ich przypadku był rzędu $10^{-16}$. Dla porównania algorytmy, które nie wykonywały wyboru elementu głównego miały błędy rzędu $10^{-15}$ dla metody eliminacji Gaussa oraz $10^{-14}$ dla rozkładu LU.
 \clearpage
 Pierwszym wnioskiem z całej listy jest to, że zaimplementowane algorytmy faktycznie miały złożoność liniową (potwierdzają to również wykresy). Kolejny wniosek to fakt, że algorytmy dokonujące częściowego wyboru elementu głównego okazały się mieć większą złożoność, ale też zwracały dokładniejsze wyniki w odróżnieniu od algorytmów nie wykonujących wyboru. Zwróćmy też uwagę na fakt, że metody bez wyboru elementu głównego nie zadziałają w momencie kiedy na diagonali pojawi się element zerowy, zatem nie zawsze będzie możliwe ich użycie. Kolejny wniosek dotyczy rozkładu LU. Okazał się on bowiem wydajniejszy w przypadku kiedy rozwiązujemy wiele układów równań w których zmianie ulega tylko wektor prawych stron.
-Kolejny wniosek to fakt, że dostosowanie reprezentacji danych pod konkretną ich strukturę może dać dużo większe możliwości. W tym przypadku była to możliwość przechowania macierzy rzędu nawet $10^6$ bez żadnego problemu. Standardowa reprezentacja macierzy nie dałaby takiej możliwości. Ponadto dzięki reprezentacji dobranej pod strukturę macierzy, ilość użytej pamięci była znacznie mniejsza. Ostatni wniosek to fakt, że dopasowanie algorytmów pod konkretną strukturę danych może znacznie zwiększyć optymalność algorytmu. W tym przypadku (również dzieki odpowiedniej reprezentacji macierzy w pamięci komputera) udało się \textit{zejść} ze złożoności $O(n^3)$ to złożoności liniowej, co jest znaczną poprawą.
+Kolejny wniosek to fakt, że dostosowanie reprezentacji danych pod konkretną ich strukturę może dać dużo większe możliwości. W tym przypadku była to możliwość przechowania macierzy rzędu nawet $10^6$ bez żadnego problemu. Standardowa reprezentacja macierzy nie dałaby takiej możliwości. Ponadto dzięki reprezentacji dobranej pod strukturę macierzy, ilość użytej pamięci była znacznie mniejsza. Ostatni wniosek to fakt, że dopasowanie algorytmów pod konkretną strukturę danych może znacznie przyspieszyć algorytm. W tym przypadku (również dzięki odpowiedniej reprezentacji macierzy w pamięci komputera) udało się \textit{zejść} ze złożoności $O(n^3)$ do złożoności liniowej, co jest znaczną poprawą.
 
 \end{document}
