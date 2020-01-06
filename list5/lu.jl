@@ -4,7 +4,7 @@ include("gauss.jl")
 using SparseArrays
 
 """
-Computes LU decomposition for given matrix using gaussian elimination.
+Computes LU decomposition for given matrix using Gauss elimination.
 Given matrix is destroyed during this process.
 A: matrix (SparseMatrixCSC{Float64, Int64})
 b: right side vector (Vector{Float64})
@@ -20,7 +20,7 @@ function lu(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l:
 end
 
 """
-Performs LU decomposition for given matrix using gaussian elimination with choice of main element. 
+Performs LU decomposition for given matrix using Gauss elimination with choice of main element. 
 Given matrix is destroyed during this process.
 A: matrix (SparseMatrixCSC{Float64, Int64}),
 b: right side vector (Vector{Float64}),
@@ -38,7 +38,7 @@ end
 
 
 """
-Solves Ax=b equation using LU decomposition made with the gaussian elimination.
+Solves Ax=b equation using LU decomposition made with the Gauss elimination.
 A: matrix (SparseMatrixCSC{Float64, Int64})
 b: right sides vector (Vector{Float64})
 n: size of matrix A (Int64)
@@ -72,7 +72,7 @@ end
 
 
 """
-Solves Ax=b equation using LU decomposition made with the gaussian elimination with choice of main element.
+Solves Ax=b equation using LU decomposition made with the Gauss elimination with choice of main element.
 A: matrix (SparseMatrixCSC{Float64, Int64})
 permutation: permutation vector (Vector{Float64})
 b: right sides vector (Vector{Float64})

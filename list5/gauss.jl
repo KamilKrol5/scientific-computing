@@ -4,12 +4,12 @@ using SparseArrays
 
 """
 Performs Gauss elimination on given matrix A (A has the form which is specified in the task description). 
-If write_matrix_L is set to true, function performs LU decompsition using Gauss elimiantion.
+If write_matrix_L is set to true, function performs LU decomposition using Gauss elimination.
 A: matrix which is SparseMatrixCSC{Float64, Int64}
 b: vector with values which is Vector{Float64}
 n: size of matrix A (Int64)
 l: size of submatrices of A (Int64)
-write_matrix_L: detrminates if function should perform LU decomposition.
+write_matrix_L: determines if function should perform LU decomposition.
 Returns:
 A: given matrix after elimination (SparseMatrixCSC{Float64, Int64}),
 b: given vector of right sides after elimination (Vector{Float64}).
@@ -72,7 +72,7 @@ end
 
 """
 Performs Gauss elimination  with partial choice of main element on given matrix A (A has the form which is specified in the task description). 
-If write_matrix_L is set to true, function performs LU decomposition using Gauss elimiantion.
+If write_matrix_L is set to true, function performs LU decomposition using Gauss elimination.
 A: matrix which is SparseMatrixCSC{Float64, Int64}
 b: vector with values which is Vector{Float64}
 n: size of matrix A (Int64)
