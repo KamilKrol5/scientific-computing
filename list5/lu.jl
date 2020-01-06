@@ -1,4 +1,5 @@
 # author: Kamil Król
+
 include("gauss.jl")
 using SparseArrays
 
@@ -38,26 +39,26 @@ end
 
 """
 Solves Ax=b equation using LU decomposition made with the gaussian elimination.
-A - matrix (SparseMatrixCSC{Float64, Int64})
-b - right sides vector (Vector{Float64})
-n - size of matrix A (Int64)
-l - size of submatrices of A (Int64)
+A: matrix (SparseMatrixCSC{Float64, Int64})
+b: right sides vector (Vector{Float64})
+n: size of matrix A (Int64)
+l: size of submatrices of A (Int64)
 Returns:
-x - vector with solutions (Vector{Float64})
+x: vector with solutions (Vector{Float64})
 """
 function solve_using_lu(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64) 
     new_b = Array{Float64}(undef, n)
 	for i in 1 : n
 		row_sum = 0.0
-		from_col = max(Int(l * floor((i-1) / l) - 1), 1)
-		for j in from_col : i-1
+		start_column = max(Int(l * floor((i-1) / l) - 1), 1)
+		for j in start_column:i-1
 			row_sum += A[j, i] * new_b[j]
 		end
 		new_b[i] = b[i] - row_sum
 	end
 
 	x = Array{Float64}(undef, n)
-	for i in n : -1 : 1
+	for i in n :-1:1
 		row_sum = 0.0
 		last_col = min(n, i + l)
 		for j in i + 1 : last_col
@@ -72,13 +73,13 @@ end
 
 """
 Solves Ax=b equation using LU decomposition made with the gaussian elimination with choice of main element.
-A - matrix (SparseMatrixCSC{Float64, Int64})
-permutation - permutation vector (Vector{Float64})
-b - right sides vector (Vector{Float64})
-n - size of matrix A (Int64)
-l - size of submatrices of A (Int64)
+A: matrix (SparseMatrixCSC{Float64, Int64})
+permutation: permutation vector (Vector{Float64})
+b: right sides vector (Vector{Float64})
+n: size of matrix A (Int64)
+l: size of submatrices of A (Int64)
 Returns:
-x - vector with solutions (Vector{Float64})
+x: vector with solutions (Vector{Float64})
 """
 function solve_using_lu_with_main_element(A::SparseMatrixCSC{Float64, Int64}, permutation::Vector{Int64}, b::Vector{Float64}, n::Int64, l::Int64) 
     new_b = Vector{Float64}(undef, n)

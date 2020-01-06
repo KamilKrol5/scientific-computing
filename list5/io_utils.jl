@@ -10,31 +10,31 @@ Returns A: read matrix, n: matrix size, l: block size
 """
 function load_matrix(file_path::String)
     open(file_path) do file
-        ln = split(readline(file))
-        n = parse(Int64, ln[1])
-        l = parse(Int64, ln[2])
+        line = split(readline(file))
+        n = parse(Int64, line[1])
+        l = parse(Int64, line[2])
         el_num = n*l + 3*(n-l)
-        J = Array{Int64}(undef,el_num)
         I = Array{Int64}(undef, el_num)
+        J = Array{Int64}(undef,el_num)
         V = Array{Float64}(undef, el_num)
-        it = 1
+        counter = 1
         while !eof(file)
-            ln = split(readline(file))
-            J[it] = parse(Int64, ln[1])
-            I[it] = parse(Int64, ln[2])
-            V[it] = parse(Float64, ln[3])
-            it += 1
+            line = split(readline(file))
+            I[counter] = parse(Int64, line[2])
+            J[counter] = parse(Int64, line[1])
+            V[counter] = parse(Float64, line[3])
+            counter += 1
         end
         for w=1:n
             for k = 1+Int64(l+l*floor((w-1)/l)): min(Int64(2*l+l * floor((w-1)/l)), n)
                 if (k != w+l)
-                    append!(J, w)
                     append!(I, k)
+                    append!(J, w)
                     append!(V, 0.0)
                 end
             end
         end
-        A = sparse(I, J, V) #transposed
+        A = sparse(I, J, V) # is transposed
         return (A, n, l)
     end
 end
@@ -47,10 +47,10 @@ function load_vector(file_path::String)
     open(file_path) do file
         n = parse(Int64, readline(file))
         b = Array{Float64}(undef, n)
-        it = 0
+        counter = 0
         while !eof(file)
-            it += 1
-            b[it] = parse(Float64, readline(file))
+            counter += 1
+            b[counter] = parse(Float64, readline(file))
         end
         return b
     end

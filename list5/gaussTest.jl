@@ -1,3 +1,5 @@
+# author: Kamil Król
+
 include("./matrixgen.jl")
 include("./blocksys.jl")
 include("matrixgen.jl")

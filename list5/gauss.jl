@@ -11,7 +11,7 @@ n: size of matrix A (Int64)
 l: size of submatrices of A (Int64)
 write_matrix_L: detrminates if function should perform LU decomposition.
 Returns:
-A, b: A: given matrix after elimination (SparseMatrixCSC{Float64, Int64}),
+A: given matrix after elimination (SparseMatrixCSC{Float64, Int64}),
 b: given vector of right sides after elimination (Vector{Float64}).
 """
 function gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64, write_matrix_L::Bool)
@@ -29,7 +29,7 @@ function gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64,
                 # If LU decomposition is performed, then multiplier is written here
                 A[column, elem] = multiplier
             else
-                A[column, elem] = Float64(0.0)
+                A[column, elem] = 0.0
             end
 
             for j = column + 1:min(column + l, n) # Iteration over columns (operating on 2 rows)
@@ -77,22 +77,16 @@ A: matrix which is SparseMatrixCSC{Float64, Int64}
 b: vector with values which is Vector{Float64}
 n: size of matrix A (Int64)
 l: size of submatrices of A (Int64)
-write_matrix_L: detrminates if function should perform LU decomposition.
+write_matrix_L: determines if function should perform LU decomposition.
 Returns:
-A, permutation, b:
 A: given matrix after elimination (SparseMatrixCSC{Float64, Int64}),
 permutation: vector of permutation (Vector{Float64})
 b: given vector of right sides after elimination (Vector{Float64}).
 """
 function gauss_with_choice_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64, write_matrix_L::Bool)
-    permutation = Vector{Int64}(undef, n)
-    for k = 1:n
-        permutation[k] = k     # not permutated sequence
-    end
+    permutation = collect(1:n)
 
-    # Iteration over columns
-    for column = 1:n - 1
-
+    for column = 1:n - 1 # Iteration over columns
         # Elements to eliminate in current column
         last_to_eliminate = convert(Int64, min(l + l * floor((column+1) / l), n))
         row_with_max = column # Row with maximal element
@@ -134,7 +128,7 @@ b: vector with values (Vector{Float64})
 n: size of matrix A (Int64)
 l: size of blocks in matrix A (Int64)
 Returns:
-x: vector with solutions (Vector{Float64})
+x: vector with solution (Vector{Float64})
 """
 function solve_gauss_with_choice_main_element(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64, l::Int64)
     x = Vector{Float64}(undef, n)

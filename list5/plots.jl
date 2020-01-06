@@ -1,3 +1,5 @@
+# author: Kamil Król
+
 include("blocksys.jl")
 include("matrixgen.jl")
 
@@ -30,7 +32,7 @@ for i = start:step:upper_bound
     (A4,n,l) = load_matrix("matrix/matrix$i")
     (A5,n,l) = load_matrix("matrix/matrix$i")
     b = collect(Float64, 1:i)
-    
+
     # @profile solve_gauss(A1, b, n, l)
     # Profile.print()
 
@@ -39,13 +41,13 @@ for i = start:step:upper_bound
         x = A2 \ b
     end
     append!(normal_TIME, [t[2]])
-    
+
     print("i=$i gauss without choice of main element\n")
     t = @timed begin
         x = solve_gauss(A1, b, n, l)
     end
     append!(gauss_TIME,[ t[2]])
-    
+
     print("i=$i gauss with choice of main element\n")
     t = @timed begin
         x = solve_gauss_with_choice_main_element(A3, b, n, l)
@@ -101,14 +103,14 @@ for i = start:step:upper_bound
         x = solve_using_lu(A1, b, n, l)
     end
     append!(first, [t[2]])
-    
+
     print("i=$i lu choice first")
     t = @timed begin
         (A2, p2) = lu_with_choice_of_main_element(A2, b, n, l)
         x = solve_using_lu_with_main_element(A2, p2, b, n, l)
     end
     append!(first_choice,[ t[2]])
-    
+
     print("i=$i lu second\n")
     t = @timed begin
         x = solve_using_lu(A1, b, n, l)
