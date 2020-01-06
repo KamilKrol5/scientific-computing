@@ -318,8 +318,8 @@ $$
 	Ideą eliminacji Gaussa było sprowadzenie macierzy $\mA$ (z równania $\mA\vx=\vb$) do macierzy trójkątnej górnej, ponieważ taki układ jesteśmy w stanie rozwiązać stosunkowo prosto. Idea rozkładu LU jest taka sama i jest ściśle powiązana z metodą eliminacji Gaussa. Jest to metoda służąca do rozwiązywania równania $\mA\vx=\vb$. Metoda polega na przedstawieniu macierzy $\mA$ w postaci iloczynu dwóch macierzy trójkątnych: macierzy $\mL$ (lower) oraz macierzy $\mU$ (upper). Macierz $\mL$ jest macierzą trójkątną dolną, a macierz $\mU$ macierzą trójkątną górną. Mając taki rozkład jesteśmy w stanie zapisać nasz układ równań w postaci $\mL\mU\vx=\vb$. Rozwiązanie tego układu sprowadza się do rozwiązania dwóch równań z macierzami trójkątnymi (górną i dolną):
 	$$\left\{
 	\begin{array}{ll}
-		\mL \bm{z}= \vb\\
-		\mU \vx= \bm{z} \\
+		\mL \bm{y}= \vb\\
+		\mU \vx= \bm{y} \\
 	\end{array}
 	\right.$$
 	Ważnym założeniem jest to, że jedna z macierzy (L lub U) ma na diagonali same jedynki. Zapewnia to jednoznaczność rozkładu. Rozkład LU jest szczególnie użyteczny w przypadku rozwiązywania wielu układów równań z tą samą macierzą $\mA$ i ze zmieniającym się wektorem prawych stron. Mając raz zrobiony rozkład LU (koszt $O(n^3)$) możemy kolejne równania rozwiązywać z kosztem $O(n^2)$.
@@ -348,11 +348,11 @@ $$
 	Algorytm będzie się składał z rozwiązania dwóch układów równań.
 	 $$\left\{
 	\begin{array}{ll}
-	\mL \bm{z}= \vb\\
-	\mU \vx= \bm{z} \\
+	\mL \bm{y}= \vb\\
+	\mU \vx= \bm{y} \\
 	\end{array}
 	\right.$$
-	Rozwiązanie pierwszego z nich tzn. $\mL \bm{z}= \vb$ wykonamy algorytmem analogicznym do algorytmu podstawiania wstecz -- nazwijmy go algorytmem podstawiania wprzód. Algorytm ten zaczyna się od pierwszego wiersza i w każdej iteracji oblicza kolejne wartości współrzędnych wektora $\bm{z}$ korzystając z coraz dłuższych wierszy. Intuicyjnie jest to przejście przez macierz trójkątną dolną zaczynające się od pierwszego elementu wiersza, a kończące się na ostatnim elemencie ostatnigo wiersza. Ilość iteracji możemy tu ograniczyć wyznaczając ograniczenia w podobny sposób jak zrobiliśmy to dla algorytmu podstawiania wstecz. Zauważmy, że elemety zerowe w macierzy L występują na tych samych pozycjach co elementy zerowe w początkowej macierzy $\mA$. Zatem sumowanie wszystkich kolumn poniżej diagonali w danym wierszu $w$ nie jest konieczne, ponieważ część z nich jest zerami. Możemy zacząć od kolumny, która może zawierać jakiś element niezerowy. Wyznaczymy teraz ograniczenie na najmniejszy indeks kolumny, który może zawierać elementy niezerowe w zadanym wierszu $w$. 
+	Rozwiązanie pierwszego z nich tzn. $\mL \bm{y}= \vb$ wykonamy algorytmem analogicznym do algorytmu podstawiania wstecz -- nazwijmy go algorytmem podstawiania wprzód. Algorytm ten zaczyna się od pierwszego wiersza i w każdej iteracji oblicza kolejne wartości współrzędnych wektora $\bm{y}$ korzystając z coraz dłuższych wierszy. Intuicyjnie jest to przejście przez macierz trójkątną dolną zaczynające się od pierwszego elementu wiersza, a kończące się na ostatnim elemencie ostatnigo wiersza. Ilość iteracji możemy tu ograniczyć wyznaczając ograniczenia w podobny sposób jak zrobiliśmy to dla algorytmu podstawiania wstecz. Zauważmy, że elemety zerowe w macierzy L występują na tych samych pozycjach co elementy zerowe w początkowej macierzy $\mA$. Zatem sumowanie wszystkich kolumn poniżej diagonali w danym wierszu $w$ nie jest konieczne, ponieważ część z nich jest zerami. Możemy zacząć od kolumny, która może zawierać jakiś element niezerowy. Wyznaczymy teraz ograniczenie na najmniejszy indeks kolumny, który może zawierać elementy niezerowe w zadanym wierszu $w$. 
 	Przeprowadzając rozumowanie analogiczne do tego przy wyznaczaniu $ostatni_{wiersz}$ dla algorytmu podstawiania wstecz możemy wyprowadzić wzór na $poczatkowa_{kolumna}$:
 	$$poczatkowa_{kolumna}(w) = max\lbrace \ell \times \lfloor \frac{w-1}{\ell}\rfloor , 1 \rbrace, w - \text{indeks wiersza}$$
 	Rozwiązanie drugiego równania wykonamy znanym nam już algorytmem podstawiania wstecz.\\
