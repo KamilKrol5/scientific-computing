@@ -3,8 +3,8 @@
 using SparseArrays
 
 """
-Performs gaussian elimination on given matrix A (A has the form which is specified in the task description). 
-If write_matrix_L is set to true, function performs LU decompsition using gaussian elimiantion.
+Performs Gauss elimination on given matrix A (A has the form which is specified in the task description). 
+If write_matrix_L is set to true, function performs LU decompsition using Gauss elimiantion.
 A: matrix which is SparseMatrixCSC{Float64, Int64}
 b: vector with values which is Vector{Float64}
 n: size of matrix A (Int64)
@@ -45,7 +45,7 @@ function gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::Int64,
 end
 
 """
-Solves equation Ax=b using gaussian elimination method.
+Solves equation Ax=b using Gauss elimination method.
 A: matrix (SparseMatrixCSC{Float64, Int64})
 b: vector with values (Vector{Float64})
 n: size of matrix A (Int64)
@@ -71,8 +71,8 @@ function solve_gauss(A::SparseMatrixCSC{Float64, Int64}, b::Vector{Float64}, n::
 end
 
 """
-Performs gaussian elimination  with partial choice of main element on given matrix A (A has the form which is specified in the task description). 
-If write_matrix_L is set to true, function performs LU decompsition using gaussian elimiantion.
+Performs Gauss elimination  with partial choice of main element on given matrix A (A has the form which is specified in the task description). 
+If write_matrix_L is set to true, function performs LU decomposition using Gauss elimiantion.
 A: matrix which is SparseMatrixCSC{Float64, Int64}
 b: vector with values which is Vector{Float64}
 n: size of matrix A (Int64)
@@ -122,7 +122,7 @@ end
 
 
 """
-Solves equation Ax=b using gaussian elimination method with partial choice of main element.
+Solves equation Ax=b using Gauss elimination method with partial choice of main element.
 A: matrix (SparseMatrixCSC{Float64, Int64})
 b: vector with values (Vector{Float64})
 n: size of matrix A (Int64)
